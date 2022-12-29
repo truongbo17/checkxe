@@ -1,0 +1,19 @@
+{
+    "name": "bo/sidebar",
+    "description": "Sidebar Admin Package",
+    "type": "package",
+    "autoload": {
+        "psr-4": {
+            "Bo\\SideBar\\": "src"
+        }
+    },
+    "require": {
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bo\\SideBar\\SideBarServiceProvider"
+            ]
+        }
+    }
+}

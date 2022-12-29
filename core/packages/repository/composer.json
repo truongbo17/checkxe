@@ -1,0 +1,11 @@
+{
+    "name": "bo/repository",
+    "description": "Repository for laravel.",
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Bo\\Repository\\": "src"
+        }
+    }
+}

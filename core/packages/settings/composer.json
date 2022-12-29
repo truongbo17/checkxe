@@ -1,0 +1,19 @@
+{
+    "name": "bo/settings",
+    "description": "Setting Package",
+    "type": "package",
+    "autoload": {
+        "psr-4": {
+            "Bo\\Settings\\": "src"
+        }
+    },
+    "require": {
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bo\\Settings\\SettingsServiceProvider"
+            ]
+        }
+    }
+}

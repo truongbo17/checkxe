@@ -1,0 +1,7 @@
+{
+    "name": "Blog",
+    "namespace": "Bo\\Blog\\",
+    "provider": "Bo\\Blog\\Providers\\BlogServiceProvider",
+    "author": "Nguyen Quang Truong",
+    "description": "Manage posts, categories, tags"
+}

@@ -1,0 +1,30 @@
+{
+    "name": "bo/filemanager",
+    "description": "Admin interface for files and folder, using elFinder",
+    "authors": [
+        {
+            "name": "Cristian Tabacitu",
+            "email": "tabacitu@backpackforlaravel.com",
+            "homepage": "https://backpackforlaravel.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "type": "package",
+    "autoload": {
+        "psr-4": {
+            "Bo\\FileManager\\": "src"
+        }
+    },
+    "require": {
+        "barryvdh/laravel-elfinder": "^0.4.7"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bo\\FileManager\\FileManagerServiceProvider"
+            ]
+        }
+    }
+}
