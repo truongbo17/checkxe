@@ -38,7 +38,7 @@ class Install extends Command
         $this->progressBar->maxSecondsBetweenRedraws(120);
         $this->progressBar->setRedrawFrequency(1);
 
-        $this->warn(' BoCMS should be working with php7.4 ...');
+        $this->warn(' BoCMS should be working with php version >=7.4 ...');
 
         $this->progressBar->start();
 

@@ -37,11 +37,14 @@ class CheckIfAdmin
      * @param [type] $request [description]
      * @return [type] [description]
      */
-    private function respondToUnauthorizedRequest($request)
+    private function respondToUnauthorizedRequest($request, bool $admin = false)
     {
         if ($request->ajax() || $request->wantsJson()) {
             return response(trans('bo::base.unauthorized'), 401);
         } else {
+            if($admin) return redirect()->guest(bo_url('login'))->withErrors([
+                'not_admin' => trans('bo::base.not_admin')
+            ]);
             return redirect()->guest(bo_url('login'));
         }
     }
@@ -60,7 +63,13 @@ class CheckIfAdmin
         }
 
         if (!$this->checkIfUserIsAdmin(bo_user())) {
-            return $this->respondToUnauthorizedRequest($request);
+
+            //If not admin => logout
+            bo_auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return $this->respondToUnauthorizedRequest($request, true);
         }
 
         return $next($request);

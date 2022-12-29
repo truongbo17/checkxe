@@ -106,7 +106,7 @@ class BoServiceProvider extends ServiceProvider
 
         // establish the minimum amount of files that need to be published, for Bo to work; there are the files that will be published by the install command
         $minimum = array_merge(
-            $bo_views,
+//            $bo_views,
             $bo_lang_files,
             $error_views,
             $bo_public_assets,
@@ -115,7 +115,7 @@ class BoServiceProvider extends ServiceProvider
 
         // register all possible publish commands and assign tags to each
         $this->publishes($bo_lang_files, 'lang');
-        $this->publishes($bo_views, 'views');
+//        $this->publishes($bo_views, 'views');
         $this->publishes($error_views, 'errors');
         $this->publishes($bo_public_assets, 'public');
         $this->publishes($gravatar_assets, 'gravatar');

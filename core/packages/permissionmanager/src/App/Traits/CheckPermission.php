@@ -51,7 +51,7 @@ trait CheckPermission
         if ($route->getPrefix() == config('bo.base.route_prefix', 'admin')) {
             if (!$this->passPermissionRoute($route->getName())) {
                 $users = bo_user();
-                if ($users && !$users->hasPermissionTo($route->getName())) {
+                if ($users && !$users->hasPermissionTo($route->getName()) && env('PERMISSION_ADMIN')) {
                     abort(500, 'No permission');
                 }
             }
