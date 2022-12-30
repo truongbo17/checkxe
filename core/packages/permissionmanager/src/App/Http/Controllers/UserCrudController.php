@@ -121,9 +121,10 @@ class UserCrudController extends CrudController
         $this->crud->setRequest($this->handlePasswordInput($this->crud->getRequest()));
         $this->crud->unsetValidation(); // validation has already been run
 
-//        if ($this->crud->getRequest()->has('roles')) {
-//            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::IS_ADMIN]);
-//        }else{
+        if ($this->crud->getRequest()->has('roles')) {
+            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::IS_ADMIN]);
+        }
+        //else{
 //            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::NOT_ADMIN]);
 //        }
 
