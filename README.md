@@ -4,3 +4,6 @@ Build CMS base on Laravel...
 * `composer install`
 * `php artisan migrate`
 * `php artisan bo:cms:install`
+
+### If File Manager not working, run it :
+* `php artisan bo:filemanager:install`

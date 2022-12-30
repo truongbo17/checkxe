@@ -1,1 +1,1 @@
-Run command `php artisan elfinder:publish`
+Run command `bo:filemanager:install`

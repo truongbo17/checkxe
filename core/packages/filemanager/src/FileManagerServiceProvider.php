@@ -15,13 +15,6 @@ class FileManagerServiceProvider extends ServiceProvider
     ];
 
     /**
-     * Where the route file lives, both inside the package and in the app (if overwritten).
-     *
-     * @var string
-     */
-    public $routeFilePath = '/routes/elfinder.php';
-
-    /**
      * Perform post-registration booting of services.
      *
      * @return void
@@ -54,25 +47,5 @@ class FileManagerServiceProvider extends ServiceProvider
             ->setIcon('nav-icon la la-files-o')
             ->setGroup('advanced')
             ->render();
-    }
-
-    public function register()
-    {
-        $this->setupRoutes($this->app->router);
-    }
-
-    /**
-     * Define the routes for the application.
-     *
-     * @param \Illuminate\Routing\Router $router
-     *
-     * @return void
-     */
-    public function setupRoutes(Router $router)
-    {
-        // by default, use the routes file provided in vendor
-        $routeFilePathInUse = __DIR__.$this->routeFilePath;
-
-        $this->loadRoutesFrom($routeFilePathInUse);
     }
 }
