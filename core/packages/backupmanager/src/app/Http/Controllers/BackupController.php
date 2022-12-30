@@ -6,7 +6,7 @@ use Artisan;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Routing\Controller;
-use League\Flysystem\Local\LocalFilesystemAdapter;
+use League\Flysystem\Adapter\Local;
 use Log;
 use Request;
 use Storage;
@@ -40,7 +40,7 @@ class BackupController extends Controller
                         'fileSize'     => round((int) $disk->size($file) / 1048576, 2),
                         'lastModified' => Carbon::createFromTimeStamp($disk->lastModified($file))->formatLocalized('%d %B %Y, %H:%M'),
                         'diskName'     => $diskName,
-                        'downloadLink' => is_a($disk->getAdapter(), LocalFilesystemAdapter::class, true) ? $downloadLink : null,
+                        'downloadLink' => is_a($disk->getAdapter(), Local::class, true) ? $downloadLink : null,
                         'deleteLink'   => $deleteLink,
                     ];
                 }
@@ -97,7 +97,7 @@ class BackupController extends Controller
             abort(500, trans('bo::backup.unknown_disk'));
         }
 
-        if (!is_a($disk->getAdapter(), LocalFilesystemAdapter::class, true)) {
+        if (!is_a($disk->getAdapter(), Local::class, true)) {
             abort(404, trans('bo::backup.only_local_downloads_supported'));
         }
 
