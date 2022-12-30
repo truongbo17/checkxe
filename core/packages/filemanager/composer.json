@@ -1,9 +1,6 @@
 {
     "name": "bo/filemanager",
     "description": "Admin interface for files and folder, using elFinder",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "type": "package",
     "autoload": {
         "psr-4": {
             "Bo\\FileManager\\": "src"

@@ -1,6 +1,5 @@
 @extends('bo::layouts.top_left')
 
-
 @section('after_scripts')
         @include('elfinder::common_scripts')
         @include('elfinder::common_styles')
