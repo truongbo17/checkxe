@@ -18,3 +18,6 @@ Route::group([
     $controller = config('bo.pagemanager.admin_controller_class', 'Bo\PageManager\app\Http\Controllers\Admin\PageCrudController');
     Route::crud('page', $controller);
 });
+
+Route::get('{page}/{subs?}', ['uses' => 'Bo\PageManager\app\Http\Controllers\PageController@index'])
+    ->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$', 'subs' => '.*']);

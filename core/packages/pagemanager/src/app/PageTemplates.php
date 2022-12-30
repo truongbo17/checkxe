@@ -52,20 +52,26 @@ trait PageTemplates
             'value' => '<br><h2>'.trans('bo::pagemanager.content').'</h2><hr>',
         ]);
         $this->crud->addField([
-            'name' => 'content',
-            'label' => trans('bo::pagemanager.content'),
-            'type' => 'summernote',
+            'name'        => 'content',
+            'label'       => trans('bo::pagemanager.content'),
+            'type'        => 'ckeditor',
             'placeholder' => trans('bo::pagemanager.content_placeholder'),
+            'options'     => [
+                'height' => 400
+            ]
         ]);
     }
 
     private function about_us()
     {
         $this->crud->addField([
-            'name' => 'content',
-            'label' => trans('bo::pagemanager.content'),
-            'type' => 'summernote',
+            'name'        => 'content',
+            'label'       => trans('bo::pagemanager.content'),
+            'type'        => 'ckeditor',
             'placeholder' => trans('bo::pagemanager.content_placeholder'),
+            'options'     => [
+                'height' => 400
+            ]
         ]);
     }
 }
