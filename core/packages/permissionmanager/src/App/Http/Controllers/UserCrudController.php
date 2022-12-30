@@ -6,10 +6,12 @@ use Bo\Base\Http\Controllers\CrudController;
 use Bo\PermissionManager\App\Enum\IsAdminEnum;
 use Bo\PermissionManager\App\Http\Requests\UserStoreCrudRequest as StoreRequest;
 use Bo\PermissionManager\App\Http\Requests\UserUpdateCrudRequest as UpdateRequest;
+use Bo\ReviseOperation\ReviseOperation;
 use Illuminate\Support\Facades\Hash;
 
 class UserCrudController extends CrudController
 {
+    use ReviseOperation;
     use \Bo\Base\Http\Controllers\Operations\ListOperation;
     use \Bo\Base\Http\Controllers\Operations\CreateOperation {
         store as traitStore;
@@ -119,11 +121,11 @@ class UserCrudController extends CrudController
         $this->crud->setRequest($this->handlePasswordInput($this->crud->getRequest()));
         $this->crud->unsetValidation(); // validation has already been run
 
-        if ($this->crud->getRequest()->has('roles')) {
-            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::IS_ADMIN]);
-        }else{
-            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::NOT_ADMIN]);
-        }
+//        if ($this->crud->getRequest()->has('roles')) {
+//            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::IS_ADMIN]);
+//        }else{
+//            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::NOT_ADMIN]);
+//        }
 
         return $this->traitUpdate();
     }

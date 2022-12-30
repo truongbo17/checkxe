@@ -7,3 +7,34 @@ Build CMS base on Laravel...
 
 ### If File Manager not working, run it :
 * `php artisan bo:filemanager:install`
+### Revision Operation
+* Add in model :
+```php
+  namespace MyApp\Models;
+
+  class Article extends Eloquent {
+  use \Backpack\CRUD\CrudTrait, \Venturecraft\Revisionable\RevisionableTrait;
+
+    public function identifiableName()
+    {
+        return $this->name;
+    }
+
+    // If you are using another bootable trait
+    // be sure to override the boot method in your model
+    public static function boot()
+    {
+        parent::boot();
+    }
+  }
+```
+* Add in CrudController :
+```php
+namespace App\Http\Controllers\Admin;
+
+use Backpack\CRUD\app\Http\Controllers\CrudController;
+
+class CategoryCrudController extends CrudController
+{
+    use \Backpack\ReviseOperation\ReviseOperation;
+```

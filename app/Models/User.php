@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Bo\PermissionManager\App\Traits\CheckPermission;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 /**
  * App\Models\User
@@ -42,7 +43,7 @@ use Bo\PermissionManager\App\Traits\CheckPermission;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, CrudTrait, CheckPermission;
+    use HasApiTokens, HasFactory, Notifiable, CrudTrait, CheckPermission, RevisionableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -87,5 +88,15 @@ class User extends Authenticatable
             config('bo.permissionmanager.column_names.model_morph_key'),
             config('bo.permissionmanager.model_has_role_primary_key'),
         );
+    }
+
+    public function identifiableName()
+    {
+        return $this->name;
+    }
+
+    public static function boot()
+    {
+        parent::boot();
     }
 }
