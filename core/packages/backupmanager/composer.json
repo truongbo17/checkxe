@@ -1,0 +1,19 @@
+{
+    "name": "bo/backupmanager",
+    "description": "Admin interface for managing backups in",
+    "require": {
+        "spatie/laravel-backup": "^7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bo\\BackupManager\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bo\\BackupManager\\BackupManagerServiceProvider"
+            ]
+        }
+    }
+}

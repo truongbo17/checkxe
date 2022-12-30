@@ -14,13 +14,12 @@ class CreateSettingsTable extends Migration
     {
         Schema::create(config('bo.setting.table_name'), function (Blueprint $table) {
             $table->increments('id');
-            $table->string('key')->unique()->index();
             $table->string('name');
-            $table->string('description')->nullable();
+            $table->string('key')->unique()->index();
             $table->text('value')->nullable();
-            $table->text('field');
-            $table->string('type')->index();
-            $table->tinyInteger('active');
+            $table->string('type')->index()->nullable();
+            $table->string('description')->nullable();
+            $table->tinyInteger('active')->default(0);
             $table->timestamps();
         });
     }

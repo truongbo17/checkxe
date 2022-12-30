@@ -25,9 +25,9 @@ class SettingRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'key' => 'required|min:3|max:255',
-            // 'name' => 'required|min:3|max:255',
-            // 'field' => 'required'
+            'key' => 'required|min:3|max:255',
+            'value' => 'required|min:3|max:255',
+             'name' => 'required|min:3|max:255',
         ];
     }
 }

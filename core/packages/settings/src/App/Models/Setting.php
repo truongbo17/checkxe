@@ -12,8 +12,11 @@ class Setting extends Model
 
     protected $fillable = [
         'key',
+        'name',
+        'description',
         'value',
         'type',
+        'active',
     ];
 
     /**
