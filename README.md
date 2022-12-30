@@ -13,7 +13,7 @@ Build CMS base on Laravel...
   namespace MyApp\Models;
 
   class Article extends Eloquent {
-  use \Backpack\CRUD\CrudTrait, \Venturecraft\Revisionable\RevisionableTrait;
+  use \Bo\CRUD\CrudTrait, \Venturecraft\Revisionable\RevisionableTrait;
 
     public function identifiableName()
     {
@@ -32,9 +32,9 @@ Build CMS base on Laravel...
 ```php
 namespace App\Http\Controllers\Admin;
 
-use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Bo\CRUD\app\Http\Controllers\CrudController;
 
 class CategoryCrudController extends CrudController
 {
-    use \Backpack\ReviseOperation\ReviseOperation;
+    use \Bo\ReviseOperation\ReviseOperation;
 ```
