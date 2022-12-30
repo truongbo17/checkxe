@@ -1,0 +1,19 @@
+{
+    "name": "bo/revise-operation",
+    "description": "Interface for venturecraft/revisionable",
+    "require": {
+        "venturecraft/revisionable": "1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bo\\ReviseOperation\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bo\\ReviseOperation\\ReviseOperationServiceProvider"
+            ]
+        }
+    }
+}

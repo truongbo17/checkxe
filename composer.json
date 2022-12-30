@@ -18,6 +18,7 @@
         "bo/logmanager": "*@dev",
         "bo/filemanager": "*@dev",
         "bo/backupmanager": "*@dev",
+        "bo/revise-operation": "*@dev",
         "composer/package-versions-deprecated": "^1.8",
         "creativeorange/gravatar": "~1.0",
         "digitallyhappy/assets": "^2.0.1",
