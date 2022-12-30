@@ -2,18 +2,25 @@
 
 namespace Bo\PermissionManager\App\Http\Controllers;
 
+use Alert;
 use Bo\Base\Http\Controllers\CrudController;
+use Bo\Base\Http\Controllers\Operations\CreateOperation;
+use Bo\Base\Http\Controllers\Operations\DeleteOperation;
+use Bo\Base\Http\Controllers\Operations\ListOperation;
+use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\PermissionManager\App\Http\Requests\RoleStoreCrudRequest as StoreRequest;
 use Bo\PermissionManager\App\Http\Requests\RoleUpdateCrudRequest as UpdateRequest;
+use Illuminate\Http\RedirectResponse;
+use Route;
 
 // VALIDATION
 
 class RoleCrudController extends CrudController
 {
-    use \Bo\Base\Http\Controllers\Operations\ListOperation;
-    use \Bo\Base\Http\Controllers\Operations\CreateOperation;
-    use \Bo\Base\Http\Controllers\Operations\UpdateOperation;
-    use \Bo\Base\Http\Controllers\Operations\DeleteOperation;
+    use ListOperation;
+    use CreateOperation;
+    use UpdateOperation;
+    use DeleteOperation;
 
     public function setup()
     {
@@ -75,12 +82,6 @@ class RoleCrudController extends CrudController
         $this->crud->setValidation(StoreRequest::class);
     }
 
-    public function setupUpdateOperation()
-    {
-        $this->addFields();
-        $this->crud->setValidation(UpdateRequest::class);
-    }
-
     private function addFields()
     {
         $this->crud->addField([
@@ -136,45 +137,13 @@ class RoleCrudController extends CrudController
     }
 
     /**
-     * Store a newly created resource in the database.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store()
-    {
-        $this->crud->hasAccessOrFail('create');
-
-        // execute the FormRequest authorization and validation, if one is required
-        $request = $this->crud->validateRequest();
-
-        $array_route_permission = json_decode($request->input('list_route_admin'), true);
-        $array_route_permission = array_unique($array_route_permission, SORT_REGULAR);
-        $request->merge(['list_route_admin' => json_encode($array_route_permission)]);
-
-        // register any Model Events defined on fields
-        $this->crud->registerFieldEvents();
-
-        // insert item in the db
-        $item = $this->crud->create($this->crud->getStrippedSaveRequest($request));
-        $this->data['entry'] = $this->crud->entry = $item;
-
-        // show a success message
-        \Alert::success(trans('bo::crud.insert_success'))->flash();
-
-        // save the redirect choice for next time
-        $this->crud->setSaveAction();
-
-        return $this->crud->performSaveAction($item->getKey());
-    }
-
-    /**
      * Return array list route name alias admin
      *
      * @return array
      * */
     public function getRouteListAdmin(): array
     {
-        $list_route = \Route::getRoutes()->getRoutesByName();
+        $list_route = Route::getRoutes()->getRoutesByName();
         $array_route_admin = [];
         $array_ignore_route_permission = config('bo.permissionmanager.ignore_route_permission', []);
 
@@ -200,5 +169,43 @@ class RoleCrudController extends CrudController
             if (str_ends_with($route_name, $value)) return false;
         }
         return true;
+    }
+
+    public function setupUpdateOperation()
+    {
+        $this->addFields();
+        $this->crud->setValidation(UpdateRequest::class);
+    }
+
+    /**
+     * Store a newly created resource in the database.
+     *
+     * @return RedirectResponse
+     */
+    public function store()
+    {
+        $this->crud->hasAccessOrFail('create');
+
+        // execute the FormRequest authorization and validation, if one is required
+        $request = $this->crud->validateRequest();
+
+        $array_route_permission = json_decode($request->input('list_route_admin'), true);
+        $array_route_permission = array_unique($array_route_permission, SORT_REGULAR);
+        $request->merge(['list_route_admin' => json_encode($array_route_permission)]);
+
+        // register any Model Events defined on fields
+        $this->crud->registerFieldEvents();
+
+        // insert item in the db
+        $item = $this->crud->create($this->crud->getStrippedSaveRequest($request));
+        $this->data['entry'] = $this->crud->entry = $item;
+
+        // show a success message
+        Alert::success(trans('bo::crud.insert_success'))->flash();
+
+        // save the redirect choice for next time
+        $this->crud->setSaveAction();
+
+        return $this->crud->performSaveAction($item->getKey());
     }
 }

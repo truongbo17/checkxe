@@ -2,24 +2,30 @@
 
 namespace Bo\PermissionManager\App\Http\Controllers;
 
+use Alert;
 use Bo\Base\Http\Controllers\CrudController;
+use Bo\Base\Http\Controllers\Operations\CreateOperation;
+use Bo\Base\Http\Controllers\Operations\DeleteOperation;
+use Bo\Base\Http\Controllers\Operations\ListOperation;
+use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\PermissionManager\App\Enum\IsAdminEnum;
 use Bo\PermissionManager\App\Http\Requests\UserStoreCrudRequest as StoreRequest;
 use Bo\PermissionManager\App\Http\Requests\UserUpdateCrudRequest as UpdateRequest;
 use Bo\ReviseOperation\ReviseOperation;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 
 class UserCrudController extends CrudController
 {
     use ReviseOperation;
-    use \Bo\Base\Http\Controllers\Operations\ListOperation;
-    use \Bo\Base\Http\Controllers\Operations\CreateOperation {
-        store as traitStore;
+    use ListOperation;
+    use CreateOperation {
+        CreateOperation::store as traitStore;
     }
-    use \Bo\Base\Http\Controllers\Operations\UpdateOperation {
-        update as traitUpdate;
+    use UpdateOperation {
+        UpdateOperation::update as traitUpdate;
     }
-    use \Bo\Base\Http\Controllers\Operations\DeleteOperation;
+    use DeleteOperation;
 
     public function setup()
     {
@@ -84,71 +90,6 @@ class UserCrudController extends CrudController
         $this->crud->setValidation(StoreRequest::class);
     }
 
-    public function setupUpdateOperation()
-    {
-        $this->addUserFields();
-        $this->crud->setValidation(UpdateRequest::class);
-    }
-
-    /**
-     * Store a newly created resource in the database.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store()
-    {
-        $this->crud->setRequest($this->crud->validateRequest());
-        $this->crud->setRequest($this->handlePasswordInput($this->crud->getRequest()));
-        $this->crud->unsetValidation(); // validation has already been run
-
-        if ($this->crud->getRequest()->has('roles')) {
-            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::IS_ADMIN]);
-        }else{
-            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::NOT_ADMIN]);
-        }
-
-        return $this->traitStore();
-    }
-
-    /**
-     * Update the specified resource in the database.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update()
-    {
-        $this->crud->setRequest($this->crud->validateRequest());
-        $this->crud->setRequest($this->handlePasswordInput($this->crud->getRequest()));
-        $this->crud->unsetValidation(); // validation has already been run
-
-        if ($this->crud->getRequest()->has('roles')) {
-            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::IS_ADMIN]);
-        }
-        //else{
-//            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::NOT_ADMIN]);
-//        }
-
-        return $this->traitUpdate();
-    }
-
-    /**
-     * Handle password input fields.
-     */
-    protected function handlePasswordInput($request)
-    {
-        // Remove fields not present on the user.
-        $request->request->remove('password_confirmation');
-
-        // Encrypt password if specified.
-        if ($request->input('password')) {
-            $request->request->set('password', Hash::make($request->input('password')));
-        } else {
-            $request->request->remove('password');
-        }
-
-        return $request;
-    }
-
     protected function addUserFields()
     {
         $this->crud->addFields([
@@ -177,9 +118,9 @@ class UserCrudController extends CrudController
                 'tab'   => 'Base info',
             ],
             [
-                'name'  => 'is_admin',
-                'type'  => 'number',
-                'tab'   => 'Base info',
+                'name'       => 'is_admin',
+                'type'       => 'number',
+                'tab'        => 'Base info',
                 'attributes' => [
                     'placeholder' => 'Auto',
                     'readonly'    => 'readonly',
@@ -193,6 +134,88 @@ class UserCrudController extends CrudController
                 'tab'   => 'Permission',
             ],
         ]);
+    }
+
+    public function setupUpdateOperation()
+    {
+        $this->addUserFields();
+        $this->crud->setValidation(UpdateRequest::class);
+    }
+
+    /**
+     * Store a newly created resource in the database.
+     *
+     * @return RedirectResponse
+     */
+    public function store()
+    {
+        $this->crud->setRequest($this->crud->validateRequest());
+        $this->crud->setRequest($this->handlePasswordInput($this->crud->getRequest()));
+        $this->crud->unsetValidation(); // validation has already been run
+
+        if ($this->crud->getRequest()->has('roles')) {
+            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::IS_ADMIN]);
+        } else {
+            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::NOT_ADMIN]);
+        }
+
+        return $this->traitStore();
+    }
+
+    /**
+     * Handle password input fields.
+     */
+    protected function handlePasswordInput($request)
+    {
+        // Remove fields not present on the user.
+        $request->request->remove('password_confirmation');
+
+        // Encrypt password if specified.
+        if ($request->input('password')) {
+            $request->request->set('password', Hash::make($request->input('password')));
+        } else {
+            $request->request->remove('password');
+        }
+
+        return $request;
+    }
+
+    public function updateStatusAdmin(int $id): bool
+    {
+        $user = $this->crud->model->findOrFail($id);
+
+        if ($user->is_admin == IsAdminEnum::IS_ADMIN) {
+            $status = IsAdminEnum::NOT_ADMIN;
+        } else {
+            $status = IsAdminEnum::IS_ADMIN;
+        }
+
+        $user->update([
+            'is_admin' => $status,
+        ]);
+
+        return true;
+    }
+
+    /**
+     * Update the specified resource in the database.
+     *
+     * @return RedirectResponse
+     */
+    public function update()
+    {
+        $this->crud->setRequest($this->crud->validateRequest());
+        $this->crud->setRequest($this->handlePasswordInput($this->crud->getRequest()));
+        $this->crud->unsetValidation(); // validation has already been run
+
+        if ($this->crud->getRequest()->has('roles')) {
+            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::IS_ADMIN]);
+        }
+        //else{
+//            $this->crud->getRequest()->merge(['is_admin' => IsAdminEnum::NOT_ADMIN]);
+//        }
+
+        return $this->traitUpdate();
     }
 
     public function traitUpdate()
@@ -218,28 +241,11 @@ class UserCrudController extends CrudController
         $this->data['entry'] = $this->crud->entry = $item;
 
         // show a success message
-        \Alert::success(trans('bo::crud.update_success'))->flash();
+        Alert::success(trans('bo::crud.update_success'))->flash();
 
         // save the redirect choice for next time
         $this->crud->setSaveAction();
 
         return $this->crud->performSaveAction($item->getKey());
-    }
-
-    public function updateStatusAdmin(int $id): bool
-    {
-        $user = $this->crud->model->findOrFail($id);
-
-        if ($user->is_admin == IsAdminEnum::IS_ADMIN) {
-            $status = IsAdminEnum::NOT_ADMIN;
-        } else {
-            $status = IsAdminEnum::IS_ADMIN;
-        }
-
-        $user->update([
-            'is_admin' => $status,
-        ]);
-
-        return true;
     }
 }

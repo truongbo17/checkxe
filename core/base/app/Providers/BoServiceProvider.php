@@ -2,6 +2,13 @@
 
 namespace Bo\Base\Providers;
 
+use Bo\Base\Console\Commands\AddCustomRouteContent;
+use Bo\Base\Console\Commands\AddSidebarContent;
+use Bo\Base\Console\Commands\CreateUser;
+use Bo\Base\Console\Commands\Fix;
+use Bo\Base\Console\Commands\Install;
+use Bo\Base\Console\Commands\PublishView;
+use Bo\Base\Console\Commands\Version;
 use Bo\Base\Http\Middleware\ThrottlePasswordRecovery;
 use Bo\Base\Library\CrudPanel\CrudPanel;
 use Illuminate\Routing\Router;
@@ -11,29 +18,29 @@ use Illuminate\Support\ServiceProvider;
 class BoServiceProvider extends ServiceProvider
 {
 
-    protected array $commands = [
-        \Bo\Base\Console\Commands\Install::class,
-        \Bo\Base\Console\Commands\AddSidebarContent::class,
-        \Bo\Base\Console\Commands\AddCustomRouteContent::class,
-        \Bo\Base\Console\Commands\Version::class,
-        \Bo\Base\Console\Commands\CreateUser::class,
-        \Bo\Base\Console\Commands\PublishView::class,
-        \Bo\Base\Console\Commands\Fix::class,
-    ];
+    public string $routeFilePath = '/routes/base.php';
 
     // Indicates if loading of the provider is deferred.
-    protected bool $defer = false;
-    // Where the route file lives, both inside the package and in the app (if overwritten).
-    public string $routeFilePath = '/routes/base.php';
-    // Where custom routes can be written, and will be registered by bo.
     public string $customRoutesFilePath = '/routes/custom.php';
+    // Where the route file lives, both inside the package and in the app (if overwritten).
+    protected array $commands = [
+        Install::class,
+        AddSidebarContent::class,
+        AddCustomRouteContent::class,
+        Version::class,
+        CreateUser::class,
+        PublishView::class,
+        Fix::class,
+    ];
+    // Where custom routes can be written, and will be registered by bo.
+    protected bool $defer = false;
 
     /**
      * Perform post-registration booting of services.
      *
      * @return void
      */
-    public function boot(\Illuminate\Routing\Router $router)
+    public function boot(Router $router)
     {
         $this->loadViewsWithFallbacks();
         $this->loadTranslationsFrom(realpath(__DIR__ . '/../../resources/lang'), 'bo');
@@ -42,114 +49,6 @@ class BoServiceProvider extends ServiceProvider
         $this->setupRoutes($this->app->router);
         $this->setupCustomRoutes($this->app->router);
         $this->publishFiles();
-    }
-
-    /**
-     * Register any package services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        // load the macros
-        include_once __DIR__ . '/../../macros.php';
-
-        // Bind the CrudPanel object to Laravel's service container
-        $this->app->singleton('crud', function ($app) {
-            return new CrudPanel($app);
-        });
-
-        // Bind the widgets collection object to Laravel's service container
-        $this->app->singleton('widgets', function ($app) {
-            return new Collection();
-        });
-
-        // register the helper functions
-        $this->loadHelpers();
-
-        // register the artisan commands
-        $this->commands($this->commands);
-    }
-
-    public function registerMiddlewareGroup(Router $router)
-    {
-        $middleware_key = config('bo.base.middleware_key');
-        $middleware_class = config('bo.base.middleware_class');
-
-        if (!is_array($middleware_class)) {
-            $router->pushMiddlewareToGroup($middleware_key, $middleware_class);
-
-            return;
-        }
-
-        foreach ($middleware_class as $middleware) {
-            $router->pushMiddlewareToGroup($middleware_key, $middleware);
-        }
-
-        // register internal bo middleware for throttling the password recovery functionality
-        // but only if functionality is enabled by developer in config
-        if (config('bo.base.setup_password_recovery_routes')) {
-            $router->aliasMiddleware('bo.throttle.password.recovery', ThrottlePasswordRecovery::class);
-        }
-    }
-
-    public function publishFiles()
-    {
-        $error_views = [__DIR__ . '/../../resources/error_views' => resource_path('views/errors')];
-        $bo_views = [__DIR__ . '/../../resources/views' => resource_path('views/vendor/bo')];
-        $bo_public_assets = [__DIR__ . '/../../public' => public_path()];
-        $bo_lang_files = [__DIR__ . '/../../resources/lang' => app()->langPath() . '/vendor/bo'];
-
-        // calculate the path from current directory to get the vendor path
-        $vendorPath = dirname(__DIR__, 4);
-        $gravatar_assets = [$vendorPath . '/vendor/creativeorange/gravatar/config' => config_path()];
-
-        // establish the minimum amount of files that need to be published, for Bo to work; there are the files that will be published by the install command
-        $minimum = array_merge(
-//            $bo_views,
-            $bo_lang_files,
-            $error_views,
-            $bo_public_assets,
-            $gravatar_assets
-        );
-
-        // register all possible publish commands and assign tags to each
-        $this->publishes($bo_lang_files, 'lang');
-//        $this->publishes($bo_views, 'views');
-        $this->publishes($error_views, 'errors');
-        $this->publishes($bo_public_assets, 'public');
-        $this->publishes($gravatar_assets, 'gravatar');
-        $this->publishes($minimum, 'minimum');
-    }
-
-    /**
-     * Define the routes for the application.
-     *
-     * @param \Illuminate\Routing\Router $router
-     * @return void
-     */
-    public function setupRoutes(Router $router)
-    {
-        $routeFilePathInUse = __DIR__ . "/../../" . $this->routeFilePath;
-
-        if (file_exists($routeFilePathInUse)) {
-            $this->loadRoutesFrom($routeFilePathInUse);
-        }
-    }
-
-    /**
-     * Load custom routes file.
-     *
-     * @param \Illuminate\Routing\Router $router
-     * @return void
-     */
-    public function setupCustomRoutes(Router $router)
-    {
-        $routeFilePathInUse = __DIR__ . "/../../" . $this->customRoutesFilePath;
-
-        if (file_exists($routeFilePathInUse)) {
-            $this->loadRoutesFrom($routeFilePathInUse);
-        }
     }
 
     public function loadViewsWithFallbacks()
@@ -167,23 +66,6 @@ class BoServiceProvider extends ServiceProvider
         // - then the stock views that come with the package, in case a published view might be missing
         $this->loadViewsFrom(realpath(__DIR__ . '/../../resources/views/base'), 'bo');
         $this->loadViewsFrom(realpath(__DIR__ . '/../../resources/views/crud'), 'crud');
-    }
-
-    protected function mergeConfigFromOperationsDirectory()
-    {
-        $operationConfigs = scandir(__DIR__ . '/../../config/bo/operations/');
-        $operationConfigs = array_diff($operationConfigs, ['.', '..']);
-
-        if (!count($operationConfigs)) {
-            return;
-        }
-
-        foreach ($operationConfigs as $configFile) {
-            $this->mergeConfigFrom(
-                __DIR__ . '/../../config/bo/operations/' . $configFile,
-                'bo.operations.' . substr($configFile, 0, strrpos($configFile, '.'))
-            );
-        }
     }
 
     public function loadConfigs()
@@ -239,6 +121,131 @@ class BoServiceProvider extends ServiceProvider
                     'provider' => 'bo',
                 ],
             ];
+    }
+
+    protected function mergeConfigFromOperationsDirectory()
+    {
+        $operationConfigs = scandir(__DIR__ . '/../../config/bo/operations/');
+        $operationConfigs = array_diff($operationConfigs, ['.', '..']);
+
+        if (!count($operationConfigs)) {
+            return;
+        }
+
+        foreach ($operationConfigs as $configFile) {
+            $this->mergeConfigFrom(
+                __DIR__ . '/../../config/bo/operations/' . $configFile,
+                'bo.operations.' . substr($configFile, 0, strrpos($configFile, '.'))
+            );
+        }
+    }
+
+    public function registerMiddlewareGroup(Router $router)
+    {
+        $middleware_key = config('bo.base.middleware_key');
+        $middleware_class = config('bo.base.middleware_class');
+
+        if (!is_array($middleware_class)) {
+            $router->pushMiddlewareToGroup($middleware_key, $middleware_class);
+
+            return;
+        }
+
+        foreach ($middleware_class as $middleware) {
+            $router->pushMiddlewareToGroup($middleware_key, $middleware);
+        }
+
+        // register internal bo middleware for throttling the password recovery functionality
+        // but only if functionality is enabled by developer in config
+        if (config('bo.base.setup_password_recovery_routes')) {
+            $router->aliasMiddleware('bo.throttle.password.recovery', ThrottlePasswordRecovery::class);
+        }
+    }
+
+    /**
+     * Define the routes for the application.
+     *
+     * @param Router $router
+     * @return void
+     */
+    public function setupRoutes(Router $router)
+    {
+        $routeFilePathInUse = __DIR__ . "/../../" . $this->routeFilePath;
+
+        if (file_exists($routeFilePathInUse)) {
+            $this->loadRoutesFrom($routeFilePathInUse);
+        }
+    }
+
+    /**
+     * Load custom routes file.
+     *
+     * @param Router $router
+     * @return void
+     */
+    public function setupCustomRoutes(Router $router)
+    {
+        $routeFilePathInUse = __DIR__ . "/../../" . $this->customRoutesFilePath;
+
+        if (file_exists($routeFilePathInUse)) {
+            $this->loadRoutesFrom($routeFilePathInUse);
+        }
+    }
+
+    public function publishFiles()
+    {
+        $error_views = [__DIR__ . '/../../resources/error_views' => resource_path('views/errors')];
+        $bo_views = [__DIR__ . '/../../resources/views' => resource_path('views/vendor/bo')];
+        $bo_public_assets = [__DIR__ . '/../../public' => public_path()];
+        $bo_lang_files = [__DIR__ . '/../../resources/lang' => app()->langPath() . '/vendor/bo'];
+
+        // calculate the path from current directory to get the vendor path
+        $vendorPath = dirname(__DIR__, 4);
+        $gravatar_assets = [$vendorPath . '/vendor/creativeorange/gravatar/config' => config_path()];
+
+        // establish the minimum amount of files that need to be published, for Bo to work; there are the files that will be published by the install command
+        $minimum = array_merge(
+//            $bo_views,
+            $bo_lang_files,
+            $error_views,
+            $bo_public_assets,
+            $gravatar_assets
+        );
+
+        // register all possible publish commands and assign tags to each
+        $this->publishes($bo_lang_files, 'lang');
+//        $this->publishes($bo_views, 'views');
+        $this->publishes($error_views, 'errors');
+        $this->publishes($bo_public_assets, 'public');
+        $this->publishes($gravatar_assets, 'gravatar');
+        $this->publishes($minimum, 'minimum');
+    }
+
+    /**
+     * Register any package services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        // load the macros
+        include_once __DIR__ . '/../../macros.php';
+
+        // Bind the CrudPanel object to Laravel's service container
+        $this->app->singleton('crud', function ($app) {
+            return new CrudPanel($app);
+        });
+
+        // Bind the widgets collection object to Laravel's service container
+        $this->app->singleton('widgets', function ($app) {
+            return new Collection();
+        });
+
+        // register the helper functions
+        $this->loadHelpers();
+
+        // register the artisan commands
+        $this->commands($this->commands);
     }
 
     /**

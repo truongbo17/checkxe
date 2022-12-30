@@ -3,6 +3,7 @@
 namespace Bo\Base\Http\Controllers\Auth;
 
 use Bo\Base\Library\Auth\AuthenticatesUsers;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -21,7 +22,7 @@ class LoginController extends Controller
     |
     */
     use AuthenticatesUsers {
-        logout as defaultLogout;
+        AuthenticatesUsers::logout as defaultLogout;
     }
 
     /**
@@ -65,7 +66,7 @@ class LoginController extends Controller
     /**
      * The user has logged out of the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return mixed
      */
     protected function loggedOut(Request $request)
@@ -76,9 +77,9 @@ class LoginController extends Controller
     /**
      * Get the guard to be used during logout.
      *
-     * @return \Illuminate\Contracts\Auth\StatefulGuard
+     * @return StatefulGuard
      */
-    protected function guard(): \Illuminate\Contracts\Auth\StatefulGuard
+    protected function guard(): StatefulGuard
     {
         return bo_auth();
     }
