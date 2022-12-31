@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "54c91885ec3ec63491ec337a22839832",
+    "content-hash": "6d656ff54b176c936d6437cf25bfbc45",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -398,6 +398,35 @@
                 }
             },
             "description": "An interface to preview, download and delete Laravel log files.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "bo/menu",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./core/packages/menu",
+                "reference": "7ec9005c0555eaedc52c294abbd3e4c22e28be85"
+            },
+            "require": {
+                "bo/pagemanager": "*@dev"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bo\\MenuCRUD\\MenuCRUDServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bo\\MenuCRUD\\": "src"
+                }
+            },
+            "description": "An admin panel for menu items",
             "transport-options": {
                 "relative": true
             }
@@ -11421,6 +11450,7 @@
         "bo/permissionmanager": 20,
         "bo/revise-operation": 20,
         "bo/pagemanager": 20,
+        "bo/menu": 20,
         "bo/settings": 20,
         "bo/sidebar": 20
     },

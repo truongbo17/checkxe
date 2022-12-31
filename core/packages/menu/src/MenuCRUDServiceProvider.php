@@ -1,6 +1,6 @@
 <?php
 
-namespace Backpack\MenuCRUD;
+namespace Bo\MenuCRUD;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
@@ -19,7 +19,13 @@ class MenuCRUDServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public $routeFilePath = '/routes/backpack/menucrud.php';
+    public $routeFilePath = '/routes/menucrud.php';
+
+    /**
+     * path database migration
+     * @var string $routeFilePath
+     * */
+    private string $migrationFilePath = '/database/migrations';
 
     /**
      * Perform post-registration booting of services.
@@ -28,12 +34,16 @@ class MenuCRUDServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // publish views
-        $this->publishes([__DIR__.'/resources/views' => base_path('resources/views/vendor/backpack/crud')], 'views');
-        // publish migrations
-        $this->publishes([__DIR__.'/database/migrations' => database_path('migrations')], 'migrations');
+        $this->loadMigrationsFrom(__DIR__ . $this->migrationFilePath);
 
         $this->loadViewsFrom(realpath(__DIR__.'/resources/views'), 'menucrud');
+
+        \SideBarDashBoard::registerItem('menu')
+            ->setLabel('Menu')
+            ->setPosition(2)
+            ->setRoute(bo_url('menu-item'))
+            ->setIcon('nav-icon la la-list')
+            ->render();
     }
 
     /**
@@ -47,7 +57,7 @@ class MenuCRUDServiceProvider extends ServiceProvider
         // by default, use the routes file provided in vendor
         $routeFilePathInUse = __DIR__.$this->routeFilePath;
 
-        // but if there's a file with the same name in routes/backpack, use that one
+        // but if there's a file with the same name in routes/bo, use that one
         if (file_exists(base_path().$this->routeFilePath)) {
             $routeFilePathInUse = base_path().$this->routeFilePath;
         }

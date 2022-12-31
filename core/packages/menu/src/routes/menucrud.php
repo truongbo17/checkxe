@@ -2,18 +2,18 @@
 
 /*
 |--------------------------------------------------------------------------
-| Backpack\MenuCRUD Routes
+| Bo\MenuCRUD Routes
 |--------------------------------------------------------------------------
 |
 | This file is where you may define all of the routes that are
-| handled by the Backpack\MenuCRUD package.
+| handled by the Bo\MenuCRUD package.
 |
 */
 
 Route::group([
-    'prefix' => config('backpack.base.route_prefix', 'admin'),
-    'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
-    'namespace' => 'Backpack\MenuCRUD\app\Http\Controllers\Admin',
+    'prefix' => config('bo.base.route_prefix', 'admin'),
+    'middleware' => ['web', config('bo.base.middleware_key', 'admin')],
+    'namespace' => 'Bo\MenuCRUD\app\Http\Controllers\Admin',
 ], function () {
     Route::crud('menu-item', 'MenuItemCrudController');
 });

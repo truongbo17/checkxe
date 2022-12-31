@@ -1,8 +1,8 @@
 <?php
 
-namespace Backpack\MenuCRUD\app\Models;
+namespace Bo\MenuCRUD\app\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Bo\Base\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class MenuItem extends Model
@@ -14,17 +14,17 @@ class MenuItem extends Model
 
     public function parent()
     {
-        return $this->belongsTo('Backpack\MenuCRUD\app\Models\MenuItem', 'parent_id');
+        return $this->belongsTo('Bo\MenuCRUD\app\Models\MenuItem', 'parent_id');
     }
 
     public function children()
     {
-        return $this->hasMany('Backpack\MenuCRUD\app\Models\MenuItem', 'parent_id');
+        return $this->hasMany('Bo\MenuCRUD\app\Models\MenuItem', 'parent_id');
     }
 
     public function page()
     {
-        return $this->belongsTo('Backpack\PageManager\app\Models\Page', 'page_id');
+        return $this->belongsTo('Bo\PageManager\app\Models\Page', 'page_id');
     }
 
     /**

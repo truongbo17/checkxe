@@ -18,6 +18,7 @@
         "bo/permissionmanager": "*@dev",
         "bo/revise-operation": "*@dev",
         "bo/pagemanager": "*@dev",
+        "bo/menu": "*@dev",
         "bo/settings": "*@dev",
         "bo/sidebar": "*@dev",
         "composer/package-versions-deprecated": "^1.8",

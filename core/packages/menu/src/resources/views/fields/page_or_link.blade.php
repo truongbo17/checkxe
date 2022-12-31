@@ -1,5 +1,5 @@
 {{-- PAGE OR LINK field --}}
-{{-- Used in Backpack\MenuCRUD --}}
+{{-- Used in Bo\MenuCRUD --}}
 
 <?php
     $field['allows_null'] = $field['allows_null'] ?? false;
@@ -8,11 +8,11 @@
     $field['name']['link'] = $field['name']['link'] ?? $field['name'][1] ?? 'link';
     $field['name']['page_id'] = $field['name']['page_id'] ?? $field['name'][2] ?? 'page_id';
 
-    $field['options']['page_link'] = $field['options']['page_link'] ?? trans('backpack::crud.page_link');
-    $field['options']['internal_link'] = $field['options']['internal_link'] ?? trans('backpack::crud.internal_link');
-    $field['options']['external_link'] = $field['options']['external_link'] ?? trans('backpack::crud.external_link');
+    $field['options']['page_link'] = $field['options']['page_link'] ?? trans('bo::crud.page_link');
+    $field['options']['internal_link'] = $field['options']['internal_link'] ?? trans('bo::crud.internal_link');
+    $field['options']['external_link'] = $field['options']['external_link'] ?? trans('bo::crud.external_link');
 
-    $field['pages'] = $field['pages'] ?? ($field['page_model'] ?? config('backpack.pagemanager.page_model_class'))::all();
+    $field['pages'] = $field['pages'] ?? ($field['page_model'] ?? config('bo.pagemanager.page_model_class'))::all();
 ?>
 
 @include('crud::fields.inc.wrapper_start')
@@ -68,7 +68,7 @@
                 <input
                     type="text"
                     class="form-control"
-                    placeholder="{{ trans('backpack::crud.internal_link_placeholder', ['url', url(config('backpack.base.route_prefix').'/page')]) }}"
+                    placeholder="{{ trans('bo::crud.internal_link_placeholder', ['url', url(config('bo.base.route_prefix').'/page')]) }}"
                     for="{{ $field['name']['link'] }}"
                     required
 
@@ -87,7 +87,7 @@
                 <input
                     type="url"
                     class="form-control"
-                    placeholder="{{ trans('backpack::crud.page_link_placeholder') }}"
+                    placeholder="{{ trans('bo::crud.page_link_placeholder') }}"
                     for="{{ $field['name']['link'] }}"
                     required
 
