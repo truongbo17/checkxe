@@ -2,7 +2,7 @@
 
 namespace Bo\BackupManager;
 
-use Bo\BackupManager\app\Console\Commands\Install;
+use Bo\BackupManager\App\Console\Commands\Install;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 

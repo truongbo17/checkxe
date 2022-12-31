@@ -1,6 +1,6 @@
 <?php
 
-namespace Bo\PageManager\app\Models;
+namespace Bo\PageManager\App\Models;
 
 use Bo\Base\Models\Traits\CrudTrait;
 use Cviebrock\EloquentSluggable\Sluggable;

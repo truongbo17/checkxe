@@ -15,6 +15,6 @@ Route::group([
     'middleware' => ['web', config('bo.base.middleware_key', 'admin')],
     'prefix' => config('bo.base.route_prefix', 'admin'),
 ], function () {
-    $controller = config('bo.pagemanager.admin_controller_class', 'Bo\PageManager\app\Http\Controllers\Admin\PageCrudController');
+    $controller = config('bo.pagemanager.admin_controller_class', 'Bo\PageManager\App\Http\Controllers\Admin\PageCrudController');
     Route::crud('page', $controller);
 });

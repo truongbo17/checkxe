@@ -1,6 +1,6 @@
 <?php
 
-namespace Bo\BackupManager\app\Console\Commands;
+namespace Bo\BackupManager\App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Bo\Base\Console\Commands\Traits\PrettyCommandOutput;

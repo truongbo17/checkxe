@@ -11,7 +11,7 @@
 */
 
 Route::group([
-    'namespace'  => 'Bo\BackupManager\app\Http\Controllers',
+    'namespace'  => 'Bo\BackupManager\App\Http\Controllers',
     'prefix'     => config('bo.base.route_prefix', 'admin'),
     'middleware' => ['web', config('bo.base.middleware_key', 'admin')],
 ], function () {

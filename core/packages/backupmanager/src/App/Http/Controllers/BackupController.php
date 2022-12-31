@@ -1,6 +1,6 @@
 <?php
 
-namespace Bo\BackupManager\app\Http\Controllers;
+namespace Bo\BackupManager\App\Http\Controllers;
 
 use Artisan;
 use Carbon\Carbon;

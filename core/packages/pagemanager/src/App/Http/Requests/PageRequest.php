@@ -1,6 +1,6 @@
 <?php
 
-namespace Bo\PageManager\app\Http\Requests;
+namespace Bo\PageManager\App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

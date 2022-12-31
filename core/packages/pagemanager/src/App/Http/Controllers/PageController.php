@@ -1,8 +1,8 @@
 <?php
 
-namespace Bo\PageManager\app\Http\Controllers;
+namespace Bo\PageManager\App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use Bo\PageManager\app\Models\Page;
+use Bo\PageManager\App\Models\Page;
 
 class PageController extends Controller
 {

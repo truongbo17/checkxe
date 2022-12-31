@@ -13,7 +13,7 @@
 Route::group([
     'prefix' => config('bo.base.route_prefix', 'admin'),
     'middleware' => ['web', config('bo.base.middleware_key', 'admin')],
-    'namespace' => 'Bo\MenuCRUD\app\Http\Controllers\Admin',
+    'namespace' => 'Bo\MenuCRUD\App\Http\Controllers\Admin',
 ], function () {
     Route::crud('menu-item', 'MenuItemCrudController');
 });

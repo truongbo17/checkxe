@@ -1,14 +1,14 @@
 <?php
 
-namespace Bo\PageManager\app\Http\Controllers\Admin;
+namespace Bo\PageManager\App\Http\Controllers\Admin;
 
-use Bo\PageManager\app\PageTemplates;
+use Bo\PageManager\App\PageTemplates;
 use Bo\Base\Http\Controllers\CrudController;
 use Bo\Base\Http\Controllers\Operations\CreateOperation;
 use Bo\Base\Http\Controllers\Operations\DeleteOperation;
 use Bo\Base\Http\Controllers\Operations\ListOperation;
 use Bo\Base\Http\Controllers\Operations\UpdateOperation;
-use Bo\PageManager\app\Http\Requests\PageRequest;
+use Bo\PageManager\App\Http\Requests\PageRequest;
 use ReflectionClass;
 use ReflectionMethod;
 use Request;
@@ -30,7 +30,7 @@ class PageCrudController extends CrudController
 
     public function setup()
     {
-        $this->crud->setModel(config('bo.pagemanager.page_model_class', 'Bo\PageManager\app\Models\Page'));
+        $this->crud->setModel(config('bo.pagemanager.page_model_class', 'Bo\PageManager\App\Models\Page'));
         $this->crud->setRoute(config('bo.base.route_prefix') . '/page');
         $this->crud->setEntityNameStrings(trans('bo::pagemanager.page'), trans('bo::pagemanager.pages'));
     }
@@ -140,7 +140,7 @@ class PageCrudController extends CrudController
     {
         $templates_array = [];
 
-        $templates_trait = new ReflectionClass('Bo\PageManager\app\PageTemplates');
+        $templates_trait = new ReflectionClass('Bo\PageManager\App\PageTemplates');
         $templates = $templates_trait->getMethods(ReflectionMethod::IS_PRIVATE);
 
         if (!count($templates)) {

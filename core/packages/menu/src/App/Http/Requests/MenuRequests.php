@@ -1,6 +1,6 @@
 <?php
 
-namespace Bo\MenuCRUD\app\Http\Requests;
+namespace Bo\MenuCRUD\App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
