@@ -19,6 +19,7 @@ class CreateMenuItemsTable extends Migration
             $table->string('link', 255)->nullable();
             $table->integer('page_id')->unsigned()->nullable();
             $table->integer('parent_id')->unsigned()->nullable();
+            $table->string('router_name', 255)->nullable();
             $table->integer('lft')->unsigned()->nullable();
             $table->integer('rgt')->unsigned()->nullable();
             $table->integer('depth')->unsigned()->nullable();

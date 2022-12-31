@@ -8,11 +8,14 @@ use Bo\Base\Http\Controllers\Operations\DeleteOperation;
 use Bo\Base\Http\Controllers\Operations\ListOperation;
 use Bo\Base\Http\Controllers\Operations\ReorderOperation;
 use Bo\Base\Http\Controllers\Operations\UpdateOperation;
+use Bo\MenuCRUD\app\Http\Requests\MenuRequests;
 
 class MenuItemCrudController extends CrudController
 {
     use ListOperation;
-    use CreateOperation;
+    use CreateOperation {
+        CreateOperation::create as traitCreate;
+    }
     use UpdateOperation;
     use DeleteOperation;
     use ReorderOperation;
@@ -54,12 +57,18 @@ class MenuItemCrudController extends CrudController
                 'model'     => "\Bo\MenuCRUD\app\Models\MenuItem",
             ]);
             $this->crud->addField([
-                'name'           => ['type', 'link', 'page_id'],
+                'name'           => ['type', 'link', 'page_id', 'router_name'],
                 'label'          => 'Type',
                 'type'           => 'page_or_link',
                 'page_model'     => '\Bo\PageManager\app\Models\Page',
                 'view_namespace' => file_exists(resource_path('views/vendor/bo/crud/fields/page_or_link.blade.php')) ? null : 'menucrud::fields',
             ]);
         });
+    }
+
+    public function setupCreateOperation()
+    {
+        $this->crud->setValidation(MenuRequests::class);
+//        dd(app('request')->all());
     }
 }

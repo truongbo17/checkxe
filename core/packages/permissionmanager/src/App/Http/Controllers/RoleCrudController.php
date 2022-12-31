@@ -102,7 +102,7 @@ class RoleCrudController extends CrudController
                     'label'   => 'Route link url',
                     'wrapper' => ['class' => 'form-group col-md-12'],
                     'type'    => 'select2_from_array',
-                    'options' => $this->getRouteListAdmin(),
+                    'options' => getRouteListAdmin(),
                 ],
                 [
                     'name'       => 'route_name',
@@ -134,41 +134,6 @@ class RoleCrudController extends CrudController
                 ],
             ],
         ]);
-    }
-
-    /**
-     * Return array list route name alias admin
-     *
-     * @return array
-     * */
-    public function getRouteListAdmin(): array
-    {
-        $list_route = Route::getRoutes()->getRoutesByName();
-        $array_route_admin = [];
-        $array_ignore_route_permission = config('bo.permissionmanager.ignore_route_permission', []);
-
-        foreach ($list_route as $route) {
-            if ($route->getPrefix() == config('bo.base.route_prefix', 'admin') && !in_array($route->getName(), $array_ignore_route_permission) && $this->checkEndsWith($route->getName())) {
-                $array_route_admin[$route->getName()] = request()->getSchemeAndHttpHost() . '/' . $route->uri();
-            }
-        }
-
-        return $array_route_admin;
-    }
-
-    /**
-     * Check end with string route
-     *
-     * @param string $route_name
-     * @return bool
-     * */
-    private function checkEndsWith(string $route_name): bool
-    {
-        $array_ignore_by_regex = config('bo.permissionmanager.ignore_route_permission_by_regex', []);
-        foreach ($array_ignore_by_regex as $value) {
-            if (str_ends_with($route_name, $value)) return false;
-        }
-        return true;
     }
 
     public function setupUpdateOperation()

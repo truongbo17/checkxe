@@ -68,5 +68,6 @@ return [
     'confirm_new_password' => 'Confirm new password',
     'throttled'            => 'You have already requested a password reset recently. Please check your email. If you do not receive our email, please retry later.',
     'throttled_request'    => 'You have exceeded the limit of tries. Please wait a few minutes and try again.',
-    'not_admin'            => 'Account is not admin.'
+    'not_admin'            => 'Account is not admin.',
+    'router_name'           => "Router Name"
 ];
