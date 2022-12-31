@@ -164,11 +164,11 @@ $field['router_name'] = $field['router_name'] ?? getRouteListAdmin();
             $(document).ready(function () {
                 $('.page_or_link_value select').select2({
                     theme: "bootstrap",
-                })
+                });
             });
 
-            if ($('input[name=page_id]').val() === "") {
-                $('input[name=page_id]').val($('.page_or_link_value select').find("option:first-child").val());
+            if ($('input[name={{ $field['name']['page_id'] }}]').val() === "") {
+                $('input[name={{ $field['name']['page_id'] }}]').val($('.page_link select').find("option:first-child").val());
             }
 
             function bpFieldInitPageOrLinkElement(element) {
@@ -186,7 +186,14 @@ $field['router_name'] = $field['router_name'] ?? getRouteListAdmin();
                 }
 
                 // save input changes to hidden placeholders
-                values.forEach(value => value.firstElementChild.addEventListener('input', updateHidden));
+                // values.forEach(value => value.firstElementChild.addEventListener('input', updateHidden));
+                values.forEach(function (value) {
+                    if ($(value.firstElementChild).get(0).tagName.toLowerCase() === 'select') {
+                        $(value.firstElementChild).on('select2:select', updateHidden)
+                    } else {
+                        value.firstElementChild.addEventListener('input', updateHidden)
+                    }
+                });
 
                 // main select change
                 select.addEventListener('change', () => {
