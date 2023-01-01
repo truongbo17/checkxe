@@ -25,11 +25,8 @@ class NotificationCrudController extends CrudController
 
         $this->crud->addClause('orderBy', 'created_at', 'desc');
 
-        $showAllUsers = $this->hasAdminAccess() && Request::get('show_all');
-        if (!$showAllUsers) {
-            $this->crud->addClause('where', 'notifiable_id', bo_user()->id);
-            $this->crud->addClause('where', 'notifiable_type', config('bo.base.user_model_fqn'));
-        }
+        $this->crud->addClause('where', 'notifiable_id', bo_user()->id);
+        $this->crud->addClause('where', 'notifiable_type', config('bo.base.user_model_fqn'));
 
         if (!Request::get('show_dismissed')) {
             $this->crud->addClause('whereNull', 'read_at');
@@ -41,19 +38,6 @@ class NotificationCrudController extends CrudController
         $this->crud->addButtonFromModelFunction('line', 'dismiss', 'dismissButton', 'end');
 
         $this->crud->denyAccess(['create', 'delete', 'update', 'show']);
-    }
-
-    public function hasAdminAccess()
-    {
-        return true;
-//        try {
-//            return bo_user()->hasPermissionTo(
-//                config('bo.notifications.admin_permission_name'),
-//                config('auth.defaults.guard', 'web')
-//            );
-//        } catch (Exception $e) {
-//            return false;
-//        }
     }
 
     public function dismissAll()
@@ -115,19 +99,6 @@ class NotificationCrudController extends CrudController
             }
         );
 
-        if ($this->hasAdminAccess()) {
-            $this->crud->addFilter(
-                [
-                    'type'  => 'simple',
-                    'name'  => 'show_all',
-                    'label' => 'Show notifications for all users (admin only)',
-                ],
-                false,
-                function () {
-                }
-            );
-        }
-
         // columns
 
         $this->crud->addColumn([
@@ -147,18 +118,5 @@ class NotificationCrudController extends CrudController
                     '</div>';
             },
         ]);
-
-        if ($this->hasAdminAccess() && Request::get('show_all')) {
-            $this->crud->addColumn([
-                'label'    => 'For',
-                'type'     => 'closure',
-                'name'     => 'notifiable_id',
-                'function' => function ($entry) {
-                    $user = User::find($entry->notifiable_id);
-
-                    return $user->displayName ?? '-';
-                },
-            ]);
-        }
     }
 }
