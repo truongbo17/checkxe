@@ -308,11 +308,4 @@ return [
     //
     // You can rename this disk here. Default: root
     'root_disk_name' => 'root',
-    'core_disk_name' => 'core',
-    'application_disk_name' => 'applications',
-
-    //path core base
-    'path_core_base' => realpath(base_path() . '/core/base'),
-    //path applications (plugins and themes)
-    'path_application_base' => realpath(base_path() . '/applications'),
 ];

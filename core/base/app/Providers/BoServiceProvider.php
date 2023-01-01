@@ -227,18 +227,6 @@ class BoServiceProvider extends ServiceProvider
             'root'   => base_path(),
         ];
 
-        // add the core disk to filesystem configuration
-        app()->config['filesystems.disks.' . config('bo.base.core_disk_name')] = [
-            'driver' => 'local',
-            'root'   => config('bo.base.path_core_base'),
-        ];
-
-        // add the application disk to filesystem configuration (plugins and themes)
-        app()->config['filesystems.disks.' . config('bo.base.application_disk_name')] = [
-            'driver' => 'local',
-            'root'   => config('bo.base.path_application_base'),
-        ];
-
         // add the bo_users authentication provider to the configuration
         app()->config['auth.providers'] = app()->config['auth.providers'] +
             [
