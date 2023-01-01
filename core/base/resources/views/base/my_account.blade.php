@@ -28,7 +28,7 @@
     <div class="row">
 
         @if (session('success'))
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
@@ -36,7 +36,7 @@
         @endif
 
         @if ($errors->count())
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="alert alert-danger">
                 <ul class="mb-1">
                     @foreach ($errors->all() as $e)
@@ -48,7 +48,7 @@
         @endif
 
         {{-- UPDATE INFO FORM --}}
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <form class="form" action="{{ route('bo.account.info.store') }}" method="post">
 
                 {!! csrf_field() !!}
@@ -91,7 +91,7 @@
         </div>
 
         {{-- CHANGE PASSWORD FORM --}}
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <form class="form" action="{{ route('bo.account.password') }}" method="post">
 
                 {!! csrf_field() !!}
