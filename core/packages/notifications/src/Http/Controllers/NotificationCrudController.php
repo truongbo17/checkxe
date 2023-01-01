@@ -5,12 +5,9 @@ namespace Bo\Notifications\Http\Controllers;
 use Alert;
 use App\Models\User;
 use Bo\Base\Http\Controllers\CrudController;
-use Bo\Base\Http\Controllers\Operations\CreateOperation;
-use Bo\Base\Http\Controllers\Operations\DeleteOperation;
 use Bo\Base\Http\Controllers\Operations\ListOperation;
 use Bo\Base\Http\Controllers\Operations\ShowOperation;
-use Bo\Base\Http\Controllers\Operations\UpdateOperation;
-use Bo\Notifications\Models\Notification;
+    use Bo\Notifications\Models\Notification;
 use Carbon\Carbon;
 use Exception;
 use Request;
@@ -18,9 +15,6 @@ use Request;
 class NotificationCrudController extends CrudController
 {
     use ListOperation;
-    use CreateOperation;
-    use UpdateOperation;
-    use DeleteOperation;
     use ShowOperation;
 
     public function setup()
@@ -145,9 +139,9 @@ class NotificationCrudController extends CrudController
         $this->crud->addColumn([
             'name'     => 'message',
             'label'    => 'Message',
-            'type'     => 'closure',
+            'type'     => 'custom_html',
             'priority' => -1,
-            'function' => function ($entry) {
+            'value' => function ($entry) {
                 return '<div style="display:inline-block; max-width:100%; white-space: pre-wrap;">' .
                     ($entry->data->message_long ?? $entry->data->message ?? '-') .
                     '</div>';
@@ -166,14 +160,5 @@ class NotificationCrudController extends CrudController
                 },
             ]);
         }
-    }
-
-    protected function setupUpdateOperation()
-    {
-        $this->setupCreateOperation();
-    }
-
-    protected function setupCreateOperation()
-    {
     }
 }

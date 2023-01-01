@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
 use Bo\Notifications\Notifications\DatabaseNotification;
 
@@ -38,7 +39,7 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $user = bo_user();
+        $user = User::find(1);
         $user->notify(new DatabaseNotification(
             $type = 'info', // info / success / warning / error
             $message = 'Test Notification',
