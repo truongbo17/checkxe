@@ -1,0 +1,16 @@
+{
+    "name": "bo/langfilemanager",
+    "description": "An interface to edit language files, for Laravel.",
+    "autoload": {
+        "psr-4": {
+            "Bo\\LangFileManager\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bo\\LangFileManager\\LangFileManagerServiceProvider"
+            ]
+        }
+    }
+}

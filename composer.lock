@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d236cc93dd629cda0b7ce7ba456805ce",
+    "content-hash": "b135490cf819b4e84f3e856b58bd3be4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -372,6 +372,32 @@
                 }
             },
             "description": "Core Generator CMS",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "bo/langfilemanager",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./core/packages/langfilemanager",
+                "reference": "7ecb3f94937600aed1bd5eda41cea06ee1857b0f"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bo\\LangFileManager\\LangFileManagerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bo\\LangFileManager\\": "src"
+                }
+            },
+            "description": "An interface to edit language files, for Laravel.",
             "transport-options": {
                 "relative": true
             }
@@ -11399,7 +11425,8 @@
         "bo/menu": 20,
         "bo/settings": 20,
         "bo/sidebar": 20,
-        "bo/notifications": 20
+        "bo/notifications": 20,
+        "bo/langfilemanager": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
