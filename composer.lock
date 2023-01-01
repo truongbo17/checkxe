@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b135490cf819b4e84f3e856b58bd3be4",
+    "content-hash": "49a5c40b1f2dceedf124ce92fb653d7b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -531,6 +531,32 @@
                 }
             },
             "description": "Permission Manager For Route.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "bo/pluginmanager",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./core/packages/pluginmanager",
+                "reference": "a47887da9f3273db93af2c6f6acf07d2179502f4"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bo\\PluginManager\\PluginManagerProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bo\\PluginManager\\": "src"
+                }
+            },
+            "description": "Plugin Manager",
             "transport-options": {
                 "relative": true
             }
@@ -11416,6 +11442,7 @@
     "stability-flags": {
         "bo/backupmanager": 20,
         "bo/base": 20,
+        "bo/pluginmanager": 20,
         "bo/filemanager": 20,
         "bo/generators": 20,
         "bo/logmanager": 20,

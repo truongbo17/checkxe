@@ -13,9 +13,9 @@ use Bo\Base\Http\Middleware\ThrottlePasswordRecovery;
 use Bo\Base\Library\CrudPanel\CrudPanel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Arr;
 
 class BoServiceProvider extends ServiceProvider
 {
@@ -387,7 +387,9 @@ class BoServiceProvider extends ServiceProvider
      */
     public function loadHelpers()
     {
-        require_once __DIR__ . '/../../helpers.php';
+        require_once __DIR__ . '/../../helpers/helpers.php';
+        require_once __DIR__ . '/../../helpers/core.php';
+        require_once __DIR__ . '/../../helpers/router.php';
     }
 
     /**

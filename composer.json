@@ -12,6 +12,7 @@
         "bensampo/laravel-enum": "^4.2",
         "bo/backupmanager": "*@dev",
         "bo/base": "*@dev",
+        "bo/pluginmanager": "*@dev",
         "bo/filemanager": "*@dev",
         "bo/generators": "*@dev",
         "bo/logmanager": "*@dev",
@@ -52,8 +53,7 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "Bo\\Blog\\": "applications/plugins/blogs/src"
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
@@ -68,8 +68,7 @@
         },
         "merge-plugin": {
             "include": [
-                "./applications/plugins/*/composer.json",
-                "./applications/themes/*/composer.json"
+                "./plugins/*/composer.json"
             ],
             "recurse": false,
             "replace": false,

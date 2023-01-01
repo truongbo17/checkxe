@@ -40,7 +40,7 @@ class PermissionManagerServiceProvider extends ServiceProvider
         // define the routes for the application
         $this->setupRoutes($this->app->router);
 
-        $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views/crud'), 'crud');
+        $this->loadViewsFrom(realpath(__DIR__ . '/resources/views/crud'), 'crud');
 
         // load migration
         $this->loadMigrationsFrom(__DIR__ . $this->migrationFilePath);

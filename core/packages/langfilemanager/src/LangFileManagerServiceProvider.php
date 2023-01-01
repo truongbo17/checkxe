@@ -20,9 +20,8 @@ class LangFileManagerServiceProvider extends ServiceProvider
      * @var bool
      */
     protected $defer = false;
-    private string $migrationFilePath = '/database/migrations';
 
-    private string $seederFilePath = '/database/seeds';
+    private string $migrationFilePath = '/database/migrations';
 
     /**
      * Perform post-registration booting of services.

@@ -1,0 +1,11 @@
+{
+    "primary_key": "chats",
+    "name": "Chats",
+    "namespace": "Bo\\Chat\\",
+    "provider": "Bo\\Chat\\Providers\\ChatServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module chat",
+    "icon": "fa-paperclip"
+}

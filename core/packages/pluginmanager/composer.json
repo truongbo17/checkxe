@@ -1,0 +1,19 @@
+{
+    "name": "bo/pluginmanager",
+    "description": "Plugin Manager",
+    "type": "package",
+    "autoload": {
+        "psr-4": {
+            "Bo\\PluginManager\\": "src"
+        }
+    },
+    "require": {
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bo\\PluginManager\\PluginManagerProvider"
+            ]
+        }
+    }
+}

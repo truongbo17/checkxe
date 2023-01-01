@@ -1,0 +1,11 @@
+{
+    "primary_key": "blogs",
+    "name": "Blogs",
+    "namespace": "Bo\\Blog\\",
+    "provider": "Bo\\Blog\\Providers\\BlogServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module blog",
+    "icon": "fa-paperclip"
+}
