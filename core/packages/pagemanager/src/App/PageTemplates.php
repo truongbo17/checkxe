@@ -1,6 +1,6 @@
 <?php
 
-namespace Bo\PageManager\app;
+namespace Bo\PageManager\App;
 
 trait PageTemplates
 {

@@ -1,0 +1,17 @@
+{
+    "name": "bo/notifications",
+    "type": "package",
+    "description": "Database notifications interface for Laravel",
+    "autoload": {
+        "psr-4": {
+            "Bo\\Notifications\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bo\\Notifications\\NotificationsServiceProvider"
+            ]
+        }
+    }
+}

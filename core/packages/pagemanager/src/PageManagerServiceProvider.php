@@ -39,7 +39,7 @@ class PageManagerServiceProvider extends ServiceProvider
             'bo.pagemanager'
         );
 
-        $this->loadViewsFrom(realpath(__DIR__.'/resources/views/vendor/backpack/crud'), 'pagemanager');
+        $this->loadViewsFrom(realpath(__DIR__ . '/resources/views/vendor/bo/crud'), 'pagemanager');
 
         \SideBarDashBoard::registerItem('page_manager')
             ->setLabel('Page')

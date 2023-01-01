@@ -12,10 +12,13 @@ class SideBar
 
     public static array $list_group_sidebar;
 
-    public function __construct(array $list_item_sidebar = [], array $list_group_sidebar = [])
+    public static array $list_namespace_view;
+
+    public function __construct(array $list_item_sidebar = [], array $list_group_sidebar = [], array $list_namespace_view = [])
     {
         self::$list_item_sidebar = $list_item_sidebar;
         self::$list_group_sidebar = $list_group_sidebar;
+        self::$list_namespace_view = $list_namespace_view;
     }
 
     /**
@@ -172,5 +175,25 @@ class SideBar
         } else {
             throw new Exception("Type of sidebar must item or group !");
         }
+    }
+
+    /**
+     * Push name space view to sidebar
+     *
+     * @param string $name_space_view
+     */
+    public function pushView(string $name_space_view)
+    {
+        self::$list_namespace_view[] = $name_space_view;
+    }
+
+    /**
+     * get name space view
+     *
+     * @return array
+     */
+    public function getViews(): array
+    {
+        return self::$list_namespace_view ?? [];
     }
 }

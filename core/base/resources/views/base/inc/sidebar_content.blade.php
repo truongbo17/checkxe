@@ -1,5 +1,8 @@
 <li class="nav-item"><a class="nav-link" href="{{ bo_url('dashboard') }}"><i
             class="la la-home nav-icon"></i> {{ trans('bo::base.dashboard') }}</a></li>
+@foreach(\SideBarDashBoard::getViews() as $views_include)
+    @include($views_include)
+@endforeach
 @foreach(\SideBarDashBoard::getAll() as $dashboard_sidebar)
     @if($dashboard_sidebar->type == 'item')
         <div @if(!is_null($dashboard_sidebar->getStyleCss()))

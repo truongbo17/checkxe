@@ -21,6 +21,7 @@
         "bo/menu": "*@dev",
         "bo/settings": "*@dev",
         "bo/sidebar": "*@dev",
+        "bo/notifications": "*@dev",
         "composer/package-versions-deprecated": "^1.8",
         "creativeorange/gravatar": "~1.0",
         "cviebrock/eloquent-sluggable": "^8",

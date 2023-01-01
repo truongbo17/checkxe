@@ -76,7 +76,7 @@ class BackupManagerServiceProvider extends ServiceProvider
         // by default, use the routes file provided in vendor
         $routeFilePathInUse = __DIR__ . $this->routeFilePath;
 
-        // but if there's a file with the same name in routes/backpack, use that one
+        // but if there's a file with the same name in routes/bo, use that one
         if (file_exists(base_path() . $this->routeFilePath)) {
             $routeFilePathInUse = base_path() . $this->routeFilePath;
         }
