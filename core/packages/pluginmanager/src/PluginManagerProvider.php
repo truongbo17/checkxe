@@ -5,6 +5,7 @@ namespace Bo\PluginManager;
 use Bo\PluginManager\App\Services\Plugin;
 use Bo\PluginManager\App\Services\PluginInterface;
 use Composer\Autoload\ClassLoader;
+use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
@@ -56,7 +57,7 @@ class PluginManagerProvider extends ServiceProvider
      * @return void
      *
      * @throws FileNotFoundException|InvalidArgumentException
-     * @throws \Exception
+     * @throws Exception
      */
     private function registerPluginActivated(): void
     {
