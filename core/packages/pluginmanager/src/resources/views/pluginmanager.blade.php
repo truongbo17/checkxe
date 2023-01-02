@@ -46,7 +46,7 @@
                                     onclick="deactivatePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.active') }}</button>
                             @endif
                             <button class="btn btn-danger"
-                                    onclick="deactivatePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.remove') }}</button>
+                                    onclick="removePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.remove') }}</button>
                         </div>
                     </div>
                 </div>
@@ -57,18 +57,22 @@
 
 @push('after_scripts')
     <script>
-        jQuery(document).ready(function ($) {
-            function activePlugin(pluginPath) {
+        function activePlugin(pluginPath) {
 
-            }
+        }
 
-            function deactivatePlugin(pluginPath) {
+        function deactivatePlugin(pluginPath) {
 
-            }
+        }
 
-            function removePlugin(pluginPath) {
-
-            }
-        });
+        function removePlugin(pluginPath) {
+            $.post("{{route("plugin.remove")}}",
+                {
+                    pluginPath: pluginPath,
+                },
+                function (result) {
+                    console.log(result)
+                });
+        }
     </script>
 @endpush

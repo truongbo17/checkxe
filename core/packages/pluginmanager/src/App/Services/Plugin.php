@@ -3,10 +3,14 @@
 namespace Bo\PluginManager\App\Services;
 
 use Alert;
+use Bo\Base\Services\BaseService;
+use Composer\Autoload\ClassLoader;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 
 class Plugin implements PluginInterface
 {
@@ -16,11 +20,15 @@ class Plugin implements PluginInterface
     /** @var array $activated_plugins */
     private array $activated_plugins = [];
 
+    private $file;
+
     /**
      * @throws FileNotFoundException
      */
     public function __construct(File $file)
     {
+        $this->file = $file;
+
         $plugins = $this->scanFolder(plugin_path()) ?? [];
         $activated_plugins = $this->getActivatedPluginFromJsonFile();
 
@@ -151,19 +159,86 @@ class Plugin implements PluginInterface
         return true;
     }
 
-    public function active()
+    public function active(string $plugin_path)
     {
         // TODO: Implement active() method.
     }
 
-    public function remove()
+    /**
+     * remove plugin
+     *
+     * @param string $plugin_path
+     * @return bool
+     */
+    public function remove(string $plugin_path): bool
     {
-        // TODO: Implement remove() method.
+        try {
+            $content = $this->getContentJsonFromPluginPath($plugin_path);
+            if (count($content) > 0 && in_array($content['primary_key'], $this->plugins)) {
+                if (in_array($content['primary_key'], $this->activated_plugins)) {
+                    $this->deactivate($plugin_path);
+                }
+
+                if (!class_exists($content['provider'])) {
+                    $loader = new ClassLoader();
+                    $loader->setPsr4($content['namespace'], $plugin_path . DIRECTORY_SEPARATOR . "src");
+                    $loader->register(true);
+                }
+
+                Schema::disableForeignKeyConstraints();
+                if (class_exists($content['namespace'] . 'Plugin')) {
+                    call_user_func([$content['namespace'] . 'Plugin', 'remove']);
+                }
+                Schema::enableForeignKeyConstraints();
+
+                $migrations = [];
+                foreach ($this->scanFolder($plugin_path . DIRECTORY_SEPARATOR . "/database/migrations") as $file) {
+                    $migrations[] = pathinfo($file, PATHINFO_FILENAME);
+                }
+                DB::table('migrations')->whereIn('migration', $migrations)->delete();
+
+                $this->file->deleteDirectory($plugin_path);
+
+                $this->removeModuleFiles($content['primary_key']);
+
+                if (class_exists($content['namespace'] . 'Plugin')) {
+                    call_user_func([$content['namespace'] . 'Plugin', 'removed']);
+                }
+
+                BaseService::clearCache();
+                return true;
+            }
+        } catch (Exception $e) {
+        }
+        return false;
     }
 
-    public function deactivate()
+    public function deactivate(string $plugin_path)
     {
         // TODO: Implement deactivate() method.
+    }
+
+    /**
+     * get content json for plugin path
+     *
+     * @param string $plugin_path
+     * @return array
+     */
+    private function getContentJsonFromPluginPath(string $plugin_path): array
+    {
+        if (
+            File::isDirectory($plugin_path) &&
+            File::exists($plugin_path . DIRECTORY_SEPARATOR . config('bo.pluginmanager.file_plugin'))
+        ) {
+            try {
+                $content = File::get($plugin_path . DIRECTORY_SEPARATOR . config('bo.pluginmanager.file_plugin'));
+                if (is_string($content)) {
+                    return json_decode($content, true);
+                }
+            } catch (FileNotFoundException $e) {
+            }
+        }
+        return [];
     }
 
     /**
@@ -184,5 +259,27 @@ class Plugin implements PluginInterface
     public function getAllPluginActivated(): array
     {
         return $this->activated_plugins ?? [];
+    }
+
+    /**
+     * @param string $module
+     * @param string $type
+     * @return void
+     */
+    private function removeModuleFiles(string $module, string $type = 'plugins'): void
+    {
+        $folders = [
+            public_path('resources/' . $type . '/' . $module),
+            resource_path('assets/' . $type . '/' . $module),
+            resource_path('views/vendor/' . $type . '/' . $module),
+            lang_path('vendor/' . $type . '/' . $module),
+            config_path($type . '/' . $module),
+        ];
+
+        foreach ($folders as $folder) {
+            if (File::isDirectory($folder)) {
+                File::deleteDirectory($folder);
+            }
+        }
     }
 }
