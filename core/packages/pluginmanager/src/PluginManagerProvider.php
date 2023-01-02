@@ -4,8 +4,13 @@ namespace Bo\PluginManager;
 
 use Bo\PluginManager\App\Services\Plugin;
 use Bo\PluginManager\App\Services\PluginInterface;
+use Composer\Autoload\ClassLoader;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class PluginManagerProvider extends ServiceProvider
 {
@@ -15,6 +20,10 @@ class PluginManagerProvider extends ServiceProvider
      * */
     private string $routeFilePath = '/routes/pluginmanager.php';
 
+    /**
+     * @throws FileNotFoundException
+     * @throws InvalidArgumentException
+     */
     public function boot()
     {
         $this->mergeConfigFrom(
@@ -37,6 +46,76 @@ class PluginManagerProvider extends ServiceProvider
             ->setIcon('nav-icon las la-braille')
             ->setGroup('setting_group')
             ->render();
+
+        $this->registerPluginActivated();
+    }
+
+    /**
+     * Register plugin activated with loader
+     *
+     * @return void
+     *
+     * @throws FileNotFoundException|InvalidArgumentException
+     * @throws \Exception
+     */
+    private function registerPluginActivated(): void
+    {
+        $plugin_construct = new Plugin(new File());
+        $activated_plugins = $plugin_construct->getAllPluginActivated();
+        if (count($activated_plugins) > 0) {
+            $loader = new ClassLoader();
+            $providers = [];
+            $namespaces = [];
+
+            if (cache()->has('plugin_namespaces') && cache()->has('plugin_providers')) {
+                $providers = cache('plugin_providers');
+                if (!is_array($providers) || empty($providers) || count($providers) != count($activated_plugins)) {
+                    $providers = [];
+                }
+
+                $namespaces = cache('plugin_namespaces');
+
+                if (!is_array($namespaces) || empty($namespaces) || count($namespaces) != count($activated_plugins)) {
+                    $namespaces = [];
+                }
+            }
+
+            if (empty($namespaces) || empty($providers)) {
+                foreach ($activated_plugins as $plugin) {
+                    if (empty($plugin)) {
+                        continue;
+                    }
+
+                    $content = $plugin_construct->getPlugin($plugin);
+                    if (!empty($content)) {
+                        if (Arr::has($content, 'namespace') && !class_exists($content['provider'])) {
+                            $namespaces[$plugin] = $content['namespace'];
+                        }
+
+                        $providers[] = $content['provider'];
+                    }
+                }
+
+                if (count($providers) == count($activated_plugins) && count($namespaces) == count($activated_plugins)) {
+                    cache()->forever('plugin_namespaces', $namespaces);
+                    cache()->forever('plugin_providers', $providers);
+                }
+            }
+
+            foreach ($namespaces as $key => $namespace) {
+                $loader->setPsr4($namespace, plugin_path($key . '/src'));
+            }
+
+            $loader->register();
+
+            foreach ($providers as $provider) {
+                if (!class_exists($provider)) {
+                    continue;
+                }
+
+                $this->app->register($provider);
+            }
+        }
     }
 
     /**

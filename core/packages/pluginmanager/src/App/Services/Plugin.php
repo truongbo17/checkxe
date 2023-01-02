@@ -20,7 +20,7 @@ class Plugin implements PluginInterface
     /** @var array $activated_plugins */
     private array $activated_plugins = [];
 
-    private $file;
+    private File $file;
 
     /**
      * @throws FileNotFoundException
@@ -41,16 +41,9 @@ class Plugin implements PluginInterface
                     File::delete(plugin_path($plugin . '/.DS_Store'));
                 }
 
-                try {
-                    $content = File::get(plugin_path($plugin . DIRECTORY_SEPARATOR . config('bo.pluginmanager.file_plugin')));
-                    if (is_string($content)) {
-                        $content = json_decode($content, true);
-                    }
-                } catch (FileNotFoundException $e) {
-                    $content = [];
-                }
+                $content = BaseService::getJsonDataPlugin($plugin);
 
-                if (is_array($content) && count($content) > 0 && $this->validateContent($content, plugin_path($plugin))) {
+                if (count($content) > 0 && $this->validateContent($content, plugin_path($plugin))) {
                     if ($this->checkExistPlugin($content)) {
                         if (File::exists(plugin_path($plugin . '/screenshot.png'))) {
                             $content['image'] = base64_encode(File::get(plugin_path($plugin . '/screenshot.png')));
@@ -66,7 +59,7 @@ class Plugin implements PluginInterface
                         }
 
                         $content['path'] = plugin_path($plugin);
-                        $this->plugins[] = $content;
+                        $this->plugins[$content['primary_key']] = $content;
                     } else {
                         Alert::error(trans('pluginmanager::pluginmanager.validate_key_content', ['plugin_path' => plugin_path($plugin)]));
                     }
@@ -259,6 +252,17 @@ class Plugin implements PluginInterface
     public function getAllPluginActivated(): array
     {
         return $this->activated_plugins ?? [];
+    }
+
+    /**
+     * Return a plugin by key
+     *
+     * @param string $primary_key
+     * @return array
+     */
+    public function getPlugin(string $primary_key): array
+    {
+        return $this->plugins[$primary_key] ?? [];
     }
 
     /**
