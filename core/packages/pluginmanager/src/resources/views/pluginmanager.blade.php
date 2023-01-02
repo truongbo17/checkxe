@@ -38,12 +38,15 @@
                         <div class="d-flex justify-content-around">
                             @if($plugin['active'])
                                 <button
-                                   class="w-50 btn btn-warning">{{ trans('pluginmanager::pluginmanager.deactivate') }}</button>
+                                    class="w-50 btn btn-warning"
+                                    onclick="activePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.deactivate') }}</button>
                             @else
                                 <button
-                                   class="w-50 btn btn-success">{{ trans('pluginmanager::pluginmanager.active') }}</button>
+                                    class="w-50 btn btn-success"
+                                    onclick="deactivatePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.active') }}</button>
                             @endif
-                            <button class="btn btn-danger">{{ trans('pluginmanager::pluginmanager.remove') }}</button>
+                            <button class="btn btn-danger"
+                                    onclick="deactivatePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.remove') }}</button>
                         </div>
                     </div>
                 </div>
@@ -51,3 +54,21 @@
         @endforeach
     </div>
 @endsection
+
+@push('after_scripts')
+    <script>
+        jQuery(document).ready(function ($) {
+            function activePlugin(pluginPath) {
+
+            }
+
+            function deactivatePlugin(pluginPath) {
+
+            }
+
+            function removePlugin(pluginPath) {
+
+            }
+        });
+    </script>
+@endpush

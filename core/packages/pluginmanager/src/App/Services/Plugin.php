@@ -56,6 +56,8 @@ class Plugin implements PluginInterface
                         } else {
                             $content["active"] = false;
                         }
+
+                        $content['path'] = plugin_path($plugin);
                         $this->plugins[] = $content;
                     } else {
                         Alert::error(trans('pluginmanager::pluginmanager.validate_key_content', ['plugin_path' => plugin_path($plugin)]));

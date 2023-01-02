@@ -20,4 +20,19 @@ class PluginManagerController
 
         return view('pluginmanager::pluginmanager', $data);
     }
+
+    public function remove()
+    {
+
+    }
+
+    public function active()
+    {
+
+    }
+
+    public function deactivate()
+    {
+
+    }
 }
