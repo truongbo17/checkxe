@@ -2,6 +2,8 @@
 
 namespace Bo\PluginManager;
 
+use Bo\PluginManager\App\Services\Plugin;
+use Bo\PluginManager\App\Services\PluginInterface;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
@@ -13,20 +15,12 @@ class PluginManagerProvider extends ServiceProvider
      * */
     private string $routeFilePath = '/routes/pluginmanager.php';
 
-    /**
-     * path database migration
-     * @var string $routeFilePath
-     * */
-    private string $migrationFilePath = '/database/migrations';
-
     public function boot()
     {
         $this->mergeConfigFrom(
             __DIR__ . '/config/pluginmanager.php',
             'bo.pluginmanager'
         );
-
-        $this->loadMigrationsFrom(__DIR__ . $this->migrationFilePath);
 
         $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'pluginmanager');
 
@@ -63,5 +57,10 @@ class PluginManagerProvider extends ServiceProvider
     private function loadHelpers()
     {
         require_once __DIR__ . '/helpers/plugins.php';
+    }
+
+    public function register()
+    {
+        $this->app->bind(PluginInterface::class, Plugin::class);
     }
 }
