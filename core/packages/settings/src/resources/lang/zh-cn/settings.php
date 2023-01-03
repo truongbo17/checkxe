@@ -14,5 +14,6 @@ return [
     'description'      => '描述',
     'setting_singular' => '设置',
     'setting_plural'   => '设置',
+    'type'             => 'Type',
 
 ];

@@ -14,5 +14,6 @@ return [
     'description'      => 'Açıklama',
     'setting_singular' => 'ayar',
     'setting_plural'   => 'ayarlar',
+    'type'             => 'Type',
 
 ];

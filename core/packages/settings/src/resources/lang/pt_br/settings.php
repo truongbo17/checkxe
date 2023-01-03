@@ -14,4 +14,6 @@ return [
     'description'      => 'Descrição',
     'setting_singular' => 'configuração',
     'setting_plural'   => 'configurações',
+    'type'             => 'Type',
+
 ];

@@ -14,5 +14,6 @@ return [
     'description'      => 'توضیحات',
     'setting_singular' => 'تنظیمات',
     'setting_plural'   => 'تنظیمات',
+    'type'             => 'Type',
 
 ];

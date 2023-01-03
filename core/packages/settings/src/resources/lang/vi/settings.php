@@ -14,5 +14,6 @@ return [
     'description'      => 'Mô tả',
     'setting_singular' => 'cấu hình',
     'setting_plural'   => 'các cấu hình',
+    'type'             => 'Loại',
 
 ];

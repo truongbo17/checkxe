@@ -14,5 +14,6 @@ return [
     'description'      => 'Opis',
     'setting_singular' => 'Podešavanje',
     'setting_plural'   => 'Podešavanja',
+    'type'             => 'Type',
 
 ];
