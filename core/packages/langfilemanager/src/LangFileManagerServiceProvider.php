@@ -35,12 +35,12 @@ class LangFileManagerServiceProvider extends ServiceProvider
         // - then the stock views that come with the package, in case a published view might be missing
         $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'langfilemanager');
 
-        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'bo.langfilemanager');
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'langfilemanager');
 
         $this->loadMigrationsFrom(__DIR__ . $this->migrationFilePath);
 
         // use the vendor configuration file as fallback
-        $this->mergeConfigFrom(__DIR__ . '/config/langfilemanager.php', 'bo.langfilemanager');
+        $this->mergeConfigFrom(__DIR__ . '/config/langfilemanager.php', 'langfilemanager');
 
         \SideBarDashBoard::registerGroup('translations')
             ->setLabel('Translations')

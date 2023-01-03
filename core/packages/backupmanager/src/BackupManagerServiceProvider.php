@@ -43,7 +43,7 @@ class BackupManagerServiceProvider extends ServiceProvider
         // - then the stock views that come with the package, in case a published view might be missing
         $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'backupmanager');
 
-        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'bo.backup');
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'backupmanager');
 
         // use the vendor configuration file as fallback
         $this->mergeConfigFrom(

@@ -2,6 +2,7 @@
 
 namespace Bo\Settings;
 
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
@@ -40,7 +41,7 @@ class SettingsServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__ . $this->migrationFilePath);
 
-        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'bo.settings');
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'settings');
 
         // only use the Settings package if the Settings table is present in the database
         if (!\App::runningInConsole() && Schema::hasTable(config('bo.setting.table_name'))) {
