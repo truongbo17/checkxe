@@ -20,15 +20,11 @@ class Plugin implements PluginInterface
     /** @var array $activated_plugins */
     private array $activated_plugins = [];
 
-    private File $file;
-
     /**
      * @throws FileNotFoundException
      */
-    public function __construct(File $file)
+    public function __construct()
     {
-        $this->file = $file;
-
         $plugins = $this->scanFolder(plugin_path()) ?? [];
         $activated_plugins = $this->getActivatedPluginFromJsonFile();
 
@@ -169,7 +165,7 @@ class Plugin implements PluginInterface
 
     public function active(string $plugin_path)
     {
-        // TODO: Implement active() method.
+
     }
 
     /**
@@ -182,7 +178,7 @@ class Plugin implements PluginInterface
     {
         try {
             $content = $this->getContentJsonFromPluginPath($plugin_path);
-            if (count($content) > 0 && in_array($content['primary_key'], $this->plugins)) {
+            if (count($content) > 0 && isset($this->plugins[$content['primary_key']])) {
                 if (in_array($content['primary_key'], $this->activated_plugins)) {
                     $this->deactivate($plugin_path);
                 }
@@ -194,7 +190,7 @@ class Plugin implements PluginInterface
                 }
 
                 Schema::disableForeignKeyConstraints();
-                if (class_exists($content['namespace'] . 'Plugin')) {
+                if (class_exists($content['namespace'] . 'Plugin') && method_exists($content['namespace'] . 'Plugin', 'remove')) {
                     call_user_func([$content['namespace'] . 'Plugin', 'remove']);
                 }
                 Schema::enableForeignKeyConstraints();
@@ -205,15 +201,18 @@ class Plugin implements PluginInterface
                 }
                 DB::table('migrations')->whereIn('migration', $migrations)->delete();
 
-                $this->file->deleteDirectory($plugin_path);
+                File::deleteDirectory($plugin_path);
 
                 $this->removeModuleFiles($content['primary_key']);
 
-                if (class_exists($content['namespace'] . 'Plugin')) {
+                if (class_exists($content['namespace'] . 'Plugin') && method_exists($content['namespace'] . 'Plugin', 'removed')) {
                     call_user_func([$content['namespace'] . 'Plugin', 'removed']);
                 }
 
                 BaseService::clearCache();
+
+                $this->updateActivatedPlugins();
+
                 return true;
             }
         } catch (Exception $e) {

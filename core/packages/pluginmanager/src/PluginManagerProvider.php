@@ -61,7 +61,7 @@ class PluginManagerProvider extends ServiceProvider
      */
     private function registerPluginActivated(): void
     {
-        $plugin_construct = new Plugin(new File());
+        $plugin_construct = new Plugin();
         $activated_plugins = $plugin_construct->getAllPluginActivated();
         if (count($activated_plugins) > 0) {
             $loader = new ClassLoader();
