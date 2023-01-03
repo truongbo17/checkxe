@@ -30,7 +30,7 @@ class UserCrudController extends CrudController
     public function setup()
     {
         $this->crud->setModel(config('bo.permissionmanager.models.user'));
-        $this->crud->setEntityNameStrings(trans('bo::permissionmanager.user'), trans('bo::permissionmanager.users'));
+        $this->crud->setEntityNameStrings(trans('permissionmanager::permissionmanager.user'), trans('permissionmanager::permissionmanager.users'));
         $this->crud->setRoute(bo_url('user'));
     }
 
@@ -39,12 +39,12 @@ class UserCrudController extends CrudController
         $this->crud->addColumns([
             [
                 'name'  => 'name',
-                'label' => trans('bo::permissionmanager.name'),
+                'label' => trans('permissionmanager::permissionmanager.name'),
                 'type'  => 'text',
             ],
             [
                 'name'  => 'email',
-                'label' => trans('bo::permissionmanager.email'),
+                'label' => trans('permissionmanager::permissionmanager.email'),
                 'type'  => 'email',
             ],
             [
@@ -54,7 +54,7 @@ class UserCrudController extends CrudController
                 'options' => array_flip(IsAdminEnum::asArray()),
             ],
             [ // n-n relationship (with pivot table)
-                'label'     => trans('bo::permissionmanager.roles'), // Table column heading
+                'label'     => trans('permissionmanager::permissionmanager.roles'), // Table column heading
                 'type'      => 'select_multiple',
                 'name'      => 'roles', // the method that defines the relationship in your Model
                 'entity'    => 'roles', // the method that defines the relationship in your Model
@@ -68,7 +68,7 @@ class UserCrudController extends CrudController
             [
                 'name'  => 'role',
                 'type'  => 'dropdown',
-                'label' => trans('bo::permissionmanager.role'),
+                'label' => trans('permissionmanager::permissionmanager.role'),
             ],
             config('bo.permissionmanager.models.role')::all()->pluck('name', 'id')->toArray(),
             function ($value) { // if the filter is active
@@ -95,25 +95,25 @@ class UserCrudController extends CrudController
         $this->crud->addFields([
             [
                 'name'  => 'name',
-                'label' => trans('bo::permissionmanager.name'),
+                'label' => trans('permissionmanager::permissionmanager.name'),
                 'type'  => 'text',
                 'tab'   => 'Base info',
             ],
             [
                 'name'  => 'email',
-                'label' => trans('bo::permissionmanager.email'),
+                'label' => trans('permissionmanager::permissionmanager.email'),
                 'type'  => 'email',
                 'tab'   => 'Base info',
             ],
             [
                 'name'  => 'password',
-                'label' => trans('bo::permissionmanager.password'),
+                'label' => trans('permissionmanager::permissionmanager.password'),
                 'type'  => 'password',
                 'tab'   => 'Base info',
             ],
             [
                 'name'  => 'password_confirmation',
-                'label' => trans('bo::permissionmanager.password_confirmation'),
+                'label' => trans('permissionmanager::permissionmanager.password_confirmation'),
                 'type'  => 'password',
                 'tab'   => 'Base info',
             ],

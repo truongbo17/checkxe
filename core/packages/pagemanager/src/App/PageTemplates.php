@@ -25,37 +25,37 @@ trait PageTemplates
         $this->crud->addField([   // CustomHTML
             'name' => 'metas_separator',
             'type' => 'custom_html',
-            'value' => '<br><h2>'.trans('bo::pagemanager.metas').'</h2><hr>',
+            'value' => '<br><h2>'.trans('pagemanager::pagemanager.metas').'</h2><hr>',
         ]);
         $this->crud->addField([
             'name' => 'meta_title',
-            'label' => trans('bo::pagemanager.meta_title'),
+            'label' => trans('pagemanager::pagemanager.meta_title'),
             'fake' => true,
             'store_in' => 'extras',
         ]);
         $this->crud->addField([
             'name' => 'meta_description',
-            'label' => trans('bo::pagemanager.meta_description'),
+            'label' => trans('pagemanager::pagemanager.meta_description'),
             'fake' => true,
             'store_in' => 'extras',
         ]);
         $this->crud->addField([
             'name' => 'meta_keywords',
             'type' => 'textarea',
-            'label' => trans('bo::pagemanager.meta_keywords'),
+            'label' => trans('pagemanager::pagemanager.meta_keywords'),
             'fake' => true,
             'store_in' => 'extras',
         ]);
         $this->crud->addField([   // CustomHTML
             'name' => 'content_separator',
             'type' => 'custom_html',
-            'value' => '<br><h2>'.trans('bo::pagemanager.content').'</h2><hr>',
+            'value' => '<br><h2>'.trans('pagemanager::pagemanager.content').'</h2><hr>',
         ]);
         $this->crud->addField([
             'name'        => 'content',
-            'label'       => trans('bo::pagemanager.content'),
+            'label'       => trans('pagemanager::pagemanager.content'),
             'type'        => 'ckeditor',
-            'placeholder' => trans('bo::pagemanager.content_placeholder'),
+            'placeholder' => trans('pagemanager::pagemanager.content_placeholder'),
             'options'     => [
                 'height' => 400
             ]
@@ -66,9 +66,9 @@ trait PageTemplates
     {
         $this->crud->addField([
             'name'        => 'content',
-            'label'       => trans('bo::pagemanager.content'),
+            'label'       => trans('pagemanager::pagemanager.content'),
             'type'        => 'ckeditor',
-            'placeholder' => trans('bo::pagemanager.content_placeholder'),
+            'placeholder' => trans('pagemanager::pagemanager.content_placeholder'),
             'options'     => [
                 'height' => 400
             ]

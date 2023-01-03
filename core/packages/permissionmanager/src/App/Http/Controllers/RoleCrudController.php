@@ -27,7 +27,7 @@ class RoleCrudController extends CrudController
         $this->role_model = $role_model = config('bo.permissionmanager.models.role');
 
         $this->crud->setModel($role_model);
-        $this->crud->setEntityNameStrings(trans('bo::permissionmanager.role'), trans('bo::permissionmanager.roles'));
+        $this->crud->setEntityNameStrings(trans('permissionmanager::permissionmanager.role'), trans('permissionmanager::permissionmanager.roles'));
         $this->crud->setRoute(bo_url('role'));
 
         // deny access according to configuration file
@@ -49,7 +49,7 @@ class RoleCrudController extends CrudController
          */
         $this->crud->addColumn([
             'name'  => 'name',
-            'label' => trans('bo::permissionmanager.name'),
+            'label' => trans('permissionmanager::permissionmanager.name'),
             'type'  => 'text',
         ]);
 
@@ -64,7 +64,7 @@ class RoleCrudController extends CrudController
          */
         $this->crud->query->withCount('users');
         $this->crud->addColumn([
-            'label'   => trans('bo::permissionmanager.users'),
+            'label'   => trans('permissionmanager::permissionmanager.users'),
             'type'    => 'text',
             'name'    => 'users_count',
             'wrapper' => [
@@ -72,7 +72,7 @@ class RoleCrudController extends CrudController
                     return bo_url('user?role=' . $entry->getKey());
                 },
             ],
-            'suffix'  => ' ' . strtolower(trans('bo::permissionmanager.users')),
+            'suffix'  => ' ' . strtolower(trans('permissionmanager::permissionmanager.users')),
         ]);
     }
 
@@ -86,7 +86,7 @@ class RoleCrudController extends CrudController
     {
         $this->crud->addField([
             'name'  => 'name',
-            'label' => trans('bo::permissionmanager.name'),
+            'label' => trans('permissionmanager::permissionmanager.name'),
             'type'  => 'text',
         ]);
 

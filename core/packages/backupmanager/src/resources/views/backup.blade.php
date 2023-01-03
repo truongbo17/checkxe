@@ -3,13 +3,13 @@
 @php
 $breadcrumbs = [
     trans('bo::crud.admin') => bo_url('dashboard'),
-    trans('bo::backup.backups') => false,
+    trans('backupmanager::backup.backups') => false,
 ];
 @endphp
 
 @section('header')
 <section class="container-fluid">
-    <h2><span class="text-capitalize">{{ trans('bo::backup.backups') }}</span></h2>
+    <h2><span class="text-capitalize">{{ trans('backupmanager::backup.backups') }}</span></h2>
 </section>
 @endsection
 
@@ -18,7 +18,7 @@ $breadcrumbs = [
 <button id="create-new-backup-button" href="{{ url(config('bo.base.route_prefix', 'admin').'/backup/create') }}" class="btn btn-primary mb-2">
     <i class="la la-spinner"></i>
     <i class="la la-plus"></i>
-    <span>{{ trans('bo::backup.create_a_new_backup') }}</span>
+    <span>{{ trans('backupmanager::backup.create_a_new_backup') }}</span>
 </button>
 
 <div class="card">
@@ -27,10 +27,10 @@ $breadcrumbs = [
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>{{ trans('bo::backup.location') }}</th>
-                    <th>{{ trans('bo::backup.date') }}</th>
-                    <th class="text-right">{{ trans('bo::backup.file_size') }}</th>
-                    <th class="text-right">{{ trans('bo::backup.actions') }}</th>
+                    <th>{{ trans('backupmanager::backup.location') }}</th>
+                    <th>{{ trans('backupmanager::backup.date') }}</th>
+                    <th class="text-right">{{ trans('backupmanager::backup.file_size') }}</th>
+                    <th class="text-right">{{ trans('backupmanager::backup.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,11 +43,11 @@ $breadcrumbs = [
                     <td class="text-right">
                         @if ($backup->downloadLink)
                         <a class="btn btn-sm btn-link" data-button-type="download" href="{{ $backup->downloadLink }}">
-                            <i class="la la-cloud-download"></i> {{ trans('bo::backup.download') }}
+                            <i class="la la-cloud-download"></i> {{ trans('backupmanager::backup.download') }}
                         </a>
                         @endif
                         <a class="btn btn-sm btn-link" data-button-type="delete" href="{{ $backup->deleteLink }}">
-                            <i class="la la-trash-o"></i> {{ trans('bo::backup.delete') }}
+                            <i class="la la-trash-o"></i> {{ trans('backupmanager::backup.delete') }}
                         </a>
                     </td>
                 </tr>
@@ -95,17 +95,17 @@ $breadcrumbs = [
         };
 
         const trans = {
-            create_confirmation_title: "{{ trans('bo::backup.create_confirmation_title') }}",
-            create_started_message: "{{ trans('bo::backup.create_started_message') }}",
-            create_error_title: "{{ trans('bo::backup.create_error_title') }}",
-            create_completed_title: "{{ trans('bo::backup.create_completed_title') }}",
-            download_confirmation_title: "{{ trans('bo::backup.download_confirmation_title') }}",
-            delete_error_title: "{{ trans('bo::backup.delete_error_title') }}",
-            delete_confirm: "{{ trans('bo::backup.delete_confirm') }}",
-            delete_cancel_title: "{{ trans('bo::backup.delete_cancel_title') }}",
-            delete_cancel_message: "{{ trans('bo::backup.delete_cancel_message') }}",
-            delete_confirmation_title: "{{ trans('bo::backup.delete_confirmation_title') }}",
-            delete_confirmation_message: "{{ trans('bo::backup.delete_confirmation_message') }}",
+            create_confirmation_title: "{{ trans('backupmanager::backup.create_confirmation_title') }}",
+            create_started_message: "{{ trans('backupmanager::backup.create_started_message') }}",
+            create_error_title: "{{ trans('backupmanager::backup.create_error_title') }}",
+            create_completed_title: "{{ trans('backupmanager::backup.create_completed_title') }}",
+            download_confirmation_title: "{{ trans('backupmanager::backup.download_confirmation_title') }}",
+            delete_error_title: "{{ trans('backupmanager::backup.delete_error_title') }}",
+            delete_confirm: "{{ trans('backupmanager::backup.delete_confirm') }}",
+            delete_cancel_title: "{{ trans('backupmanager::backup.delete_cancel_title') }}",
+            delete_cancel_message: "{{ trans('backupmanager::backup.delete_cancel_message') }}",
+            delete_confirmation_title: "{{ trans('backupmanager::backup.delete_confirmation_title') }}",
+            delete_confirmation_message: "{{ trans('backupmanager::backup.delete_confirmation_message') }}",
         }
 
         // Noty alert helper

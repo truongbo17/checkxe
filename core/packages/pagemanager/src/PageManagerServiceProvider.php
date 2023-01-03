@@ -41,7 +41,7 @@ class PageManagerServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(realpath(__DIR__ . '/resources/views/vendor/bo/crud'), 'pagemanager');
 
-        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'bo');
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'pagemanager');
 
         \SideBarDashBoard::registerItem('page_manager')
             ->setLabel('Page')

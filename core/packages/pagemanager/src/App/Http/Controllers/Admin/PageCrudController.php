@@ -32,24 +32,24 @@ class PageCrudController extends CrudController
     {
         $this->crud->setModel(config('bo.pagemanager.page_model_class', 'Bo\PageManager\App\Models\Page'));
         $this->crud->setRoute(config('bo.base.route_prefix') . '/page');
-        $this->crud->setEntityNameStrings(trans('bo::pagemanager.page'), trans('bo::pagemanager.pages'));
+        $this->crud->setEntityNameStrings(trans('pagemanager::pagemanager.page'), trans('pagemanager::pagemanager.pages'));
     }
 
     protected function setupListOperation()
     {
         $this->crud->addColumn([
             'name'  => 'name',
-            'label' => trans('bo::pagemanager.name'),
+            'label' => trans('pagemanager::pagemanager.name'),
         ]);
         $this->crud->addColumn([
             'name'          => 'template',
-            'label'         => trans('bo::pagemanager.template'),
+            'label'         => trans('pagemanager::pagemanager.template'),
             'type'          => 'model_function',
             'function_name' => 'getTemplateName',
         ]);
         $this->crud->addColumn([
             'name'  => 'slug',
-            'label' => trans('bo::pagemanager.slug'),
+            'label' => trans('pagemanager::pagemanager.slug'),
         ]);
         $this->crud->addButtonFromModelFunction('line', 'open', 'getOpenButton', 'beginning');
     }
@@ -79,7 +79,7 @@ class PageCrudController extends CrudController
     {
         $this->crud->addField([
             'name'              => 'template',
-            'label'             => trans('bo::pagemanager.template'),
+            'label'             => trans('pagemanager::pagemanager.template'),
             'type'              => 'select_page_template',
             'view_namespace'    => file_exists(resource_path('views/vendor/bo/crud/fields/select_page_template.blade.php')) ? null : 'pagemanager::fields',
             'options'           => $this->getTemplatesArray(),
@@ -91,7 +91,7 @@ class PageCrudController extends CrudController
         ]);
         $this->crud->addField([
             'name'              => 'name',
-            'label'             => trans('bo::pagemanager.page_name'),
+            'label'             => trans('pagemanager::pagemanager.page_name'),
             'type'              => 'text',
             'wrapperAttributes' => [
                 'class' => 'form-group col-md-6',
@@ -100,15 +100,15 @@ class PageCrudController extends CrudController
         ]);
         $this->crud->addField([
             'name'  => 'title',
-            'label' => trans('bo::pagemanager.page_title'),
+            'label' => trans('pagemanager::pagemanager.page_title'),
             'type'  => 'text',
             // 'disabled' => 'disabled'
         ]);
         $this->crud->addField([
             'name'  => 'slug',
-            'label' => trans('bo::pagemanager.page_slug'),
+            'label' => trans('pagemanager::pagemanager.page_slug'),
             'type'  => 'text',
-            'hint'  => trans('bo::pagemanager.page_slug_hint'),
+            'hint'  => trans('pagemanager::pagemanager.page_slug_hint'),
             // 'disabled' => 'disabled'
         ]);
     }
@@ -144,7 +144,7 @@ class PageCrudController extends CrudController
         $templates = $templates_trait->getMethods(ReflectionMethod::IS_PRIVATE);
 
         if (!count($templates)) {
-            abort(503, trans('bo::pagemanager.template_not_found'));
+            abort(503, trans('pagemanager::pagemanager.template_not_found'));
         }
 
         return $templates;

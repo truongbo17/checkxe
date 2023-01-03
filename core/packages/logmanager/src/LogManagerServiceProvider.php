@@ -26,7 +26,7 @@ class LogManagerServiceProvider extends ServiceProvider
         // - then the stock views that come with the package, in case a published view might be missing
         $this->loadViewsFrom(realpath(__DIR__ . '/../resources/views'), 'logmanager');
 
-        $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/lang'), 'bo.logmanager');
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/../resources/lang'), 'bo');
 
         \SideBarDashBoard::registerGroup('advanced')
             ->setLabel('Advanced')

@@ -16,7 +16,7 @@ class BackupController extends Controller
     public function index()
     {
         if (!count(config('backup.backup.destination.disks'))) {
-            abort(500, trans('bo::backup.no_disks_configured'));
+            abort(500, trans('backupmanager::backup.no_disks_configured'));
         }
 
         $this->data['backups'] = [];
@@ -49,7 +49,7 @@ class BackupController extends Controller
 
         // reverse the backups, so the newest one would be on top
         $this->data['backups'] = array_reverse($this->data['backups']);
-        $this->data['title'] = trans('bo::backup.backups');
+        $this->data['title'] = trans('backupmanager::backup.backups');
 
         return view('backupmanager::backup', $this->data);
     }
@@ -94,15 +94,15 @@ class BackupController extends Controller
         $disk = Storage::disk($diskName);
 
         if (!$this->isBackupDisk($diskName)) {
-            abort(500, trans('bo::backup.unknown_disk'));
+            abort(500, trans('backupmanager::backup.unknown_disk'));
         }
 
         if (!is_a($disk->getAdapter(), Local::class, true)) {
-            abort(404, trans('bo::backup.only_local_downloads_supported'));
+            abort(404, trans('backupmanager::backup.only_local_downloads_supported'));
         }
 
         if (!$disk->exists($fileName)) {
-            abort(404, trans('bo::backup.backup_doesnt_exist'));
+            abort(404, trans('backupmanager::backup.backup_doesnt_exist'));
         }
 
         return $disk->download($fileName);
@@ -117,13 +117,13 @@ class BackupController extends Controller
         $fileName = Request::input('file_name');
 
         if (!$this->isBackupDisk($diskName)) {
-            return response(trans('bo::backup.unknown_disk'), 500);
+            return response(trans('backupmanager::backup.unknown_disk'), 500);
         }
 
         $disk = Storage::disk($diskName);
 
         if (!$disk->exists($fileName)) {
-            return response(trans('bo::backup.backup_doesnt_exist'), 404);
+            return response(trans('backupmanager::backup.backup_doesnt_exist'), 404);
         }
 
         return $disk->delete($fileName);

@@ -31,7 +31,7 @@ class LanguageCrudController extends CrudController
     {
         $this->crud->setModel("Bo\LangFileManager\App\Models\Language");
         $this->crud->setRoute(config('bo.base.route_prefix', 'admin') . '/language');
-        $this->crud->setEntityNameStrings(trans('bo::langfilemanager.language'), trans('bo::langfilemanager.languages'));
+        $this->crud->setEntityNameStrings(trans('langfilemanager::langfilemanager.language'), trans('langfilemanager::langfilemanager.languages'));
     }
 
     public function setupListOperation()
@@ -39,16 +39,16 @@ class LanguageCrudController extends CrudController
         $this->crud->setColumns([
             [
                 'name'  => 'name',
-                'label' => trans('bo::langfilemanager.language_name'),
+                'label' => trans('langfilemanager::langfilemanager.language_name'),
             ],
             [
                 'name'  => 'active',
-                'label' => trans('bo::langfilemanager.active'),
+                'label' => trans('langfilemanager::langfilemanager.active'),
                 'type'  => 'boolean',
             ],
             [
                 'name'  => 'default',
-                'label' => trans('bo::langfilemanager.default'),
+                'label' => trans('langfilemanager::langfilemanager.default'),
                 'type'  => 'boolean',
             ],
         ]);
@@ -65,32 +65,32 @@ class LanguageCrudController extends CrudController
         $this->crud->setValidation(LanguageRequest::class);
         $this->crud->addField([
             'name'  => 'name',
-            'label' => trans('bo::langfilemanager.language_name'),
+            'label' => trans('langfilemanager::langfilemanager.language_name'),
             'type'  => 'text',
         ]);
         $this->crud->addField([
             'name'  => 'native',
-            'label' => trans('bo::langfilemanager.native_name'),
+            'label' => trans('langfilemanager::langfilemanager.native_name'),
             'type'  => 'text',
         ]);
         $this->crud->addField([
             'name'  => 'abbr',
-            'label' => trans('bo::langfilemanager.code_iso639-1'),
+            'label' => trans('langfilemanager::langfilemanager.code_iso639-1'),
             'type'  => 'text',
         ]);
         $this->crud->addField([
             'name'  => 'flag',
-            'label' => trans('bo::langfilemanager.flag_image'),
+            'label' => trans('langfilemanager::langfilemanager.flag_image'),
             'type'  => bopro() ? 'browse' : 'text',
         ]);
         $this->crud->addField([
             'name'  => 'active',
-            'label' => trans('bo::langfilemanager.active'),
+            'label' => trans('langfilemanager::langfilemanager.active'),
             'type'  => 'checkbox',
         ]);
         $this->crud->addField([
             'name'  => 'default',
-            'label' => trans('bo::langfilemanager.default'),
+            'label' => trans('langfilemanager::langfilemanager.default'),
             'type'  => 'checkbox',
         ]);
     }
@@ -128,7 +128,7 @@ class LanguageCrudController extends CrudController
         // SECURITY
         // check if that file isn't forbidden in the config file
         if (in_array($file, config('bo.langfilemanager.language_ignore'))) {
-            abort('403', trans('bo::langfilemanager.cant_edit_online'));
+            abort('403', trans('langfilemanager::langfilemanager.cant_edit_online'));
         }
 
         if ($lang) {
@@ -145,7 +145,7 @@ class LanguageCrudController extends CrudController
         $this->data['langFiles'] = $langfile->getlangFiles();
         $this->data['fileArray'] = $langfile->getFileContent();
         $this->data['langfile'] = $langfile;
-        $this->data['title'] = trans('bo::langfilemanager.translations');
+        $this->data['title'] = trans('langfilemanager::langfilemanager.translations');
 
         return view('langfilemanager::translations', $this->data);
     }
@@ -155,7 +155,7 @@ class LanguageCrudController extends CrudController
         // SECURITY
         // check if that file isn't forbidden in the config file
         if (in_array($file, config('bo.langfilemanager.language_ignore'))) {
-            abort('403', trans('bo::langfilemanager.cant_edit_online'));
+            abort('403', trans('langfilemanager::langfilemanager.cant_edit_online'));
         }
 
         $message = trans('error.error_general');
@@ -170,12 +170,12 @@ class LanguageCrudController extends CrudController
         $fields = $langfile->testFields($request->all());
         if (empty($fields)) {
             if ($langfile->setFileContent($request->all())) {
-                Alert::success(trans('bo::langfilemanager.saved'))->flash();
+                Alert::success(trans('langfilemanager::langfilemanager.saved'))->flash();
                 $status = true;
             }
         } else {
             $message = trans('admin.language.fields_required');
-            Alert::error(trans('bo::langfilemanager.please_fill_all_fields'))->flash();
+            Alert::error(trans('langfilemanager::langfilemanager.please_fill_all_fields'))->flash();
         }
 
         return redirect()->back();

@@ -4,7 +4,7 @@
   $defaultBreadcrumbs = [
     trans('bo::crud.admin') => bo_url('dashboard'),
     $crud->entity_name_plural => url($crud->route),
-    trans('bo::crud.edit').' '.trans('bo::langfilemanager.texts') => false,
+    trans('bo::crud.edit').' '.trans('langfilemanager::langfilemanager.texts') => false,
   ];
 
   // if breadcrumbs aren't defined in the CrudController, use the default breadcrumbs
@@ -14,8 +14,8 @@
 @section('header')
 	<section class="container-fluid">
 	  <h2>
-        <span class="text-capitalize">{{ trans('bo::langfilemanager.translate') }}</span>
-        <small>{{ trans('bo::langfilemanager.site_texts') }}.</small>
+        <span class="text-capitalize">{{ trans('langfilemanager::langfilemanager.translate') }}</span>
+        <small>{{ trans('langfilemanager::langfilemanager.site_texts') }}.</small>
 
         @if ($crud->hasAccess('list'))
           <small><a href="{{ url($crud->route) }}" class="hidden-print font-sm"><i class="fa fa-angle-double-left"></i> {{ trans('bo::crud.back_to_all') }} <span>{{ $crud->entity_name_plural }}</span></a></small>
@@ -30,7 +30,7 @@
   	<div class="box-header with-border">
 	  <h3 class="box-title float-right pr-1">
 		<small>
-			 &nbsp; {{ trans('bo::langfilemanager.switch_to') }}: &nbsp;
+			 &nbsp; {{ trans('langfilemanager::langfilemanager.switch_to') }}: &nbsp;
 			<select name="language_switch" id="language_switch">
 				@foreach ($languages as $lang)
 				<option value="{{ url(config('bo.base.route_prefix', 'admin')."/language/texts/{$lang->abbr}") }}" {{ $currentLang == $lang->abbr ? 'selected' : ''}}>{{ $lang->name }}</option>
@@ -59,13 +59,13 @@
 				{!! csrf_field() !!}
 				<div class="form-group row">
 					<div class="col-sm-2">
-						<h5>{{ trans('bo::langfilemanager.key') }}</h5>
+						<h5>{{ trans('langfilemanager::langfilemanager.key') }}</h5>
 					</div>
 					<div class="hidden-sm hidden-xs col-md-5">
-						<h5>{{ trans('bo::langfilemanager.language_text', ['language_name' => $browsingLangObj->name]) }}</h5>
+						<h5>{{ trans('langfilemanager::langfilemanager.language_text', ['language_name' => $browsingLangObj->name]) }}</h5>
 					</div>
 					<div class="col-sm-10 col-md-5">
-						<h5>{{ trans('bo::langfilemanager.language_translation', ['language_name' => $currentLangObj->name]) }}</h5>
+						<h5>{{ trans('langfilemanager::langfilemanager.language_translation', ['language_name' => $currentLangObj->name]) }}</h5>
 					</div>
 				</div>
 				{!! $langfile->displayInputs($fileArray) !!}
@@ -75,11 +75,11 @@
 				</div>
 				</form>
 				@else
-					<em>{{ trans('bo::langfilemanager.empty_file') }}</em>
+					<em>{{ trans('langfilemanager::langfilemanager.empty_file') }}</em>
 				@endif
 			</section>
     </div><!-- /.card-body -->
-    	<p><small>{!! trans('bo::langfilemanager.rules_text') !!}</small></p>
+    	<p><small>{!! trans('langfilemanager::langfilemanager.rules_text') !!}</small></p>
   </div><!-- /.card -->
 @endsection
 

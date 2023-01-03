@@ -40,7 +40,7 @@ class LangFileManagerServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . $this->migrationFilePath);
 
         // use the vendor configuration file as fallback
-        $this->mergeConfigFrom(__DIR__ . '/config/langfilemanager.php', 'langfilemanager');
+        $this->mergeConfigFrom(__DIR__ . '/config/langfilemanager.php', 'bo.langfilemanager');
 
         \SideBarDashBoard::registerGroup('translations')
             ->setLabel('Translations')
