@@ -45,6 +45,8 @@ class PermissionManagerServiceProvider extends ServiceProvider
         // load migration
         $this->loadMigrationsFrom(__DIR__ . $this->migrationFilePath);
 
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'bo.pagemanager');
+
         \SideBarDashBoard::registerGroup('permission_manager')
             ->setLabel('Authentication')
             ->setPosition(98)

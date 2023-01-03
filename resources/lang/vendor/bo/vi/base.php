@@ -68,5 +68,6 @@ return [
     'confirm_new_password' => 'Xác nhận mật khẩu mới',
     'throttled'            => 'Bạn vừa gửi một yêu cầu đặt lại mật khẩu gần đây. Vui lòng kiểm tra email. Nếu bạn không nhận được email hướng dẫn, vui lòng thử lại sau.',
     'throttled_request'    => 'Bạn đã yêu cầu đặt lại mật khẩu vượt quá số lần giới hạn. Vui lòng thử lại sau vài phút nữa.',
-
+    'not_admin'            => 'Tài khoản không phải là quản trị viên.',
+    'router_name'          => 'Tên tuyến đường'
 ];
