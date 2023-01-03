@@ -9,7 +9,6 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -52,11 +51,31 @@ class PluginManagerProvider extends ServiceProvider
     }
 
     /**
+     * Define the routes for the application.
+     *
+     * @param Router $router
+     *
+     * @return void
+     */
+    public function setupRoutes(Router $router)
+    {
+        // by default, use the routes file provided in package
+        $routeFilePathInUse = __DIR__ . $this->routeFilePath;
+
+        $this->loadRoutesFrom($routeFilePathInUse);
+    }
+
+    private function loadHelpers()
+    {
+        require_once __DIR__ . '/helpers/plugins.php';
+    }
+
+    /**
      * Register plugin activated with loader
      *
      * @return void
      *
-     * @throws FileNotFoundException|InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws Exception
      */
     private function registerPluginActivated(): void
@@ -117,26 +136,6 @@ class PluginManagerProvider extends ServiceProvider
                 $this->app->register($provider);
             }
         }
-    }
-
-    /**
-     * Define the routes for the application.
-     *
-     * @param Router $router
-     *
-     * @return void
-     */
-    public function setupRoutes(Router $router)
-    {
-        // by default, use the routes file provided in package
-        $routeFilePathInUse = __DIR__ . $this->routeFilePath;
-
-        $this->loadRoutesFrom($routeFilePathInUse);
-    }
-
-    private function loadHelpers()
-    {
-        require_once __DIR__ . '/helpers/plugins.php';
     }
 
     public function register()

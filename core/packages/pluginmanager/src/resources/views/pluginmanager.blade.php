@@ -39,11 +39,11 @@
                             @if($plugin['active'])
                                 <button
                                     class="w-50 btn btn-warning"
-                                    onclick="activePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.deactivate') }}</button>
+                                    onclick="deactivatePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.deactivate') }}</button>
                             @else
                                 <button
                                     class="w-50 btn btn-success"
-                                    onclick="deactivatePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.active') }}</button>
+                                    onclick="activePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.active') }}</button>
                             @endif
                             <button class="btn btn-danger"
                                     onclick="removePlugin('{{ $plugin['path'] }}')">{{ trans('pluginmanager::pluginmanager.remove') }}</button>
@@ -58,11 +58,23 @@
 @push('after_scripts')
     <script>
         function activePlugin(pluginPath) {
-
+            $.post("{{route("plugin.activate")}}",
+                {
+                    pluginPath: pluginPath,
+                },
+                function () {
+                    location.reload();
+                });
         }
 
         function deactivatePlugin(pluginPath) {
-
+            $.post("{{route("plugin.deactivate")}}",
+                {
+                    pluginPath: pluginPath,
+                },
+                function () {
+                    location.reload();
+                });
         }
 
         function removePlugin(pluginPath) {
@@ -70,8 +82,8 @@
                 {
                     pluginPath: pluginPath,
                 },
-                function (result) {
-                    console.log(result)
+                function () {
+                    location.reload();
                 });
         }
     </script>

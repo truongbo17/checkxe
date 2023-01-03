@@ -2,6 +2,7 @@
 
 namespace Bo\PluginManager\App\Http\Controllers;
 
+use Alert;
 use Bo\PluginManager\App\Services\PluginInterface;
 use Illuminate\Http\Request;
 
@@ -22,29 +23,33 @@ class PluginManagerController
         return view('pluginmanager::pluginmanager', $data);
     }
 
-    public function remove(Request $request)
+    public function remove(Request $request): bool
     {
-        if ($request->has('pluginPath')) {
-            if ($this->plugin->remove($request->input('pluginPath'))) {
-                return json_encode([
-                    "error"   => false,
-                    "message" => trans("pluginmanager::pluginmanager.success_remove_plugin")
-                ]);
-            }
+        if ($request->has('pluginPath') && $this->plugin->remove($request->input('pluginPath'))) {
+            Alert::add('success', trans("pluginmanager::pluginmanager.success_remove_plugin"))->flash();
+        } else {
+            Alert::add('error', trans("pluginmanager::pluginmanager.fail_remove_plugin"))->flash();
         }
-        return json_encode([
-            "error"   => true,
-            "message" => trans("pluginmanager::pluginmanager.fail_remove_plugin")
-        ]);
+        return true;
     }
 
-    public function active()
+    public function activate(Request $request): bool
     {
-
+        if ($request->has('pluginPath') && $this->plugin->active($request->input('pluginPath'))) {
+            Alert::add('success', trans("pluginmanager::pluginmanager.success_active_plugin"))->flash();
+        } else {
+            Alert::add('error', trans("pluginmanager::pluginmanager.fail_active_plugin"))->flash();
+        }
+        return true;
     }
 
-    public function deactivate()
+    public function deactivate(Request $request): bool
     {
-
+        if ($request->has('pluginPath') && $this->plugin->deactivate($request->input('pluginPath'))) {
+            Alert::add('success', trans("pluginmanager::pluginmanager.success_deactivate_plugin"))->flash();
+        } else {
+            Alert::add('error', trans("pluginmanager::pluginmanager.fail_deactivate_plugin"))->flash();
+        }
+        return true;
     }
 }

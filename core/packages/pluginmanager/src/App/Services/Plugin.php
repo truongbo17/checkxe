@@ -163,9 +163,49 @@ class Plugin implements PluginInterface
         return true;
     }
 
-    public function active(string $plugin_path)
+    /**
+     * Active plugin
+     *
+     * @paraamm string $plugin_path
+     * @return bool
+     */
+    public function active(string $plugin_path): bool
     {
+        try {
+            $content = $this->getContentJsonFromPluginPath($plugin_path);
+            if (count($content) > 0 && isset($this->plugins[$content['primary_key']])) {
+                if (!in_array($content['primary_key'], $this->activated_plugins)) {
+                    if (!class_exists($content['provider'])) {
+                        $loader = new ClassLoader();
+                        $loader->setPsr4($content['namespace'], $plugin_path . DIRECTORY_SEPARATOR . "src");
+                        $loader->register(true);
+                    }
+                    if (class_exists($content['namespace'] . 'Plugin') && method_exists($content['namespace'] . 'Plugin', 'activate')) {
+                        call_user_func([$content['namespace'] . 'Plugin', 'activate']);
+                    }
 
+                    // $this->publishAssets($plugin);
+                    if (File::isDirectory(get_path_database_plugin($content['primary_key']))) {
+                        app()->make('migrator')->run(get_path_database_plugin($content['primary_key']));
+                    }
+                    app()->register($content['provider']);
+
+                    $this->activated_plugins[] = $content['primary_key'];
+                    $this->updateActivatedPlugins();
+
+                    if (class_exists($content['namespace'] . 'Plugin') && method_exists($content['namespace'] . 'Plugin', 'activated')) {
+                        call_user_func([$content['namespace'] . 'Plugin', 'activated']);
+                    }
+
+                    BaseService::clearCache();
+
+                    return true;
+
+                }
+            }
+        } catch (Exception $e) {
+        }
+        return false;
     }
 
     /**
@@ -220,9 +260,45 @@ class Plugin implements PluginInterface
         return false;
     }
 
-    public function deactivate(string $plugin_path)
+    /**
+     * Deactivate plugin
+     *
+     * @param string $plugin_path
+     * @return bool
+     */
+    public function deactivate(string $plugin_path): bool
     {
-        // TODO: Implement deactivate() method.
+        try {
+            $content = $this->getContentJsonFromPluginPath($plugin_path);
+            if (count($content) > 0 && isset($this->plugins[$content['primary_key']])) {
+                if (!class_exists($content['provider'])) {
+                    $loader = new ClassLoader();
+                    $loader->setPsr4($content['namespace'], $plugin_path . DIRECTORY_SEPARATOR . "src");
+                    $loader->register(true);
+                }
+                if (in_array($content['primary_key'], $this->activated_plugins)) {
+                    if (class_exists($content['namespace'] . 'Plugin') && method_exists($content['namespace'] . 'Plugin', 'deactivate')) {
+                        call_user_func([$content['namespace'] . 'Plugin', 'deactivate']);
+                    }
+
+                    if (($key = array_search($content['primary_key'], $this->activated_plugins)) !== false) {
+                        unset($this->activated_plugins[$key]);
+
+                        $this->updateActivatedPlugins();
+
+                        if (class_exists($content['namespace'] . 'Plugin') && method_exists($content['namespace'] . 'Plugin', 'deactivated')) {
+                            call_user_func([$content['namespace'] . 'Plugin', 'deactivated']);
+                        }
+
+                        BaseService::clearCache();
+
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception $e) {
+        }
+        return false;
     }
 
     /**

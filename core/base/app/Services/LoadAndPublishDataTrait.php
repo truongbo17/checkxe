@@ -3,260 +3,64 @@
 namespace Bo\Base\Services;
 
 use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Str;
-use ReflectionClass;
 
 trait LoadAndPublishDataTrait
 {
-    /**
-     * @var string|null
-     */
-    protected ?string $namespace = null;
+    /** @var string|null $primary_key */
+    private ?string $primary_key = null;
+
+    /** @var string|null $dir_plugin */
+    private ?string $dir_plugin = null;
 
     /**
-     * @var string|null
+     * Set primary key for plugin
+     *
+     * @param string $primary_key
+     * @return LoadAndPublishDataTrait
      */
-    protected ?string $basePath = null;
-
-    /**
-     * @param string $namespace
-     * @return $this
-     */
-    public function setNamespace(string $namespace): self
+    public function setPrimaryKeyPlugin(string $primary_key): self
     {
-        $this->namespace = ltrim(rtrim($namespace, '/'), '/');
-
+        $this->primary_key = $primary_key;
         return $this;
     }
 
     /**
-     * Publish the given configuration file name (without extension) and the given module
-     * @param array|string $fileNames
-     * @return $this
+     * Set dir for plugin
+     *
+     * @param string $dir_plugin
+     * @return LoadAndPublishDataTrait
+     */
+    public function setDirPlugin(string $dir_plugin): self
+    {
+        $this->dir_plugin = $dir_plugin;
+        return $this;
+    }
+
+    /**
+     * validate dir and primary key plugin not null
+     *
      * @throws Exception
      */
-    public function loadAndPublishConfigurations($fileNames): self
+    private function validateDirAndPrimaryKeyPlugin(): void
     {
-        if (!is_array($fileNames)) {
-            $fileNames = [$fileNames];
-        }
-        foreach ($fileNames as $fileName) {
-            $this->mergeConfigFrom($this->getConfigFilePath($fileName), $this->getDotedNamespace() . '.' . $fileName);
-            if ($this->app->runningInConsole()) {
-                $this->publishes([
-                    $this->getConfigFilePath($fileName) => config_path($this->getDashedNamespace() . '/' . $fileName . '.php'),
-                ], 'cms-config');
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get path of the give file name in the given module
-     * @param string $file
-     * @return string
-     * @throws Exception
-     */
-    protected function getConfigFilePath(string $file): string
-    {
-        $file = $this->getBasePath() . $this->getDashedNamespace() . '/config/' . $file . '.php';
-
-        if (!file_exists($file) && Str::contains($file, plugin_path())) {
-            $this->throwInvalidPluginError();
-        }
-
-        return $file;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBasePath(): string
-    {
-        if (strpos($this->getDashedNamespace(), "plugins") !== false) {
-            return application_path();
-        }
-
-        return $this->basePath ?? platform_path();
-    }
-
-    /**
-     * @param string $path
-     * @return $this
-     */
-    public function setBasePath(string $path): self
-    {
-        $this->basePath = $path;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getDashedNamespace(): string
-    {
-        return str_replace('.', '/', $this->namespace);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getDotedNamespace(): string
-    {
-        return str_replace('/', '.', $this->namespace);
-    }
-
-    /**
-     * Publish the given configuration file name (without extension) and the given module
-     * @param array|string $fileNames
-     * @return $this
-     */
-    public function loadRoutes($fileNames = ['web']): self
-    {
-        if (!is_array($fileNames)) {
-            $fileNames = [$fileNames];
-        }
-
-        foreach ($fileNames as $fileName) {
-            $this->loadRoutesFrom($this->getRouteFilePath($fileName));
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $file
-     * @return string
-     * @throws Exception
-     */
-    protected function getRouteFilePath(string $file): string
-    {
-        $file = $this->getBasePath() . $this->getDashedNamespace() . '/routes/' . $file . '.php';
-
-        if (!file_exists($file) && Str::contains($file, plugin_path())) {
-            $this->throwInvalidPluginError();
-        }
-
-        return $file;
-    }
-
-    /**
-     * @return $this
-     */
-    public function loadAndPublishViews(): self
-    {
-        $this->loadViewsFrom($this->getViewsPath(), $this->getDashedNamespace());
-        if ($this->app->runningInConsole()) {
-            $this->publishes(
-                [$this->getViewsPath() => resource_path('views/vendor/' . $this->getDashedNamespace())],
-                'cms-views'
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getViewsPath(): string
-    {
-        return $this->getBasePath() . $this->getDashedNamespace() . '/resources/views/';
-    }
-
-    /**
-     * @return $this
-     */
-    public function loadAndPublishTranslations(): self
-    {
-        $this->loadTranslationsFrom($this->getTranslationsPath(), $this->getDashedNamespace());
-        $this->publishes(
-            [$this->getTranslationsPath() => lang_path('vendor/' . $this->getDashedNamespace())],
-            'cms-lang'
-        );
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getTranslationsPath(): string
-    {
-        return $this->getBasePath() . $this->getDashedNamespace() . '/resources/lang/';
-    }
-
-    /**
-     * @return $this
-     */
-    public function loadMigrations(): self
-    {
-        $this->loadMigrationsFrom($this->getMigrationsPath());
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getMigrationsPath(): string
-    {
-        return $this->getBasePath() . $this->getDashedNamespace() . '/database/migrations/';
-    }
-
-    /**
-     * @param string|null $path
-     * @return $this
-     */
-    public function publishAssets(string $path = null): self
-    {
-        if ($this->app->runningInConsole()) {
-            if (empty($path)) {
-                $path = 'resources/core/' . $this->getDashedNamespace();
-            }
-            $this->publishes([$this->getAssetsPath() => public_path($path)], 'cms-public');
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getAssetsPath(): string
-    {
-        return $this->getBasePath() . $this->getDashedNamespace() . '/public/';
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function throwInvalidPluginError()
-    {
-        $reflection = new ReflectionClass($this);
-
-        $from = str_replace('/src/Providers', '', dirname($reflection->getFilename()));
-        $from = str_replace(base_path(), '', $from);
-
-        $to = $this->getBasePath() . $this->getDashedNamespace();
-        $to = str_replace(base_path(), '', $to);
-
-        if ($from != $to) {
-            throw new Exception(sprintf('Plugin folder is invalid. Need to rename folder %s to %s', $from, $to));
+        if (is_null($this->dir_plugin) && is_null($this->primary_key)) {
+            throw new Exception("Please add dir plugin and primary_key plugin.");
         }
     }
 
     /**
-     * @return $this
-     * @throws FileNotFoundException
+     * load route service provider
+     *
+     * @param array $routes
+     * @return LoadAndPublishDataTrait
      */
-    public function loadHelpers(): self
+    public function loadRoutes(array $routes): self
     {
-        BaseService::autoload(base_path('base/') . $this->getDashedNamespace() . '/helpers');
-        BaseService::autoload(base_path('application/') . $this->getDashedNamespace() . '/helpers');
+        $this->validateDirAndPrimaryKeyPlugin();
+
+        foreach ($routes as $route) {
+            $this->loadRoutesFrom(get_path_route_plugin($this->dir_plugin, $route));
+        }
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dcore\Blog;
+namespace Bo\Blog;
 
 use Bo\PluginManager\App\Services\PluginOperationAbstract;
 
