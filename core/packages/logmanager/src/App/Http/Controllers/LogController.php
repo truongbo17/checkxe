@@ -15,7 +15,7 @@ class LogController extends Controller
     public function index()
     {
         $this->data['files'] = LogViewer::getFiles(true, true);
-        $this->data['title'] = trans('bo::logmanager.log_manager');
+        $this->data['title'] = trans('logmanager::logmanager.log_manager');
 
         return view('logmanager::logs', $this->data);
     }
@@ -32,11 +32,11 @@ class LogController extends Controller
         $logs = LogViewer::all();
 
         if (count($logs) <= 0) {
-            abort(404, trans('bo::logmanager.log_file_doesnt_exist'));
+            abort(404, trans('logmanager::logmanager.log_file_doesnt_exist'));
         }
 
         $this->data['logs'] = $logs;
-        $this->data['title'] = trans('bo::logmanager.preview') . ' LogController.php' .trans('bo::logmanager.logs');
+        $this->data['title'] = trans('logmanager::logmanager.preview') . ' LogController.php' .trans('logmanager::logmanager.logs');
         $this->data['file_name'] = decrypt($file_name);
 
         return view('logmanager::log_item', $this->data);
@@ -71,6 +71,6 @@ class LogController extends Controller
             return 'success';
         }
 
-        abort(404, trans('bo::logmanager.log_file_doesnt_exist'));
+        abort(404, trans('logmanager::logmanager.log_file_doesnt_exist'));
     }
 }

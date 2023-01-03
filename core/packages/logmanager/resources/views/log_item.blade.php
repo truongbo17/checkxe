@@ -3,16 +3,16 @@
 @php
   $breadcrumbs = [
     trans('bo::crud.admin') => bo_url('dashboard'),
-    trans('bo::logmanager.log_manager') => bo_url('log'),
-    trans('bo::logmanager.preview') => false,
+    trans('logmanager::logmanager.log_manager') => bo_url('log'),
+    trans('logmanager::logmanager.preview') => false,
   ];
 @endphp
 
 @section('header')
     <section class="container-fluid">
       <h2>
-        {{ trans('bo::logmanager.log_manager') }}<small>{{ trans('bo::logmanager.file_name') }}: <i>{{ $file_name }}</i></small>
-        <small><a href="{{ bo_url('log') }}" class="hidden-print font-sm"><i class="la la-angle-double-left"></i> {{ trans('bo::logmanager.back_to_all_logs') }}</a></small>
+        {{ trans('logmanager::logmanager.log_manager') }}<small>{{ trans('logmanager::logmanager.file_name') }}: <i>{{ $file_name }}</i></small>
+        <small><a href="{{ bo_url('log') }}" class="hidden-print font-sm"><i class="la la-angle-double-left"></i> {{ trans('logmanager::logmanager.back_to_all_logs') }}</a></small>
       </h2>
     </section>
 @endsection

@@ -3,16 +3,16 @@
 @php
     $breadcrumbs = [
       trans('bo::crud.admin') => bo_url('dashboard'),
-      trans('bo::logmanager.log_manager') => bo_url('log'),
-      trans('bo::logmanager.existing_logs') => false,
+      trans('logmanager::logmanager.log_manager') => bo_url('log'),
+      trans('logmanager::logmanager.existing_logs') => false,
     ];
 @endphp
 
 @section('header')
     <section class="container-fluid">
         <h2>
-            {{ trans('bo::logmanager.log_manager') }}
-            <small>{{ trans('bo::logmanager.log_manager_description') }}</small>
+            {{ trans('logmanager::logmanager.log_manager') }}
+            <small>{{ trans('logmanager::logmanager.log_manager_description') }}</small>
         </h2>
     </section>
 @endsection
@@ -25,11 +25,11 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>{{ trans('bo::logmanager.file_name') }}</th>
-                    <th>{{ trans('bo::logmanager.date') }}</th>
-                    <th>{{ trans('bo::logmanager.last_modified') }}</th>
-                    <th class="text-right">{{ trans('bo::logmanager.file_size') }}</th>
-                    <th>{{ trans('bo::logmanager.actions') }}</th>
+                    <th>{{ trans('logmanager::logmanager.file_name') }}</th>
+                    <th>{{ trans('logmanager::logmanager.date') }}</th>
+                    <th>{{ trans('logmanager::logmanager.last_modified') }}</th>
+                    <th class="text-right">{{ trans('logmanager::logmanager.file_size') }}</th>
+                    <th>{{ trans('logmanager::logmanager.actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,13 +43,13 @@
                         <td>
                             <a class="btn btn-sm btn-link"
                                href="{{ url(config('bo.base.route_prefix', 'admin').'/log/preview/'. encrypt($file['file_name'])) }}"><i
-                                    class="la la-eye"></i> {{ trans('bo::logmanager.preview') }}</a>
+                                    class="la la-eye"></i> {{ trans('logmanager::logmanager.preview') }}</a>
                             <a class="btn btn-sm btn-link"
                                href="{{ url(config('bo.base.route_prefix', 'admin').'/log/download/'.encrypt($file['file_name'])) }}"><i
-                                    class="la la-cloud-download"></i> {{ trans('bo::logmanager.download') }}</a>
+                                    class="la la-cloud-download"></i> {{ trans('logmanager::logmanager.download') }}</a>
                             <a class="btn btn-sm btn-link" data-button-type="delete"
                                href="{{ url(config('bo.base.route_prefix', 'admin').'/log/delete/'.encrypt($file['file_name'])) }}"><i
-                                    class="la la-trash-o"></i> {{ trans('bo::logmanager.delete') }}</a>
+                                    class="la la-trash-o"></i> {{ trans('logmanager::logmanager.delete') }}</a>
                         </td>
                     </tr>
                 @endforeach
@@ -71,7 +71,7 @@
                 var delete_button = $(this);
                 var delete_url = $(this).attr('href');
 
-                if (confirm("{{ trans('bo::logmanager.delete_confirm') }}") == true) {
+                if (confirm("{{ trans('logmanager::logmanager.delete_confirm') }}") == true) {
                     $.ajax({
                         url: delete_url,
                         type: 'DELETE',
@@ -84,21 +84,21 @@
 
                             // Show an alert with the result
                             new Noty({
-                                text: "<strong>{{ trans('bo::logmanager.delete_confirmation_title') }}</strong><br>{{ trans('bo::logmanager.delete_confirmation_message') }}",
+                                text: "<strong>{{ trans('logmanager::logmanager.delete_confirmation_title') }}</strong><br>{{ trans('logmanager::logmanager.delete_confirmation_message') }}",
                                 type: "success"
                             }).show();
                         },
                         error: function (result) {
                             // Show an alert with the result
                             new Noty({
-                                text: "<strong>{{ trans('bo::logmanager.delete_error_title') }}</strong><br>{{ trans('bo::logmanager.delete_error_message') }}",
+                                text: "<strong>{{ trans('logmanager::logmanager.delete_error_title') }}</strong><br>{{ trans('logmanager::logmanager.delete_error_message') }}",
                                 type: "warning"
                             }).show();
                         }
                     });
                 } else {
                     new Noty({
-                        text: "<strong>{{ trans('bo::logmanager.delete_cancel_title') }}</strong><br>{{ trans('bo::logmanager.delete_cancel_message') }}",
+                        text: "<strong>{{ trans('logmanager::logmanager.delete_cancel_title') }}</strong><br>{{ trans('logmanager::logmanager.delete_cancel_message') }}",
                         type: "info"
                     }).show();
                 }

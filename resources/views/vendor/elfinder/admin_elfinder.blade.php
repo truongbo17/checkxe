@@ -3,15 +3,15 @@
 @php
     $breadcrumbs = [
       trans('bo::crud.admin') => bo_url('dashboard'),
-      trans('bo::logmanager.log_manager') => false,
+      trans('logmanager::logmanager.log_manager') => false,
     ];
 @endphp
 
 @section('header')
     <section class="container-fluid">
         <h2>
-            {{ trans('bo::logmanager.log_manager') }}
-            <small>{{ trans('bo::logmanager.log_manager_description') }}</small>
+            {{ trans('logmanager::logmanager.log_manager') }}
+            <small>{{ trans('logmanager::logmanager.log_manager_description') }}</small>
         </h2>
     </section>
 @endsection
