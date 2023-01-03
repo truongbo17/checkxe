@@ -66,6 +66,19 @@ class Plugin implements PluginInterface
                 }
             }
         }
+
+        $this->updateActivatedPlugins();
+    }
+
+    public function updateActivatedPlugins(): bool
+    {
+        try {
+            if (File::exists(core_package_path("pluginmanager/" . config('bo.pluginmanager.file_active_plugin')))) {
+                return File::put(core_package_path("pluginmanager/" . config('bo.pluginmanager.file_active_plugin')), json_encode($this->activated_plugins ?? []));
+            }
+        } catch (\Exception $exception) {
+        }
+        return false;
     }
 
     /**
@@ -94,9 +107,11 @@ class Plugin implements PluginInterface
     private function getActivatedPluginFromJsonFile(): array
     {
         try {
-            $json = File::get(core_package_path("pluginmanager/" . config('bo.pluginmanager.file_active_plugin')));
-            if (is_string($json)) {
-                return json_decode($json, true);
+            if (File::exists(core_package_path("pluginmanager/" . config('bo.pluginmanager.file_active_plugin')))) {
+                $json = File::get(core_package_path("pluginmanager/" . config('bo.pluginmanager.file_active_plugin')));
+                if (is_string($json)) {
+                    return json_decode($json, true);
+                }
             }
         } catch (\Exception $exception) {
         }
