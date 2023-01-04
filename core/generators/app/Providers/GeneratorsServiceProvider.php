@@ -2,11 +2,13 @@
 
 namespace Bo\Generators\Providers;
 
+use Bo\Generators\Console\Commands\MakePluginCommand;
 use Illuminate\Support\ServiceProvider;
 
 class GeneratorsServiceProvider extends ServiceProvider
 {
     protected array $commands = [
+        MakePluginCommand::class,
         \Bo\Generators\Console\Commands\ConfigBoCommand::class,
         \Bo\Generators\Console\Commands\RequestBoCommand::class,
         \Bo\Generators\Console\Commands\TestCommand::class,

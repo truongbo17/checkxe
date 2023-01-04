@@ -32,7 +32,7 @@ Build CMS base on Laravel...
 ```php
 namespace App\Http\Controllers\Admin;
 
-use Bo\CRUD\app\Http\Controllers\CrudController;
+use Bo\CRUD\App\Http\Controllers\CrudController;
 
 class CategoryCrudController extends CrudController
 {

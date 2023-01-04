@@ -3,7 +3,6 @@
 namespace Bo\Base\Providers;
 
 use Bo\Base\Console\Commands\AddCustomRouteContent;
-use Bo\Base\Console\Commands\AddSidebarContent;
 use Bo\Base\Console\Commands\CreateUser;
 use Bo\Base\Console\Commands\Fix;
 use Bo\Base\Console\Commands\Install;
@@ -27,7 +26,6 @@ class BoServiceProvider extends ServiceProvider
     // Where the route file lives, both inside the package and in the app (if overwritten).
     protected array $commands = [
         Install::class,
-        AddSidebarContent::class,
         AddCustomRouteContent::class,
         Version::class,
         CreateUser::class,
