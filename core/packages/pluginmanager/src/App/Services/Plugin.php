@@ -376,4 +376,26 @@ class Plugin implements PluginInterface
             }
         }
     }
+
+    /**
+     * Check exist plugins
+     *
+     * @param string $plugin_key
+     * @return bool
+     * */
+    public function exists(string $plugin_key): bool
+    {
+        return array_key_exists($plugin_key, $this->plugins);
+    }
+
+    /**
+     * Check exist plugins activated
+     *
+     * @param string $plugin_key
+     * @return bool
+     * */
+    public function is_activate(string $plugin_key): bool
+    {
+        return array_key_exists($plugin_key, $this->activated_plugins);
+    }
 }

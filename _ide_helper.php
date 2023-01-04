@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 8.83.23.
+ * Generated for Laravel 8.83.27.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -2167,6 +2167,17 @@
         {
                         /** @var \Illuminate\Auth\SessionGuard $instance */
                         return $instance->setRequest($request);
+        }
+                    /**
+         * Get the timebox instance used by the guard.
+         *
+         * @return \Illuminate\Support\Timebox 
+         * @static 
+         */ 
+        public static function getTimebox()
+        {
+                        /** @var \Illuminate\Auth\SessionGuard $instance */
+                        return $instance->getTimebox();
         }
                     /**
          * Determine if the current user is authenticated. If not, throw an exception.
@@ -16103,6 +16114,16 @@
                     /**
          * 
          *
+         * @see \Barryvdh\Debugbar\ServiceProvider::register()
+         * @static 
+         */ 
+        public static function debug()
+        {
+                        return \Illuminate\Support\Collection::debug();
+        }
+                    /**
+         * 
+         *
          * @see \Spatie\LaravelRay\RayServiceProvider::registerMacros()
          * @param string $description
          * @static 
@@ -16134,7 +16155,544 @@
      
 }
 
-        namespace Creativeorange\Gravatar\Facades { 
+        namespace Barryvdh\Debugbar\Facades { 
+            /**
+     * 
+     *
+     * @method static void alert(mixed $message)
+     * @method static void critical(mixed $message)
+     * @method static void debug(mixed $message)
+     * @method static void emergency(mixed $message)
+     * @method static void error(mixed $message)
+     * @method static void info(mixed $message)
+     * @method static void log(mixed $message)
+     * @method static void notice(mixed $message)
+     * @method static void warning(mixed $message)
+     * @see \Barryvdh\Debugbar\LaravelDebugbar
+     */ 
+        class Debugbar {
+                    /**
+         * Enable the Debugbar and boot, if not already booted.
+         *
+         * @static 
+         */ 
+        public static function enable()
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->enable();
+        }
+                    /**
+         * Boot the debugbar (add collectors, renderer and listener)
+         *
+         * @static 
+         */ 
+        public static function boot()
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->boot();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function shouldCollect($name, $default = false)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->shouldCollect($name, $default);
+        }
+                    /**
+         * Adds a data collector
+         *
+         * @param \DebugBar\DataCollector\DataCollectorInterface $collector
+         * @throws DebugBarException
+         * @return \Barryvdh\Debugbar\LaravelDebugbar 
+         * @static 
+         */ 
+        public static function addCollector($collector)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->addCollector($collector);
+        }
+                    /**
+         * Handle silenced errors
+         *
+         * @param $level
+         * @param $message
+         * @param string $file
+         * @param int $line
+         * @param array $context
+         * @throws \ErrorException
+         * @static 
+         */ 
+        public static function handleError($level, $message, $file = '', $line = 0, $context = [])
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->handleError($level, $message, $file, $line, $context);
+        }
+                    /**
+         * Starts a measure
+         *
+         * @param string $name Internal name, used to stop the measure
+         * @param string $label Public name
+         * @static 
+         */ 
+        public static function startMeasure($name, $label = null)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->startMeasure($name, $label);
+        }
+                    /**
+         * Stops a measure
+         *
+         * @param string $name
+         * @static 
+         */ 
+        public static function stopMeasure($name)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->stopMeasure($name);
+        }
+                    /**
+         * Adds an exception to be profiled in the debug bar
+         *
+         * @param \Exception $e
+         * @deprecated in favor of addThrowable
+         * @static 
+         */ 
+        public static function addException($e)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->addException($e);
+        }
+                    /**
+         * Adds an exception to be profiled in the debug bar
+         *
+         * @param \Exception $e
+         * @static 
+         */ 
+        public static function addThrowable($e)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->addThrowable($e);
+        }
+                    /**
+         * Returns a JavascriptRenderer for this instance
+         *
+         * @param string $baseUrl
+         * @param string $basePathng
+         * @return \Barryvdh\Debugbar\JavascriptRenderer 
+         * @static 
+         */ 
+        public static function getJavascriptRenderer($baseUrl = null, $basePath = null)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getJavascriptRenderer($baseUrl, $basePath);
+        }
+                    /**
+         * Modify the response and inject the debugbar (or data in headers)
+         *
+         * @param \Symfony\Component\HttpFoundation\Request $request
+         * @param \Symfony\Component\HttpFoundation\Response $response
+         * @return \Symfony\Component\HttpFoundation\Response 
+         * @static 
+         */ 
+        public static function modifyResponse($request, $response)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->modifyResponse($request, $response);
+        }
+                    /**
+         * Check if the Debugbar is enabled
+         *
+         * @return boolean 
+         * @static 
+         */ 
+        public static function isEnabled()
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->isEnabled();
+        }
+                    /**
+         * Collects the data from the collectors
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function collect()
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->collect();
+        }
+                    /**
+         * Injects the web debug toolbar into the given Response.
+         *
+         * @param \Symfony\Component\HttpFoundation\Response $response A Response instance
+         * Based on https://github.com/symfony/WebProfilerBundle/blob/master/EventListener/WebDebugToolbarListener.php
+         * @static 
+         */ 
+        public static function injectDebugbar($response)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->injectDebugbar($response);
+        }
+                    /**
+         * Disable the Debugbar
+         *
+         * @static 
+         */ 
+        public static function disable()
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->disable();
+        }
+                    /**
+         * Adds a measure
+         *
+         * @param string $label
+         * @param float $start
+         * @param float $end
+         * @static 
+         */ 
+        public static function addMeasure($label, $start, $end)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->addMeasure($label, $start, $end);
+        }
+                    /**
+         * Utility function to measure the execution of a Closure
+         *
+         * @param string $label
+         * @param \Closure $closure
+         * @return mixed 
+         * @static 
+         */ 
+        public static function measure($label, $closure)
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->measure($label, $closure);
+        }
+                    /**
+         * Collect data in a CLI request
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function collectConsole()
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->collectConsole();
+        }
+                    /**
+         * Adds a message to the MessagesCollector
+         * 
+         * A message can be anything from an object to a string
+         *
+         * @param mixed $message
+         * @param string $label
+         * @static 
+         */ 
+        public static function addMessage($message, $label = 'info')
+        {
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->addMessage($message, $label);
+        }
+                    /**
+         * Checks if a data collector has been added
+         *
+         * @param string $name
+         * @return boolean 
+         * @static 
+         */ 
+        public static function hasCollector($name)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->hasCollector($name);
+        }
+                    /**
+         * Returns a data collector
+         *
+         * @param string $name
+         * @return \DebugBar\DataCollector\DataCollectorInterface 
+         * @throws DebugBarException
+         * @static 
+         */ 
+        public static function getCollector($name)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getCollector($name);
+        }
+                    /**
+         * Returns an array of all data collectors
+         *
+         * @return \DebugBar\array[DataCollectorInterface] 
+         * @static 
+         */ 
+        public static function getCollectors()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getCollectors();
+        }
+                    /**
+         * Sets the request id generator
+         *
+         * @param \DebugBar\RequestIdGeneratorInterface $generator
+         * @return \Barryvdh\Debugbar\LaravelDebugbar 
+         * @static 
+         */ 
+        public static function setRequestIdGenerator($generator)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->setRequestIdGenerator($generator);
+        }
+                    /**
+         * 
+         *
+         * @return \DebugBar\RequestIdGeneratorInterface 
+         * @static 
+         */ 
+        public static function getRequestIdGenerator()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getRequestIdGenerator();
+        }
+                    /**
+         * Returns the id of the current request
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getCurrentRequestId()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getCurrentRequestId();
+        }
+                    /**
+         * Sets the storage backend to use to store the collected data
+         *
+         * @param \DebugBar\StorageInterface $storage
+         * @return \Barryvdh\Debugbar\LaravelDebugbar 
+         * @static 
+         */ 
+        public static function setStorage($storage = null)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->setStorage($storage);
+        }
+                    /**
+         * 
+         *
+         * @return \DebugBar\StorageInterface 
+         * @static 
+         */ 
+        public static function getStorage()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getStorage();
+        }
+                    /**
+         * Checks if the data will be persisted
+         *
+         * @return boolean 
+         * @static 
+         */ 
+        public static function isDataPersisted()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->isDataPersisted();
+        }
+                    /**
+         * Sets the HTTP driver
+         *
+         * @param \DebugBar\HttpDriverInterface $driver
+         * @return \Barryvdh\Debugbar\LaravelDebugbar 
+         * @static 
+         */ 
+        public static function setHttpDriver($driver)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->setHttpDriver($driver);
+        }
+                    /**
+         * Returns the HTTP driver
+         * 
+         * If no http driver where defined, a PhpHttpDriver is automatically created
+         *
+         * @return \DebugBar\HttpDriverInterface 
+         * @static 
+         */ 
+        public static function getHttpDriver()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getHttpDriver();
+        }
+                    /**
+         * Returns collected data
+         * 
+         * Will collect the data if none have been collected yet
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getData()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getData();
+        }
+                    /**
+         * Returns an array of HTTP headers containing the data
+         *
+         * @param string $headerName
+         * @param integer $maxHeaderLength
+         * @return array 
+         * @static 
+         */ 
+        public static function getDataAsHeaders($headerName = 'phpdebugbar', $maxHeaderLength = 4096, $maxTotalHeaderLength = 250000)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getDataAsHeaders($headerName, $maxHeaderLength, $maxTotalHeaderLength);
+        }
+                    /**
+         * Sends the data through the HTTP headers
+         *
+         * @param bool $useOpenHandler
+         * @param string $headerName
+         * @param integer $maxHeaderLength
+         * @return \Barryvdh\Debugbar\LaravelDebugbar 
+         * @static 
+         */ 
+        public static function sendDataInHeaders($useOpenHandler = null, $headerName = 'phpdebugbar', $maxHeaderLength = 4096)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->sendDataInHeaders($useOpenHandler, $headerName, $maxHeaderLength);
+        }
+                    /**
+         * Stacks the data in the session for later rendering
+         *
+         * @static 
+         */ 
+        public static function stackData()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->stackData();
+        }
+                    /**
+         * Checks if there is stacked data in the session
+         *
+         * @return boolean 
+         * @static 
+         */ 
+        public static function hasStackedData()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->hasStackedData();
+        }
+                    /**
+         * Returns the data stacked in the session
+         *
+         * @param boolean $delete Whether to delete the data in the session
+         * @return array 
+         * @static 
+         */ 
+        public static function getStackedData($delete = true)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getStackedData($delete);
+        }
+                    /**
+         * Sets the key to use in the $_SESSION array
+         *
+         * @param string $ns
+         * @return \Barryvdh\Debugbar\LaravelDebugbar 
+         * @static 
+         */ 
+        public static function setStackDataSessionNamespace($ns)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->setStackDataSessionNamespace($ns);
+        }
+                    /**
+         * Returns the key used in the $_SESSION array
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getStackDataSessionNamespace()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->getStackDataSessionNamespace();
+        }
+                    /**
+         * Sets whether to only use the session to store stacked data even
+         * if a storage is enabled
+         *
+         * @param boolean $enabled
+         * @return \Barryvdh\Debugbar\LaravelDebugbar 
+         * @static 
+         */ 
+        public static function setStackAlwaysUseSessionStorage($enabled = true)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->setStackAlwaysUseSessionStorage($enabled);
+        }
+                    /**
+         * Checks if the session is always used to store stacked data
+         * even if a storage is enabled
+         *
+         * @return boolean 
+         * @static 
+         */ 
+        public static function isStackAlwaysUseSessionStorage()
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->isStackAlwaysUseSessionStorage();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function offsetSet($key, $value)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->offsetSet($key, $value);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function offsetGet($key)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->offsetGet($key);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function offsetExists($key)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->offsetExists($key);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function offsetUnset($key)
+        {            //Method inherited from \DebugBar\DebugBar         
+                        /** @var \Barryvdh\Debugbar\LaravelDebugbar $instance */
+                        return $instance->offsetUnset($key);
+        }
+         
+    }
+     
+}
+
+    namespace Creativeorange\Gravatar\Facades { 
             /**
      * 
      *
@@ -16556,6 +17114,70 @@
      
 }
 
+    namespace Intervention\Image\Facades { 
+            /**
+     * 
+     *
+     */ 
+        class Image {
+                    /**
+         * Overrides configuration settings
+         *
+         * @param array $config
+         * @return self 
+         * @static 
+         */ 
+        public static function configure($config = [])
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->configure($config);
+        }
+                    /**
+         * Initiates an Image instance from different input types
+         *
+         * @param mixed $data
+         * @return \Intervention\Image\Image 
+         * @static 
+         */ 
+        public static function make($data)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->make($data);
+        }
+                    /**
+         * Creates an empty image canvas
+         *
+         * @param int $width
+         * @param int $height
+         * @param mixed $background
+         * @return \Intervention\Image\Image 
+         * @static 
+         */ 
+        public static function canvas($width, $height, $background = null)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->canvas($width, $height, $background);
+        }
+                    /**
+         * Create new cached image and run callback
+         * (requires additional package intervention/imagecache)
+         *
+         * @param \Closure $callback
+         * @param int $lifetime
+         * @param boolean $returnObj
+         * @return \Image 
+         * @static 
+         */ 
+        public static function cache($callback, $lifetime = null, $returnObj = false)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->cache($callback, $lifetime, $returnObj);
+        }
+         
+    }
+     
+}
+
     namespace Prologue\Alerts\Facades { 
             /**
      * 
@@ -16886,6 +17508,168 @@
      
 }
 
+    namespace Spatie\SignalAwareCommand\Facades { 
+            /**
+     * 
+     *
+     * @see \Spatie\SignalAwareCommand\Signal
+     */ 
+        class Signal {
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function handle($signal, $callable)
+        {
+                        /** @var \Spatie\SignalAwareCommand\Signal $instance */
+                        return $instance->handle($signal, $callable);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function executeSignalHandlers($signal, $command)
+        {
+                        /** @var \Spatie\SignalAwareCommand\Signal $instance */
+                        return $instance->executeSignalHandlers($signal, $command);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function clearHandlers($signal = null)
+        {
+                        /** @var \Spatie\SignalAwareCommand\Signal $instance */
+                        return $instance->clearHandlers($signal);
+        }
+         
+    }
+     
+}
+
+    namespace Bo\Settings\App\Models { 
+            /**
+     * 
+     *
+     */ 
+        class Setting {
+         
+    }
+     
+}
+
+    namespace Bo\SideBar\App\Facades { 
+            /**
+     * 
+     *
+     */ 
+        class SideBarFacade {
+                    /**
+         * Function register item sidebar with option
+         *
+         * @param string $id_item
+         * @return \Bo\SideBar\App\Item\Item 
+         * @throws Exception
+         * @static 
+         */ 
+        public static function registerItem($id_item)
+        {
+                        /** @var \Bo\SideBar\App\SideBar $instance */
+                        return $instance->registerItem($id_item);
+        }
+                    /**
+         * Function register group sidebar with option
+         *
+         * @param string $id_group
+         * @return \Bo\SideBar\App\Group\Group 
+         * @throws Exception
+         * @static 
+         */ 
+        public static function registerGroup($id_group)
+        {
+                        /** @var \Bo\SideBar\App\SideBar $instance */
+                        return $instance->registerGroup($id_group);
+        }
+                    /**
+         * Get list item has group
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getListItemHasGroup()
+        {
+                        /** @var \Bo\SideBar\App\SideBar $instance */
+                        return $instance->getListItemHasGroup();
+        }
+                    /**
+         * Get list group including item
+         *
+         * @param array $item_has_group
+         * @return array 
+         * @throws Exception
+         * @static 
+         */ 
+        public static function getListGroup($item_has_group)
+        {
+                        /** @var \Bo\SideBar\App\SideBar $instance */
+                        return $instance->getListGroup($item_has_group);
+        }
+                    /**
+         * Render item and group sidebar with condition render equal true
+         *
+         * @return array 
+         * @throws Exception
+         * @static 
+         */ 
+        public static function getAll()
+        {
+                        /** @var \Bo\SideBar\App\SideBar $instance */
+                        return $instance->getAll();
+        }
+                    /**
+         * Check exist item and group in sidebar
+         *
+         * @param string $id
+         * @param string $type (item | group)
+         * @return bool 
+         * @throws Exception
+         * @static 
+         */ 
+        public static function checkExist($id, $type)
+        {
+                        /** @var \Bo\SideBar\App\SideBar $instance */
+                        return $instance->checkExist($id, $type);
+        }
+                    /**
+         * Push name space view to sidebar
+         *
+         * @param string $name_space_view
+         * @static 
+         */ 
+        public static function pushView($name_space_view)
+        {
+                        /** @var \Bo\SideBar\App\SideBar $instance */
+                        return $instance->pushView($name_space_view);
+        }
+                    /**
+         * get name space view
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getViews()
+        {
+                        /** @var \Bo\SideBar\App\SideBar $instance */
+                        return $instance->getViews();
+        }
+         
+    }
+     
+}
+
     namespace Illuminate\Http { 
             /**
      * 
@@ -16943,6 +17727,32 @@
      
 }
 
+    namespace Illuminate\Routing { 
+            /**
+     * 
+     *
+     * @mixin \Illuminate\Routing\RouteRegistrar
+     */ 
+        class Router {
+                    /**
+         * The route macro allows developers to generate the routes for a CrudController,
+         * for all operations, using a simple syntax: Route::crud().
+         * 
+         * It will go to the given CrudController and get the setupRoutes() method on it.
+         *
+         * @param mixed $name
+         * @param mixed $controller
+         * @static 
+         */ 
+        public static function crud($name, $controller)
+        {
+                        return \Illuminate\Routing\Router::crud($name, $controller);
+        }
+         
+    }
+     
+}
+
     namespace Illuminate\Testing { 
             /**
      * 
@@ -16986,27 +17796,12 @@
      
 }
 
-    namespace Illuminate\Routing { 
+    namespace Bo\Base\Library\CrudPanel { 
             /**
      * 
      *
-     * @mixin \Illuminate\Routing\RouteRegistrar
      */ 
-        class Router {
-                    /**
-         * The route macro allows developers to generate the routes for a CrudController,
-         * for all operations, using a simple syntax: Route::crud().
-         * 
-         * It will go to the given CrudController and get the setupRoutes() method on it.
-         *
-         * @param mixed $name
-         * @param mixed $controller
-         * @static 
-         */ 
-        public static function crud($name, $controller)
-        {
-                        return \Illuminate\Routing\Router::crud($name, $controller);
-        }
+        class CrudPanel {
          
     }
      
@@ -20501,10 +21296,15 @@ namespace  {
             class URL extends \Illuminate\Support\Facades\URL {}
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
+            class Debugbar extends \Barryvdh\Debugbar\Facades\Debugbar {}
             class Gravatar extends \Creativeorange\Gravatar\Facades\Gravatar {}
             class Assets extends \DigitallyHappy\Assets\Facades\Assets {}
             class Flare extends \Facade\Ignition\Facades\Flare {}
+            class Image extends \Intervention\Image\Facades\Image {}
             class Alert extends \Prologue\Alerts\Facades\Alert {}
+            class Signal extends \Spatie\SignalAwareCommand\Facades\Signal {}
+            class Setting extends \Bo\Settings\App\Models\Setting {}
+            class SideBarDashBoard extends \Bo\SideBar\App\Facades\SideBarFacade {}
      
 }
 

@@ -66,3 +66,18 @@ if (!function_exists('get_path_resource_plugin')) {
         return base_path("plugins/" . $plugin_dir_name . "/resources/" . $file_name . ".php");
     }
 }
+
+
+if (!function_exists('plugin_exist')) {
+    function plugin_exist(string $plugin_key): bool
+    {
+        return (new \Bo\PluginManager\App\Services\Plugin())->exists($plugin_key);
+    }
+}
+
+if (!function_exists('is_plugin_active')) {
+    function is_plugin_active(string $plugin_key): bool
+    {
+        return (new \Bo\PluginManager\App\Services\Plugin())->is_activate($plugin_key);
+    }
+}

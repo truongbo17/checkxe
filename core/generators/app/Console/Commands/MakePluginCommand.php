@@ -44,16 +44,16 @@ class MakePluginCommand extends Command
         $plugin_name_kebab = Str::kebab($plugin_name_title);
         $plugin_name_plural = ucwords(str_replace('-', ' ', Str::plural($plugin_name_kebab)));
 
-        if (array_key_exists($plugin_name, $this->plugin->getAllPlugin())) {
+        if (plugin_exist($plugin_name)) {
             $this->error("Plugin exists in {$this->plugin->getPlugin($plugin_name)['path']}");
             return self::FAILURE;
         }
         $plugin_path = plugin_path($plugin_name);
 
         //Make config
-        \Artisan::call('bo:cms:config', [
+        $this->call('bo:cms:config', [
             'plugin_name' => $plugin_name,
-            'name' => 'general',
+            'name'        => 'general',
         ]);
 
         // if the application uses cached routes, we should rebuild the cache so the previous added route will

@@ -21,7 +21,8 @@ class ConfigBoCommand extends GeneratorCommand
      */
     protected $signature = 'bo:cms:config
     {plugin_name : plugin name}
-    {name : config file name}';
+    {name : config file name}
+    {--make_with_plugin : force check plugin exist}';
 
     /**
      * The console command description.
@@ -59,13 +60,9 @@ class ConfigBoCommand extends GeneratorCommand
         $path = $this->getPath($name);
         $plugin_name = $this->argument('plugin_name');
 
-        if ($plugin_name) {
-            if (exist_plugin($plugin_name)) {
-                $path = $this->getPath($name, '/applications/plugins/' . $plugin_name);
-            } else {
-                $this->error("Plugin $plugin_name don't exist!");
-                return false;
-            }
+        if (!plugin_exist($plugin_name) && $this->option('make_with_plugin')) {
+            $this->error("Plugin does not exist");
+            return self::FAILURE;
         }
 
         if ($this->checkExits($path)) {
