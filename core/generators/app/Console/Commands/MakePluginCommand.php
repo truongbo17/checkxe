@@ -50,7 +50,11 @@ class MakePluginCommand extends Command
         }
         $plugin_path = plugin_path($plugin_name);
 
-        //Make
+        //Make config
+        \Artisan::call('bo:cms:config', [
+            'plugin_name' => $plugin_name,
+            'name' => 'general',
+        ]);
 
         // if the application uses cached routes, we should rebuild the cache so the previous added route will
         // be acessible without manually clearing the route cache.

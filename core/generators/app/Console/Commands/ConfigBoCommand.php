@@ -19,16 +19,16 @@ class ConfigBoCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'bo:dashboard:config
-    {name : config file name}
-    {--plugin_name= : If you add config for plugin please add option name for plugin}';
+    protected $signature = 'bo:cms:config
+    {plugin_name : plugin name}
+    {name : config file name}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate a config file for BoCMS';
+    protected $description = 'Generate a config file plugin for BoCMS';
 
     /**
      * The type of class being generated.
@@ -57,7 +57,7 @@ class ConfigBoCommand extends GeneratorCommand
     {
         $name = $this->getNameInput();
         $path = $this->getPath($name);
-        $plugin_name = $this->option('plugin_name');
+        $plugin_name = $this->argument('plugin_name');
 
         if ($plugin_name) {
             if (exist_plugin($plugin_name)) {
