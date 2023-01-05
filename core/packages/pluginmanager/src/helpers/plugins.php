@@ -7,6 +7,13 @@ if (!function_exists('plugin_path')) {
     }
 }
 
+if (!function_exists('get_path_src_plugin')) {
+    function get_path_src_plugin(string $plugin_dir_name = ""): string
+    {
+        return base_path("plugins/" . $plugin_dir_name . "/src/");
+    }
+}
+
 if (!function_exists('get_path_route_plugin')) {
     function get_path_route_plugin(string $plugin_dir_name, string $file_name = ""): string
     {

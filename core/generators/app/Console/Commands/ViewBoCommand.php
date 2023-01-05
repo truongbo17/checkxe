@@ -5,21 +5,21 @@ namespace Bo\Generators\Console\Commands;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
-class ConfigBoCommand extends GeneratorCommand
+class ViewBoCommand extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'bo:cms:config';
+    protected $name = 'bo:cms:view';
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bo:cms:config
+    protected $signature = 'bo:cms:view
     {plugin_name : plugin name}
     {name : config file name}
     {--make_with_plugin : force check plugin exist}';
@@ -29,24 +29,14 @@ class ConfigBoCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Generate a config file plugin for BoCMS';
+    protected $description = 'Generate a lang file plugin for BoCMS';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Config';
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub(): string
-    {
-        return __DIR__ . '/../../stubs/config.stub';
-    }
+    protected $type = 'View';
 
     /**
      * Handle create config file
@@ -58,7 +48,7 @@ class ConfigBoCommand extends GeneratorCommand
     {
         $name = $this->getNameInput();
         $plugin_name = $this->argument('plugin_name');
-        $path = get_path_config_plugin($plugin_name, $name);
+        $path = get_path_resource_plugin($plugin_name, "views" . DIRECTORY_SEPARATOR . $name);
 
         if (!plugin_exist($plugin_name) && !$this->option('make_with_plugin')) {
             $this->error("Plugin does not exist");
@@ -71,7 +61,7 @@ class ConfigBoCommand extends GeneratorCommand
         }
 
         $this->makeDirectory($path);
-        $this->files->put($path, $this->buildClass($name));
+        $this->files->put($path, "");
         $this->info("$this->type created successfully in " . realpath($path));
 
         return self::SUCCESS;
@@ -88,27 +78,8 @@ class ConfigBoCommand extends GeneratorCommand
         return $this->files->exists($path_name);
     }
 
-    /**
-     * Build the class with the given name.
-     *
-     * @param string $name
-     * @return string
-     * @throws FileNotFoundException
-     */
-    protected function buildClass($name): string
+    protected function getStub()
     {
-        return $this->files->get($this->getStub());
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions(): array
-    {
-        return [
-
-        ];
+        // TODO: Implement getStub() method.
     }
 }

@@ -3,6 +3,7 @@
 namespace Bo\Generators\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 class RouteBoCommand extends GeneratorCommand
 {
@@ -11,18 +12,19 @@ class RouteBoCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'bo:dashboard:route';
+    protected $name = 'bo:cms:route';
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bo:dashboard:route
+    protected $signature = 'bo:cms:route
     {plugin_name : Plugin name}
-    {--class_controller= : Class controller use in route...|}
-    {--route_option= : Option type route |api,web,custom,admin...|}
-    {--force : if you add this option, once the route exists it overwrite (default is false)}';
+    {name : Route file name}
+    {class_controller : Class controller use in route...|}
+    {namespace_controller : Namespace controller...|}
+    {--make_with_plugin : force check plugin exist}';
 
     /**
      * The console command description.
@@ -45,7 +47,7 @@ class RouteBoCommand extends GeneratorCommand
      */
     protected function getStub(): string
     {
-        return __DIR__ . '/../../stubs/route-admin.stub';
+        return __DIR__ . '/../../stubs/route.stub';
     }
 
     /**
@@ -53,58 +55,57 @@ class RouteBoCommand extends GeneratorCommand
      * */
     public function handle()
     {
+        $name = $this->getNameInput();
         $plugin_name = $this->argument('plugin_name');
-        $route_option = $this->option('route_option') ?? 'web';
-        $class_controller = $this->option('class_controller');
+        $class_controller = $this->argument('class_controller');
+        $namespace_controller = $this->argument('namespace_controller');
 
-        if (exist_plugin($plugin_name)) {
-            $path_route = path_plugins_route($plugin_name, $route_option);
+        $path = get_path_route_plugin($plugin_name, $name);
 
-            if ($this->files->exists($path_route) && (!$this->hasOption('force') || !$this->option('force'))) {
-                $this->warn("File route in {$path_route} exist !");
-                return false;
-            }
+        if (!plugin_exist($plugin_name) && !$this->option('make_with_plugin')) {
+            $this->error("Plugin does not exist");
+            return self::FAILURE;
+        }
 
-            $this->makeDirectory($path_route);
-            $this->files->put($path_route, $this->sortImports($this->buildClassCustom($class_controller, $route_option, $plugin_name)));
-
-            $this->info("Create route ${route_option} success !!!");
-
-            return self::SUCCESS;
-        } else {
-            $this->error("Plugin $plugin_name don't exist!");
+        if ($this->checkExits($path)) {
+            $this->error("$this->type $name already existed in \"$path\" !");
             return false;
         }
+
+        $this->makeDirectory($path);
+        $this->files->put($path, $this->sortImports($this->buildClassCustom($class_controller, $namespace_controller, $plugin_name)));
+
+        $this->info("$this->type created successfully in " . realpath($path));
+
+        return self::SUCCESS;
     }
 
     /**
      * Build the class with the given name.
      *
      * @param string $class_controller
-     * @param string $route_option
+     * @param string $namespace_controller
      * @param string $plugin_name
      *
      * @return string
      */
-    protected function buildClassCustom(string $class_controller, string $route_option, string $plugin_name): string
+    protected function buildClassCustom(string $class_controller, string $namespace_controller, string $plugin_name): string
     {
         $stub = $this->files->get($this->getStub());
 
-        if ($route_option == 'admin') {
-            $prefix_plugin = 'admin';
-            $prefix_plugin_route = $plugin_name;
-        } else {
-            $prefix_plugin = $plugin_name;
-            $prefix_plugin_route = '';
-        }
-
-        $namespace_controller = preg_replace("/\\\\[a-zA-Z]+Controller/", "", $class_controller);
-
-        $stub = str_replace('prefix_plugin', $prefix_plugin, $stub);
-        $stub = str_replace('plugin_route', $prefix_plugin_route, $stub);
+        $stub = str_replace('plugin_route', $plugin_name, $stub);
         $stub = str_replace('namespace_plugin_controller', $namespace_controller, $stub);
         return str_replace('plugin_controller', $class_controller, $stub);
     }
 
-
+    /**
+     * Check exist file or directory
+     *
+     * @param string $path_name
+     * @return bool
+     */
+    public function checkExits(string $path_name): bool
+    {
+        return $this->files->exists($path_name);
+    }
 }

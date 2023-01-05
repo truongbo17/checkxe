@@ -12,24 +12,24 @@ class ModelBoCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'bo:dashboard:model';
+    protected $name = 'bo:cms:model';
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bo:dashboard:model
+    protected $signature = 'bo:cms:model
     {plugin_name}
-    {--model_name= : if don\'t have model_name , model name will be created with plugin_name}
-    {--force : if you add this option, once the model exists it will not add the CrudTrait trait (default is false)}';
+    {name : model name}
+    {--make_with_plugin : force check plugin exist}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate a BoCMS CRUD model';
+    protected $description = 'Generate a Model BoCMS CRUD model';
 
     /**
      * The type of class being generated.
@@ -67,8 +67,9 @@ class ModelBoCommand extends GeneratorCommand
      */
     public function handle()
     {
+        $name = $this->getNameInput();
         $plugin_name = $this->argument('plugin_name');
-        $model_name = $this->option('model_name');
+        $path = get_path_src_plugin($plugin_name, $name);
 
         if (exist_plugin($plugin_name)) {
             $plugin_root_data = get_file_data_by_json(exist_plugin($plugin_name));

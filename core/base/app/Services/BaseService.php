@@ -50,7 +50,7 @@ class BaseService
         try {
             $content = File::get(plugin_path($plugin . DIRECTORY_SEPARATOR . config('bo.pluginmanager.file_plugin')));
             if (is_string($content)) {
-                return json_decode($content, true);
+                return json_decode($content, true) ?? [];
             }
         } catch (FileNotFoundException $e) {
         }

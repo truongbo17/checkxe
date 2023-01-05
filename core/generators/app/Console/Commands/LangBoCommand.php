@@ -5,23 +5,24 @@ namespace Bo\Generators\Console\Commands;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
-class ConfigBoCommand extends GeneratorCommand
+class LangBoCommand extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'bo:cms:config';
+    protected $name = 'bo:cms:lang';
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bo:cms:config
+    protected $signature = 'bo:cms:lang
     {plugin_name : plugin name}
     {name : config file name}
+    {lang : language}
     {--make_with_plugin : force check plugin exist}';
 
     /**
@@ -29,24 +30,14 @@ class ConfigBoCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Generate a config file plugin for BoCMS';
+    protected $description = 'Generate a lang file plugin for BoCMS';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Config';
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub(): string
-    {
-        return __DIR__ . '/../../stubs/config.stub';
-    }
+    protected $type = 'Lang';
 
     /**
      * Handle create config file
@@ -58,7 +49,8 @@ class ConfigBoCommand extends GeneratorCommand
     {
         $name = $this->getNameInput();
         $plugin_name = $this->argument('plugin_name');
-        $path = get_path_config_plugin($plugin_name, $name);
+        $lang = $this->argument('lang');
+        $path = get_path_resource_plugin($plugin_name, "lang" . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $name);
 
         if (!plugin_exist($plugin_name) && !$this->option('make_with_plugin')) {
             $this->error("Plugin does not exist");
@@ -98,6 +90,16 @@ class ConfigBoCommand extends GeneratorCommand
     protected function buildClass($name): string
     {
         return $this->files->get($this->getStub());
+    }
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub(): string
+    {
+        return __DIR__ . '/../../stubs/lang.stub';
     }
 
     /**

@@ -60,7 +60,7 @@ class HelperBoCommand extends GeneratorCommand
         $plugin_name = $this->argument('plugin_name');
         $path = get_path_helper_plugin($plugin_name, $name);
 
-        if (!plugin_exist($plugin_name) && $this->option('make_with_plugin')) {
+        if (!plugin_exist($plugin_name) && !$this->option('make_with_plugin')) {
             $this->error("Plugin does not exist");
             return self::FAILURE;
         }

@@ -3,9 +3,15 @@
 namespace Bo\Generators\Providers;
 
 use Bo\Generators\Console\Commands\ConfigBoCommand;
+use Bo\Generators\Console\Commands\ControllerBoCommand;
 use Bo\Generators\Console\Commands\HelperBoCommand;
+use Bo\Generators\Console\Commands\LangBoCommand;
 use Bo\Generators\Console\Commands\MakePluginCommand;
 use Bo\Generators\Console\Commands\MigrationBoCommand;
+use Bo\Generators\Console\Commands\ModelBoCommand;
+use Bo\Generators\Console\Commands\RequestBoCommand;
+use Bo\Generators\Console\Commands\RouteBoCommand;
+use Bo\Generators\Console\Commands\ViewBoCommand;
 use Illuminate\Support\ServiceProvider;
 
 class GeneratorsServiceProvider extends ServiceProvider
@@ -15,12 +21,12 @@ class GeneratorsServiceProvider extends ServiceProvider
         ConfigBoCommand::class,
         HelperBoCommand::class,
         MigrationBoCommand::class,
-        \Bo\Generators\Console\Commands\RequestBoCommand::class,
-        \Bo\Generators\Console\Commands\TestCommand::class,
-        \Bo\Generators\Console\Commands\BoCrudCommand::class,
-        \Bo\Generators\Console\Commands\ModelBoCommand::class,
-        \Bo\Generators\Console\Commands\ControllerBoCommand::class,
-        \Bo\Generators\Console\Commands\RouteBoCommand::class,
+        LangBoCommand::class,
+        ViewBoCommand::class,
+        RequestBoCommand::class,
+        ModelBoCommand::class,
+        ControllerBoCommand::class,
+        RouteBoCommand::class,
     ];
 
     /**

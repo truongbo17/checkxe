@@ -2,6 +2,7 @@
 
 namespace Bo\Generators\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
@@ -58,9 +59,16 @@ class MigrationBoCommand extends GeneratorCommand
     {
         $name = $this->getNameInput();
         $plugin_name = $this->argument('plugin_name');
-        $path = get_path_database_plugin($plugin_name, $name);
 
-        if (!plugin_exist($plugin_name) && $this->option('make_with_plugin')) {
+        if ($this->option('make_with_plugin')) {
+            $migration_name = Carbon::now()->format("Y_m_d_His") . "_create_" . $name . "_table";
+        } else {
+            $migration_name = $name;
+        }
+
+        $path = get_path_database_plugin($plugin_name, $migration_name);
+
+        if (!plugin_exist($plugin_name) && !$this->option('make_with_plugin')) {
             $this->error("Plugin does not exist");
             return self::FAILURE;
         }
