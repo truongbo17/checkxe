@@ -5,21 +5,21 @@ namespace Bo\Generators\Console\Commands;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
-class ConfigBoCommand extends GeneratorCommand
+class MigrationBoCommand extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'bo:cms:config';
+    protected $name = 'bo:cms:migration';
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bo:cms:config
+    protected $signature = 'bo:cms:migration
     {plugin_name : plugin name}
     {name : config file name}
     {--make_with_plugin : force check plugin exist}';
@@ -29,14 +29,14 @@ class ConfigBoCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Generate a config file plugin for BoCMS';
+    protected $description = 'Generate a migration file plugin for BoCMS';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Config';
+    protected $type = 'Migration';
 
     /**
      * Get the stub file for the generator.
@@ -45,7 +45,7 @@ class ConfigBoCommand extends GeneratorCommand
      */
     protected function getStub(): string
     {
-        return __DIR__ . '/../../stubs/config.stub';
+        return __DIR__ . '/../../stubs/migration.stub';
     }
 
     /**
@@ -58,7 +58,7 @@ class ConfigBoCommand extends GeneratorCommand
     {
         $name = $this->getNameInput();
         $plugin_name = $this->argument('plugin_name');
-        $path = get_path_config_plugin($plugin_name, $name);
+        $path = get_path_database_plugin($plugin_name, $name);
 
         if (!plugin_exist($plugin_name) && $this->option('make_with_plugin')) {
             $this->error("Plugin does not exist");
@@ -97,7 +97,21 @@ class ConfigBoCommand extends GeneratorCommand
      */
     protected function buildClass($name): string
     {
-        return $this->files->get($this->getStub());
+        $stub = $this->files->get($this->getStub());
+
+        return $this->replaceTable($stub, $name);
+    }
+
+    /**
+     * Replace the table name for the given stub.
+     *
+     * @param string $stub
+     * @param string $name
+     * @return array|string|string[]
+     */
+    private function replaceTable(string &$stub, string $name)
+    {
+        return str_replace('dummy-table', $name, $stub);
     }
 
     /**

@@ -5,21 +5,21 @@ namespace Bo\Generators\Console\Commands;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
-class ConfigBoCommand extends GeneratorCommand
+class HelperBoCommand extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'bo:cms:config';
+    protected $name = 'bo:cms:helper';
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bo:cms:config
+    protected $signature = 'bo:cms:helper
     {plugin_name : plugin name}
     {name : config file name}
     {--make_with_plugin : force check plugin exist}';
@@ -29,14 +29,14 @@ class ConfigBoCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Generate a config file plugin for BoCMS';
+    protected $description = 'Generate a helper file plugin for BoCMS';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Config';
+    protected $type = 'Helper';
 
     /**
      * Get the stub file for the generator.
@@ -45,7 +45,7 @@ class ConfigBoCommand extends GeneratorCommand
      */
     protected function getStub(): string
     {
-        return __DIR__ . '/../../stubs/config.stub';
+        return __DIR__ . '/../../stubs/helper.stub';
     }
 
     /**
@@ -58,7 +58,7 @@ class ConfigBoCommand extends GeneratorCommand
     {
         $name = $this->getNameInput();
         $plugin_name = $this->argument('plugin_name');
-        $path = get_path_config_plugin($plugin_name, $name);
+        $path = get_path_helper_plugin($plugin_name, $name);
 
         if (!plugin_exist($plugin_name) && $this->option('make_with_plugin')) {
             $this->error("Plugin does not exist");
