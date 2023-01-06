@@ -1,11 +1,11 @@
 <?php
 
-namespace DummyNamespace;
+namespace Bo\Chat\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Bo\Base\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
 
-class DummyClass extends Model
+class Chat extends Model
 {
     use CrudTrait;
 
@@ -15,7 +15,7 @@ class DummyClass extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'DummyTable';
+    protected $table = 'chats';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];

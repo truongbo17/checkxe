@@ -1,16 +1,16 @@
 <?php
 
-namespace DummyNamespace;
+namespace Bo\Chat\Http\Controllers\Admin;
 
 use Bo\Base\Http\Controllers\CrudController;
-use Bo\Base\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Bo\Base\Http\Controllers\Operations\ListOperation;
 use Bo\Base\Http\Controllers\Operations\CreateOperation;
-use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\Base\Http\Controllers\Operations\DeleteOperation;
+use Bo\Base\Http\Controllers\Operations\ListOperation;
 use Bo\Base\Http\Controllers\Operations\ShowOperation;
+use Bo\Base\Http\Controllers\Operations\UpdateOperation;
+use Bo\Base\Library\CrudPanel\CrudPanelFacade as CRUD;
 
-class DummyClassController extends CrudController
+class ChatController extends CrudController
 {
     use ListOperation;
     use CreateOperation;
@@ -25,9 +25,9 @@ class DummyClassController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\DummyClassModel::class);
-        CRUD::setRoute(config('bo.base.route_prefix') . '/dummy-class');
-        CRUD::setEntityNameStrings('dummy singular', 'dummy plural');
+        CRUD::setModel(\Bo\Chat\Models\Chat::class);
+        CRUD::setRoute(config('bo.base.route_prefix') . '/chat');
+        CRUD::setEntityNameStrings('chat', 'chats');
     }
 
     /**
@@ -37,7 +37,7 @@ class DummyClassController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+        CRUD::column('name');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -53,9 +53,9 @@ class DummyClassController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(\DummyClassRequest::class);
+        CRUD::setValidation(\Bo\Chat\Http\Requests\ChatRequest::class);
 
-        CRUD::setFromDb(); // fields
+        CRUD::field('name');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

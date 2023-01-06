@@ -3,6 +3,7 @@
 namespace Bo\Generators\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Str;
 
 class ControllerBoCommand extends GeneratorCommand
@@ -12,27 +13,27 @@ class ControllerBoCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'bo:dashboard:controller';
+    protected $name = 'bo:cms:controller';
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bo:dashboard:controller
+    protected $signature = 'bo:cms:controller
     {plugin_name}
-    {class_name_model : class name model used with controller crud}
-    {class_name_request : class name model used with controller crud}
-    {--controller_name : if don\'t have controller_name , controller name will be created with plugin_name}
-    {--type= : type of model (admin or default)}
-    {--force : if you add this option, once the model exists it will not add the CrudTrait trait (default is false)}';
+    {name : Request name}
+    {namespace_controller : Namespace controller...}
+    {class_model : Model class...}
+    {class_request : Request class...}
+    {--make_with_plugin : force check plugin exist}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate a BoCMS CRUD controller';
+    protected $description = 'Generate a Controller BoCMS CRUD controller';
 
     /**
      * The type of class being generated.
@@ -40,16 +41,6 @@ class ControllerBoCommand extends GeneratorCommand
      * @var string
      */
     protected $type = 'Controller';
-
-    /**
-     * Type of command
-     *
-     * @var array
-     * */
-    protected array $type_of = [
-        'admin',
-        'default',
-    ];
 
     /**
      * Get the stub file for the generator.
@@ -73,144 +64,60 @@ class ControllerBoCommand extends GeneratorCommand
 
     /**
      * Execute the console command.
+     * @throws FileNotFoundException
      */
     public function handle()
     {
+        $name = $this->getNameInput();
         $plugin_name = $this->argument('plugin_name');
-        $controller_name = $this->option('controller_name');
-        $this->class_name_model = $this->argument('class_name_model');
-        $this->class_name_request = $this->argument('class_name_request');
-        $type = $this->option('type') ?? 'default';
+        $namespace_controller = $this->argument('namespace_controller');
+        $class_model = $this->argument('class_model');
+        $class_request = $this->argument('class_request');
 
-        if (!in_array($type, $this->type_of)) {
-            $this->error("Type of controller must match in [admin or default]");
+        $path = get_path_src_plugin($plugin_name, "Http/Controllers" . DIRECTORY_SEPARATOR . $name);
+
+        if (!plugin_exist($plugin_name) && !$this->option('make_with_plugin')) {
+            $this->error("Plugin does not exist");
+            return self::FAILURE;
+        }
+
+        if ($this->checkExits($path)) {
+            $this->error("$this->type $name already existed in \"$path\" !");
             return false;
         }
 
-        if (exist_plugin($plugin_name)) {
-            $plugin_root_data = get_file_data_by_json(exist_plugin($plugin_name));
+        $this->makeDirectory($path);
+        $this->files->put($path, $this->sortImports($this->buildClassCustom($plugin_name, $name, $namespace_controller, $class_model, $class_request)));
 
-            if ($controller_name) {
-                $class_name_model = $this->generateClassName($type, $plugin_root_data['namespace'], $plugin_name, $controller_name);
-            } else {
-                $class_name_model = $this->generateClassName($type, $plugin_root_data['namespace'], $plugin_name);
-            }
+        $this->info("$this->type created successfully in " . realpath($path));
 
-            $this->makeFileByClassName($class_name_model);
-
-            return self::SUCCESS;
-        } else {
-            $this->error("Plugin $plugin_name don't exist!");
-            return false;
-        }
-    }
-
-    /**
-     * Generate Class Name
-     *
-     * @param string $type
-     * @param string $namespace
-     * @param string $plugin_name
-     * @param string $controller_name
-     *
-     * @return array
-     * */
-    public function generateClassName(string $type, string $namespace, string $plugin_name, string $controller_name = ''): array
-    {
-        $type = ($type == 'admin') ? 'Admin\\' : '';
-
-        if (mb_strlen($controller_name) > 0) {
-            $controller = ucfirst($controller_name) . "Controller";
-        } else {
-            $controller = ucfirst($plugin_name) . "Controller";
-        }
-        $class_name_controller = $namespace . "Http\\Controllers\\" . $type . $controller;
-
-        return [
-            'name'       => $controller,
-            'class_name' => $class_name_controller,
-            'namespace'  => $namespace . "Http\\Controllers",
-            'path'       => path_plugins_controller($plugin_name, $controller, $type),
-        ];
-    }
-
-    /**
-     * Check exist class and path name and make directory
-     *
-     * @param array $class_controller
-     * @param bool $autoload (default : true)
-     *
-     * @return bool|mixed
-     * */
-    public function makeFileByClassName(array $class_controller, bool $autoload = true)
-    {
-        //Generate
-        if (!class_exists($class_controller['class_name'], $autoload)) {
-            if (!$this->files->exists($class_controller['path'])) {
-                $this->makeDirectory($class_controller['path']);
-                $this->files->put($class_controller['path'], $this->sortImports($this->buildClassCustom($class_controller)));
-
-                $this->info($this->type . ' ' . $class_controller['name'] . ' created successfully.');
-
-                //In BoCrudCommand , use regex check and get class name
-                $this->info("|{$class_controller['class_name']}|");
-                return true;
-            } else {
-                $file = $this->files->get($class_controller['path']);
-                //check namespace
-                if (!Str::contains($file, "namespace {$class_controller['namespace']}")) {
-                    $this->comment("Namespace not match with plugin controller.Please make new Request use namespace {$class_controller['namespace']} of Plugin");
-                    return false;
-                }
-
-                //In BoCrudCommand , use regex check and get class name
-                $this->info("|{$class_controller['class_name']}|");
-            }
-        } else {
-            $this->error("Class name " . $class_controller['name'] . " or path " . $class_controller['path'] . " exist! Check class Request and Model");
-
-            $this->info("|{$class_controller['class_name']}|");
-            return false;
-        }
-    }
-
-    /**
-     * Replace the table name for the given stub.
-     *
-     * @param string $stub
-     * @param string $name
-     * @return ControllerBoCommand
-     */
-    protected function replaceNameStrings(string &$stub, string $name): ControllerBoCommand
-    {
-        $nameTitle = Str::afterLast(preg_replace("/Controller$/", "", $name), '\\');
-        $nameKebab = Str::kebab($nameTitle);
-        $nameSingular = str_replace('-', ' ', $nameKebab);
-        $namePlural = Str::plural($nameSingular);
-
-        $stub = str_replace('DummyClassModel', $this->class_name_model, $stub);
-        $stub = str_replace('DummyClassRequest', $this->class_name_request, $stub);
-        $stub = str_replace('DummyClassController', $name, $stub);
-        $stub = str_replace('dummy-class', $nameKebab, $stub);
-        $stub = str_replace('dummy singular', $nameSingular, $stub);
-        $stub = str_replace('dummy plural', $namePlural, $stub);
-
-        return $this;
+        return self::SUCCESS;
     }
 
     /**
      * Build the class with the given name.
      *
-     * @param array $class_controller
+     * @param string $plugin_name
+     * @param string $name
+     * @param string $namespace_controller
+     * @param $class_model
+     * @param $class_request
      * @return string
+     * @throws FileNotFoundException
      */
-    protected function buildClassCustom(array $class_controller): string
+    protected function buildClassCustom(string $plugin_name, string $name, string $namespace_controller, $class_model, $class_request): string
     {
         $stub = $this->files->get($this->getStub());
 
-        $this->replaceNamespace($stub, $class_controller['class_name'])
-            ->replaceNameStrings($stub, $class_controller['name'])
-            ->replaceSetFromDb($stub);
+        $stub = str_replace('DummyClassModel', $class_model, $stub);
+        $stub = str_replace('DummyClassRequest', $class_request, $stub);
+        $stub = str_replace('DummyClassController', $name, $stub);
+        $stub = str_replace('DummyNamespace', $namespace_controller, $stub);
+        $stub = str_replace('dummy-class', $plugin_name, $stub);
+        $stub = str_replace('dummy singular', $plugin_name, $stub);
+        $stub = str_replace('dummy plural', Str::plural($plugin_name), $stub);
+
+        $this->replaceSetFromDb($stub, $class_model, $plugin_name);
 
         return $stub;
     }
@@ -219,15 +126,24 @@ class ControllerBoCommand extends GeneratorCommand
      * Replace the table name for the given stub.
      *
      * @param string $stub
+     * @param string $class_model
+     * @param $plugin_name
      * @return ControllerBoCommand
      */
-    protected function replaceSetFromDb(string &$stub): ControllerBoCommand
+    protected function replaceSetFromDb(string &$stub, string $class_model, $plugin_name): ControllerBoCommand
     {
-        if (!class_exists($this->class_name_model)) {
+        if($this->option('make_with_plugin')){
+            $path = get_path_src_plugin($plugin_name, "Models" . DIRECTORY_SEPARATOR . ucfirst(Str::camel($plugin_name)));
+            if(file_exists($path)){
+                require_once $path;
+            };
+        }
+
+        if (!class_exists($class_model)) {
             return $this;
         }
 
-        $attributes = $this->getAttributes($this->class_name_model);
+        $attributes = $this->getAttributes($class_model);
 
         // create an array with the needed code for defining fields
         $fields = \Arr::except($attributes, ['id', 'created_at', 'updated_at', 'deleted_at']);
@@ -261,7 +177,6 @@ class ControllerBoCommand extends GeneratorCommand
      * */
     protected function getAttributes(string $model)
     {
-        $attributes = [];
         $model = new $model;
 
         // if fillable was defined, use that as the attributes
@@ -273,5 +188,16 @@ class ControllerBoCommand extends GeneratorCommand
         }
 
         return $attributes;
+    }
+
+    /**
+     * Check exist file or directory
+     *
+     * @param string $path_name
+     * @return bool
+     */
+    public function checkExits(string $path_name): bool
+    {
+        return $this->files->exists($path_name);
     }
 }

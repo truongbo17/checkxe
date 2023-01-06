@@ -3,6 +3,7 @@
 namespace Bo\Generators\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Str;
 
 class RequestBoCommand extends GeneratorCommand
@@ -12,17 +13,18 @@ class RequestBoCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'bo:dashboard:request';
+    protected $name = 'bo:cms:request';
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bo:dashboard:request
+    protected $signature = 'bo:cms:request
     {plugin_name : Plugin name}
-    {--request_name= : if don\'t have request_name , model name will be created with plugin_name}
-    {--type= : type of model (admin or default)}';
+    {name : Request name}
+    {namespace_request : Namespace request...}
+    {--make_with_plugin : force check plugin exist}';
 
     /**
      * The console command description.
@@ -39,16 +41,6 @@ class RequestBoCommand extends GeneratorCommand
     protected $type = 'Request';
 
     /**
-     * Type of command
-     *
-     * @var array
-     * */
-    protected array $type_of = [
-        'admin',
-        'default',
-    ];
-
-    /**
      * Get the stub file for the generator.
      *
      * @return string
@@ -63,119 +55,54 @@ class RequestBoCommand extends GeneratorCommand
      * */
     public function handle()
     {
+        $name = $this->getNameInput();
         $plugin_name = $this->argument('plugin_name');
-        $request_name = $this->option('request_name');
+        $namespace_request = $this->argument('namespace_request');
 
-        $type = $this->option('type') ?? 'default';
+        $path = get_path_src_plugin($plugin_name, "Http/Requests" . DIRECTORY_SEPARATOR . $name);
 
-        if (!in_array($type, $this->type_of)) {
-            $this->error("Type of controller must match in [admin or default]");
+        if (!plugin_exist($plugin_name) && !$this->option('make_with_plugin')) {
+            $this->error("Plugin does not exist");
+            return self::FAILURE;
+        }
+
+        if ($this->checkExits($path)) {
+            $this->error("$this->type $name already existed in \"$path\" !");
             return false;
         }
 
-        if (exist_plugin($plugin_name)) {
-            $plugin_root_data = get_file_data_by_json(exist_plugin($plugin_name));
+        $this->makeDirectory($path);
+        $this->files->put($path, $this->sortImports($this->buildClassCustom($name, $namespace_request)));
 
-            if ($request_name) {
-                $class_request = $this->generateClassName($type, $plugin_root_data['namespace'], $plugin_name, $request_name);
-            } else {
-                $class_request = $this->generateClassName($type, $plugin_root_data['namespace'], $plugin_name);
-            }
+        $this->info("$this->type created successfully in " . realpath($path));
 
-            $this->makeFileByClassName($class_request);
-
-            return self::SUCCESS;
-        } else {
-            $this->error("Plugin $plugin_name don't exist!");
-            return false;
-        }
+        return self::SUCCESS;
     }
 
     /**
-     * Check exist class and path name and make directory
+     * Check exist file or directory
      *
-     * @param array $class_request
-     * @param bool $autoload (default : true)
-     *
+     * @param string $path_name
      * @return bool
-     * */
-    public function makeFileByClassName(array $class_request, bool $autoload = true): bool
+     */
+    public function checkExits(string $path_name): bool
     {
-        //Generate
-        if (!class_exists($class_request['class_name'], $autoload)) {
-            if (!$this->files->exists($class_request['path'])) {
-                $this->makeDirectory($class_request['path']);
-                $this->files->put($class_request['path'], $this->sortImports($this->buildClassCustom($class_request)));
-
-                $this->info($this->type . ' ' . $class_request['name'] . ' created successfully.');
-                //In BoCrudCommand , use regex check and get class name
-                $this->info("|{$class_request['class_name']}|");
-
-                return true;
-            }else{
-                //Path file in exist,check namespace class
-                $file = $this->files->get($class_request['path']);
-
-                //check namespace
-                if (!Str::contains($file, "namespace {$class_request['namespace']}")) {
-                    $this->comment("Namespace not match with plugin request.Please make new Request use namespace {$class_request['namespace']} of Plugin");
-                    return false;
-                }
-
-                $this->info("Request file and class exist !!!");
-                //In BoCrudCommand , use regex check and get class name
-                $this->info("|{$class_request['class_name']}|");
-                return true;
-            }
-        } else {
-            $this->error("Class name {$class_request['name']} exist!");
-            //In BoCrudCommand , use regex check and get class name
-            $this->info("|{$class_request['class_name']}|");
-            return false;
-        }
+        return $this->files->exists($path_name);
     }
 
-    /**
-     * Generate Class Name
-     *
-     * @param string $type
-     * @param string $namespace
-     * @param string $plugin_name
-     * @param string $request_name
-     *
-     * @return array
-     * */
-    public function generateClassName(string $type, string $namespace, string $plugin_name, string $request_name = ''): array
-    {
-        $type = ($type == 'admin') ? 'Admin\\' : '';
-
-        if (mb_strlen($request_name) > 0) {
-            $request = ucfirst($request_name) . "Request";
-        } else {
-            $request = ucfirst($plugin_name) . "Request";
-        }
-        $class_request = $namespace . "Http\\Requests\\" . $type . $request;
-
-        return [
-            'name'       => $request,
-            'class_name' => $class_request,
-            'namespace'  => $namespace . "Http\\Requests",
-            'path'       => path_plugins_request($plugin_name, $request, $type),
-        ];
-    }
 
     /**
      * Build the class with the given name.
      *
-     * @param array $class_request
+     * @param string $class_name
+     * @param string $namespace_request
      * @return string
      */
-    protected function buildClassCustom(array $class_request): string
+    protected function buildClassCustom(string $class_name, string $namespace_request): string
     {
         $stub = $this->files->get($this->getStub());
 
-        return $this
-            ->replaceNamespace($stub, $class_request['class_name'])
-            ->replaceClass($stub, $class_request['name']);
+        $stub = str_replace('DummyClass', $class_name, $stub);
+        return str_replace('DummyNamespace', $namespace_request, $stub);
     }
 }

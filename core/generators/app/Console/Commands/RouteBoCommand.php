@@ -22,8 +22,8 @@ class RouteBoCommand extends GeneratorCommand
     protected $signature = 'bo:cms:route
     {plugin_name : Plugin name}
     {name : Route file name}
-    {class_controller : Class controller use in route...|}
-    {namespace_controller : Namespace controller...|}
+    {class_controller : Class controller use in route...}
+    {namespace_controller : Namespace controller...}
     {--make_with_plugin : force check plugin exist}';
 
     /**

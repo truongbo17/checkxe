@@ -5,6 +5,7 @@ namespace Bo\Generators\Console\Commands;
 use Bo\PluginManager\App\Services\Plugin;
 use Bo\PluginManager\App\Services\PluginInterface;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -37,6 +38,7 @@ class MakePluginCommand extends Command
      * Execute the console command.
      *
      * @return int|void
+     * @throws FileNotFoundException
      */
     public function handle()
     {
@@ -50,66 +52,95 @@ class MakePluginCommand extends Command
         $namespace = "Bo\\$plugin_name_title";
         $class_controller = $plugin_name_title . "Controller";
         $namespace_controller = "$namespace\\Http\\Controllers\\Admin";
+        $namespace_model = "$namespace\\Models";
+        $namespace_request = "$namespace\\Http\\Requests";
 
-//        dd($plugin_name,$plugin_name_title,$plugin_name_kebab,$plugin_name_plural,$plugin_name_plural_up_case,$plugin_path);
+        if (plugin_exist($plugin_name)) {
+            $this->error("Plugin exists in {$this->plugin->getPlugin($plugin_name)['path']}");
+            return self::FAILURE;
+        }
 
-//        if (plugin_exist($plugin_name)) {
-//            $this->error("Plugin exists in {$this->plugin->getPlugin($plugin_name)['path']}");
-//            return self::FAILURE;
-//        }
-//
-//        if(File::isDirectory($plugin_path)){
-//            $this->error("Folder $plugin_path already exists, please delete folder or try again with another name");
-//            return self::FAILURE;
-//        }
+        if (File::isDirectory($plugin_path)) {
+            $this->error("Folder $plugin_path already exists, please delete folder or try again with another name");
+            return self::FAILURE;
+        }
 
-        // Create plugin file json
+        //Create plugin file json
         if (!$this->createPluginFile($plugin_name, $plugin_name_title)) return self::FAILURE;
 
         //Make config
         $this->call('bo:cms:config', [
-            'plugin_name'        => $plugin_name,
-            'name'               => 'general',
+            'plugin_name' => $plugin_name,
+            'name' => 'general',
             "--make_with_plugin" => true
         ]);
 
         //Make helper
         $this->call('bo:cms:helper', [
-            'plugin_name'        => $plugin_name,
-            'name'               => 'helper',
+            'plugin_name' => $plugin_name,
+            'name' => 'helper',
             "--make_with_plugin" => true
         ]);
 
         //Make migration
         $this->call('bo:cms:migration', [
-            'plugin_name'        => $plugin_name,
-            "name"               => "$plugin_name_plural",
+            'plugin_name' => $plugin_name,
+            "name" => "$plugin_name_plural",
             "--make_with_plugin" => true
         ]);
 
         //Make lang
         $this->call('bo:cms:lang', [
-            'plugin_name'        => $plugin_name,
-            "name"               => "$plugin_name_plural",
-            "lang"               => "en",
+            'plugin_name' => $plugin_name,
+            "name" => "$plugin_name_plural",
+            "lang" => "en",
             "--make_with_plugin" => true
         ]);
 
         //Make view
         $this->call('bo:cms:view', [
-            'plugin_name'        => $plugin_name,
-            "name"               => "index.blade",
+            'plugin_name' => $plugin_name,
+            "name" => "index.blade",
             "--make_with_plugin" => true
         ]);
 
         //Make route
         $this->call('bo:cms:route', [
-            'plugin_name'          => $plugin_name,
-            "name"                 => "web",
-            "class_controller"     => $class_controller,
+            'plugin_name' => $plugin_name,
+            "name" => "web",
+            "class_controller" => $class_controller,
             'namespace_controller' => $namespace_controller,
-            "--make_with_plugin"   => true
+            "--make_with_plugin" => true
         ]);
+
+        //Make model
+        $this->call('bo:cms:model', [
+            'plugin_name' => $plugin_name,
+            "name" => $plugin_name_title,
+            'namespace_model' => $namespace_model,
+            'table' => $plugin_name_plural,
+            "--make_with_plugin" => true
+        ]);
+
+        //Make request
+        $this->call('bo:cms:request', [
+            'plugin_name' => $plugin_name,
+            "name" => "{$plugin_name_title}Request",
+            'namespace_request' => $namespace_request,
+            "--make_with_plugin" => true
+        ]);
+
+        //Make controller
+        $this->call('bo:cms:controller', [
+            'plugin_name' => $plugin_name,
+            "name" => "{$plugin_name_title}Controller",
+            'namespace_controller' => $namespace_controller,
+            'class_model' => "$namespace_model\\$plugin_name_title",
+            'class_request' => "$namespace_request\\{$plugin_name_title}Request",
+            "--make_with_plugin" => true
+        ]);
+
+        $this->makePluginClass($plugin_name);
 
         // if the application uses cached routes, we should rebuild the cache so the previous added route will
         // be acessible without manually clearing the route cache.
@@ -126,6 +157,7 @@ class MakePluginCommand extends Command
      * @param string $plugin_name
      * @param string $plugin_name_title
      * @return false
+     * @throws FileNotFoundException
      */
     private function createPluginFile(string $plugin_name, string $plugin_name_title): bool
     {
@@ -162,6 +194,7 @@ class MakePluginCommand extends Command
      * @param string $plugin_name
      * @param string $plugin_name_title
      * @return string
+     * @throws FileNotFoundException
      */
     private function getContentPluginJson(string $plugin_name, string $plugin_name_title): string
     {
@@ -173,5 +206,35 @@ class MakePluginCommand extends Command
             return str_replace('provider_plugin', str_replace(" ", "", "Bo\\\ $plugin_name_title\\\Providers\\\ {$plugin_name_title}ServiceProvider"), $content_file);
         }
         return "";
+    }
+
+    /**
+     * Make plugin class
+     *
+     * */
+    private function makePluginClass(string $plugin_name): bool
+    {
+        $path = plugin_path($plugin_name, "Plugin");
+
+        if ($this->checkExits($path)) {
+            $this->error("Class Plugin already existed in \"$path\" !");
+            return false;
+        }
+
+        $this->makeDirectory($path);
+
+        if (File::exists(__DIR__ . '/../../stubs/plugin-class.stub')) {
+            $content = File::get(__DIR__ . '/../../stubs/plugin-class.stub');
+            $content = str_replace("");
+
+            File::put($path, "$content");
+
+            $this->info("Class Plugin created successfully in " . realpath($path));
+
+            return true;
+        }
+
+        $this->error("File stub plugin does not exist !");
+        return false;
     }
 }
