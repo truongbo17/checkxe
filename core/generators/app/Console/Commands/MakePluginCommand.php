@@ -152,7 +152,7 @@ class MakePluginCommand extends Command
         //Make provider
         $this->call('bo:cms:provider', [
             'plugin_name'        => $plugin_name,
-            "name"               => "{$plugin_name_title}Provider",
+            "name"               => "{$plugin_name_title}ServiceProvider",
             'namespace_provider' => $namespace_provider,
             "--make_with_plugin" => true
         ]);
@@ -219,7 +219,7 @@ class MakePluginCommand extends Command
             $content_file = File::get(__DIR__ . '/../../stubs/plugin.stub');
             $content_file = str_replace('plugin_name', $plugin_name, $content_file);
             $content_file = str_replace('name_title', $plugin_name_title, $content_file);
-            $content_file = str_replace('namespace_plugin', str_replace(" ", "", "Bo\\\ $plugin_name_title"), $content_file);
+            $content_file = str_replace('namespace_plugin', str_replace(" ", "", "Bo\\\ $plugin_name_title \\\ "), $content_file);
             return str_replace('provider_plugin', str_replace(" ", "", "Bo\\\ $plugin_name_title\\\Providers\\\ {$plugin_name_title}ServiceProvider"), $content_file);
         }
         return "";

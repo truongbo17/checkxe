@@ -1,7 +1,7 @@
 {
     "primary_key": "chat",
     "name": "Chat",
-    "namespace": "Bo\\Chat",
+    "namespace": "Bo\\Chat\\",
     "provider": "Bo\\Chat\\Providers\\ChatServiceProvider",
     "author": "Nguyen Quang Truong",
     "url": "https://github.com/truongbo17",
