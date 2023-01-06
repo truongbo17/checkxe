@@ -43,6 +43,15 @@ class MakePluginCommand extends Command
     public function handle()
     {
         $plugin_name = (string)$this->argument('plugin_name');
+
+        if (File::isDirectory(core_package_path())) {
+            $data = array_diff(scandir(core_package_path()), array_merge(['.', '..', '.DS_Store']));
+            if (in_array($plugin_name, $data)) {
+                $this->error("Plugin must not have the following names : " . implode(",", $data));
+                return self::FAILURE;
+            }
+        }
+
         $plugin_name_title = ucfirst(Str::camel($plugin_name));
         $plugin_name_kebab = Str::kebab($plugin_name_title);
         $plugin_name_plural = Str::plural($plugin_name_kebab);
@@ -53,24 +62,25 @@ class MakePluginCommand extends Command
         $namespace_controller = "$namespace\\Http\\Controllers\\Admin";
         $namespace_model = "$namespace\\Models";
         $namespace_request = "$namespace\\Http\\Requests";
+        $namespace_provider = "$namespace\\Providers";
 
-//        if (plugin_exist($plugin_name)) {
-//            $this->error("Plugin exists in {$this->plugin->getPlugin($plugin_name)['path']}");
-//            return self::FAILURE;
-//        }
-//
-//        if (File::isDirectory($plugin_path)) {
-//            $this->error("Folder $plugin_path already exists, please delete folder or try again with another name");
-//            return self::FAILURE;
-//        }
-//
-//        //Create plugin file json
-//        if (!$this->createPluginFile($plugin_name, $plugin_name_title)) return self::FAILURE;
+        if (plugin_exist($plugin_name)) {
+            $this->error("Plugin exists in {$this->plugin->getPlugin($plugin_name)['path']}");
+            return self::FAILURE;
+        }
+
+        if (File::isDirectory($plugin_path)) {
+            $this->error("Folder $plugin_path already exists, please delete folder or try again with another name");
+            return self::FAILURE;
+        }
+
+        //Create plugin file json
+        if (!$this->createPluginFile($plugin_name, $plugin_name_title)) return self::FAILURE;
 
         //Make config
         $this->call('bo:cms:config', [
-            'plugin_name' => $plugin_name,
-            'name' => 'general',
+            'plugin_name'        => $plugin_name,
+            'name'               => 'general',
             "--make_with_plugin" => true
         ]);
 
@@ -131,11 +141,19 @@ class MakePluginCommand extends Command
 
         //Make controller
         $this->call('bo:cms:controller', [
-            'plugin_name' => $plugin_name,
-            "name" => "{$plugin_name_title}Controller",
+            'plugin_name'          => $plugin_name,
+            "name"                 => "{$plugin_name_title}Controller",
             'namespace_controller' => $namespace_controller,
-            'class_model' => "$namespace_model\\$plugin_name_title",
-            'class_request' => "$namespace_request\\{$plugin_name_title}Request",
+            'class_model'          => "$namespace_model\\$plugin_name_title",
+            'class_request'        => "$namespace_request\\{$plugin_name_title}Request",
+            "--make_with_plugin"   => true
+        ]);
+
+        //Make provider
+        $this->call('bo:cms:provider', [
+            'plugin_name'        => $plugin_name,
+            "name"               => "{$plugin_name_title}Provider",
+            'namespace_provider' => $namespace_provider,
             "--make_with_plugin" => true
         ]);
 

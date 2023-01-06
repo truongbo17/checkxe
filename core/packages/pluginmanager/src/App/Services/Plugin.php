@@ -31,7 +31,7 @@ class Plugin implements PluginInterface
         foreach ($plugins as $plugin) {
             if (
                 File::isDirectory(plugin_path($plugin)) &&
-                File::exists(plugin_path($plugin . DIRECTORY_SEPARATOR . config('bo.pluginmanager.file_plugin')))
+                File::exists(plugin_path($plugin, config('bo.pluginmanager.file_plugin')))
             ) {
                 if (File::exists(plugin_path($plugin . '/.DS_Store'))) {
                     File::delete(plugin_path($plugin . '/.DS_Store'));

@@ -52,7 +52,6 @@ trait LoadAndPublishDataTrait
      * load route service provider
      *
      * @param array $routes
-     * @return LoadAndPublishDataTrait
      */
     public function loadRoutes(array $routes): self
     {
@@ -60,6 +59,56 @@ trait LoadAndPublishDataTrait
 
         foreach ($routes as $route) {
             $this->loadRoutesFrom(get_path_route_plugin($this->dir_plugin, $route));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Load helper
+     *
+     * */
+    public function loadHelper(): self
+    {
+        $this->validateDirAndPrimaryKeyPlugin();
+        BaseService::autoload(get_path_helper_plugin($this->primary_key));
+        return $this;
+    }
+
+    /**
+     * Load migration
+     * */
+    public function loadMigration(): self
+    {
+        $this->loadMigrationsFrom(get_path_database_plugin($this->primary_key));
+        return $this;
+    }
+
+    /**
+     * Load and publish translation
+     */
+    public function loadAndPublishTranslations(): self
+    {
+        $this->loadTranslationsFrom(get_path_resource_plugin($this->primary_key . "/lang"), $this->primary_key);
+        $this->publishes(
+            [get_path_resource_plugin($this->primary_key . "/lang") => lang_path('vendor/' . $this->primary_key)],
+            'cms-lang'
+        );
+
+        return $this;
+    }
+
+    /**
+     * Load and publish view
+     */
+    public function loadAndPublishViews(): self
+    {
+        $this->loadViewsFrom(get_path_resource_plugin($this->primary_key . "/views"), $this->primary_key);
+        if ($this->app->runningInConsole()) {
+            $this->publishes(
+                [get_path_resource_plugin($this->primary_key . "/views") => resource_path('views/vendor/' . $this->primary_key)],
+                'cms-views'
+            );
         }
 
         return $this;

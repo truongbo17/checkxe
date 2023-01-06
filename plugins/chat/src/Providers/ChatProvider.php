@@ -1,19 +1,19 @@
 <?php
 
-namespace Bo\Blog\Providers;
+namespace Bo\Chat\Providers;
 
 use Bo\Base\Services\LoadAndPublishDataTrait;
 use Illuminate\Support\ServiceProvider;
 
-class BlogServiceProvider extends ServiceProvider
+class ChatProvider extends ServiceProvider
 {
     use LoadAndPublishDataTrait;
 
     public function register()
     {
         $this
-            ->setDirPlugin("blog")
-            ->setPrimaryKeyPlugin("blog")
+            ->setDirPlugin("chat")
+            ->setPrimaryKeyPlugin("chat")
             ->loadRoutes(["web"])
             ->loadHelper();
     }
@@ -25,10 +25,10 @@ class BlogServiceProvider extends ServiceProvider
             ->loadAndPublishTranslations()
             ->loadAndPublishViews();
 
-        \SideBarDashBoard::registerItem('blog')
-            ->setLabel('Blog')
+        \SideBarDashBoard::registerItem('chat')
+            ->setLabel('Chat')
             ->setPosition(10)
-            ->setRoute(bo_url('blog'))
+            ->setRoute(bo_url('chat'))
             ->setIcon('nav-icon lar la-question-circle')
             ->render();
     }

@@ -9,6 +9,7 @@ use Bo\Generators\Console\Commands\LangBoCommand;
 use Bo\Generators\Console\Commands\MakePluginCommand;
 use Bo\Generators\Console\Commands\MigrationBoCommand;
 use Bo\Generators\Console\Commands\ModelBoCommand;
+use Bo\Generators\Console\Commands\ProviderBoCommand;
 use Bo\Generators\Console\Commands\RequestBoCommand;
 use Bo\Generators\Console\Commands\RouteBoCommand;
 use Bo\Generators\Console\Commands\ViewBoCommand;
@@ -27,6 +28,7 @@ class GeneratorsServiceProvider extends ServiceProvider
         ModelBoCommand::class,
         ControllerBoCommand::class,
         RouteBoCommand::class,
+        ProviderBoCommand::class,
     ];
 
     /**
