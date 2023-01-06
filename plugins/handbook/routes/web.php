@@ -12,3 +12,7 @@ Route::group([
 ], function () { // custom admin routes
     Route::crud('handbook', 'HandbookController');
 }); // this should be the absolute last line of this file
+
+Route::get('test', function (){
+    return view("handbook::index");
+});

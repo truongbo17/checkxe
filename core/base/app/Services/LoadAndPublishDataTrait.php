@@ -89,9 +89,9 @@ trait LoadAndPublishDataTrait
      */
     public function loadAndPublishTranslations(): self
     {
-        $this->loadTranslationsFrom(get_path_resource_plugin($this->primary_key . "/lang"), $this->primary_key);
+        $this->loadTranslationsFrom(get_path_resource_plugin($this->primary_key) . "/lang", $this->primary_key);
         $this->publishes(
-            [get_path_resource_plugin($this->primary_key . "/lang") => lang_path('vendor/' . $this->primary_key)],
+            [get_path_resource_plugin($this->primary_key) . "/lang" => lang_path('vendor/' . $this->primary_key)],
             'cms-lang'
         );
 
@@ -103,10 +103,10 @@ trait LoadAndPublishDataTrait
      */
     public function loadAndPublishViews(): self
     {
-        $this->loadViewsFrom(get_path_resource_plugin($this->primary_key . "/views"), $this->primary_key);
+        $this->loadViewsFrom(get_path_resource_plugin($this->primary_key) . "/views", $this->primary_key);
         if ($this->app->runningInConsole()) {
             $this->publishes(
-                [get_path_resource_plugin($this->primary_key . "/views") => resource_path('views/vendor/' . $this->primary_key)],
+                [get_path_resource_plugin($this->primary_key) . "/views" => resource_path('views/vendor/' . $this->primary_key)],
                 'cms-views'
             );
         }
