@@ -10,6 +10,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 class Plugin implements PluginInterface
@@ -73,6 +74,7 @@ class Plugin implements PluginInterface
                 return File::put(core_package_path("pluginmanager/" . config('bo.pluginmanager.file_active_plugin')), json_encode($this->activated_plugins ?? []));
             }
         } catch (\Exception $exception) {
+            Log::error($exception);
         }
         return false;
     }
@@ -91,6 +93,7 @@ class Plugin implements PluginInterface
                 return $data;
             }
         } catch (Exception $exception) {
+            Log::error($exception);
         }
         return [];
     }
@@ -106,10 +109,11 @@ class Plugin implements PluginInterface
             if (File::exists(core_package_path("pluginmanager/" . config('bo.pluginmanager.file_active_plugin')))) {
                 $json = File::get(core_package_path("pluginmanager/" . config('bo.pluginmanager.file_active_plugin')));
                 if (is_string($json)) {
-                    return json_decode($json, true);
+                    return json_decode($json, true) ?? [];
                 }
             }
         } catch (\Exception $exception) {
+            Log::error($exception);
         }
         return [];
     }
@@ -204,6 +208,7 @@ class Plugin implements PluginInterface
                 }
             }
         } catch (Exception $e) {
+            Log::error($e);
         }
         return false;
     }
@@ -256,6 +261,7 @@ class Plugin implements PluginInterface
                 return true;
             }
         } catch (Exception $e) {
+            Log::error($e);
         }
         return false;
     }
@@ -297,6 +303,7 @@ class Plugin implements PluginInterface
                 }
             }
         } catch (Exception $e) {
+            Log::error($e);
         }
         return false;
     }
@@ -316,9 +323,10 @@ class Plugin implements PluginInterface
             try {
                 $content = File::get($plugin_path . DIRECTORY_SEPARATOR . config('bo.pluginmanager.file_plugin'));
                 if (is_string($content)) {
-                    return json_decode($content, true);
+                    return json_decode($content, true) ?? [];
                 }
-            } catch (FileNotFoundException $e) {
+            } catch (Exception $e) {
+                Log::error($e);
             }
         }
         return [];
