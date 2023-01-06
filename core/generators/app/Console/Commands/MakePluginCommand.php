@@ -46,7 +46,6 @@ class MakePluginCommand extends Command
         $plugin_name_title = ucfirst(Str::camel($plugin_name));
         $plugin_name_kebab = Str::kebab($plugin_name_title);
         $plugin_name_plural = Str::plural($plugin_name_kebab);
-        $plugin_name_plural_up_case = ucwords(str_replace('-', ' ', Str::plural($plugin_name_kebab)));
         $plugin_path = plugin_path($plugin_name);
 
         $namespace = "Bo\\$plugin_name_title";
@@ -55,18 +54,18 @@ class MakePluginCommand extends Command
         $namespace_model = "$namespace\\Models";
         $namespace_request = "$namespace\\Http\\Requests";
 
-        if (plugin_exist($plugin_name)) {
-            $this->error("Plugin exists in {$this->plugin->getPlugin($plugin_name)['path']}");
-            return self::FAILURE;
-        }
-
-        if (File::isDirectory($plugin_path)) {
-            $this->error("Folder $plugin_path already exists, please delete folder or try again with another name");
-            return self::FAILURE;
-        }
-
-        //Create plugin file json
-        if (!$this->createPluginFile($plugin_name, $plugin_name_title)) return self::FAILURE;
+//        if (plugin_exist($plugin_name)) {
+//            $this->error("Plugin exists in {$this->plugin->getPlugin($plugin_name)['path']}");
+//            return self::FAILURE;
+//        }
+//
+//        if (File::isDirectory($plugin_path)) {
+//            $this->error("Folder $plugin_path already exists, please delete folder or try again with another name");
+//            return self::FAILURE;
+//        }
+//
+//        //Create plugin file json
+//        if (!$this->createPluginFile($plugin_name, $plugin_name_title)) return self::FAILURE;
 
         //Make config
         $this->call('bo:cms:config', [
@@ -140,7 +139,7 @@ class MakePluginCommand extends Command
             "--make_with_plugin" => true
         ]);
 
-        $this->makePluginClass($plugin_name);
+        $this->makePluginClass($plugin_name, $namespace, $plugin_name_plural);
 
         // if the application uses cached routes, we should rebuild the cache so the previous added route will
         // be acessible without manually clearing the route cache.
@@ -212,11 +211,11 @@ class MakePluginCommand extends Command
      * Make plugin class
      *
      * */
-    private function makePluginClass(string $plugin_name): bool
+    private function makePluginClass(string $plugin_name, string $namespace, string $table): bool
     {
-        $path = plugin_path($plugin_name, "Plugin");
+        $path = get_path_src_plugin($plugin_name, "Plugin");
 
-        if ($this->checkExits($path)) {
+        if (File::exists($path)) {
             $this->error("Class Plugin already existed in \"$path\" !");
             return false;
         }
@@ -225,7 +224,8 @@ class MakePluginCommand extends Command
 
         if (File::exists(__DIR__ . '/../../stubs/plugin-class.stub')) {
             $content = File::get(__DIR__ . '/../../stubs/plugin-class.stub');
-            $content = str_replace("");
+            $content = str_replace("DUMMY_NAMESPACE", $namespace, $content);
+            $content = str_replace("DUMMY_TABLE", $table, $content);
 
             File::put($path, "$content");
 

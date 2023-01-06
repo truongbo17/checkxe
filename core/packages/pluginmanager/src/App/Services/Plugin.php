@@ -25,7 +25,7 @@ class Plugin implements PluginInterface
      */
     public function __construct()
     {
-        $plugins = $this->scanFolder(plugin_path()) ?? [];
+        $plugins = $this->scanFolder(plugin_path("")) ?? [];
         $activated_plugins = $this->getActivatedPluginFromJsonFile();
 
         foreach ($plugins as $plugin) {
