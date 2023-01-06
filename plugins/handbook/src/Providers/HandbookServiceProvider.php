@@ -1,19 +1,19 @@
 <?php
 
-namespace Bo\Chat\Providers;
+namespace Bo\Handbook\Providers;
 
 use Bo\Base\Services\LoadAndPublishDataTrait;
 use Illuminate\Support\ServiceProvider;
 
-class ChatProvider extends ServiceProvider
+class HandbookServiceProvider extends ServiceProvider
 {
     use LoadAndPublishDataTrait;
 
     public function register()
     {
         $this
-            ->setDirPlugin("chat")
-            ->setPrimaryKeyPlugin("chat")
+            ->setDirPlugin("handbook")
+            ->setPrimaryKeyPlugin("handbook")
             ->loadRoutes(["web"])
             ->loadHelper();
     }
@@ -25,10 +25,10 @@ class ChatProvider extends ServiceProvider
             ->loadAndPublishTranslations()
             ->loadAndPublishViews();
 
-        \SideBarDashBoard::registerItem('chat')
-            ->setLabel('Chat')
+        \SideBarDashBoard::registerItem('handbook')
+            ->setLabel('Handbook')
             ->setPosition(10)
-            ->setRoute(bo_url('chat'))
+            ->setRoute(bo_url('handbook'))
             ->setIcon('nav-icon lar la-question-circle')
             ->render();
     }

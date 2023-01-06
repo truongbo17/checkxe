@@ -1,6 +1,6 @@
 <?php
 
-namespace Bo\Chat;
+namespace Bo\Handbook;
 
 use Bo\PluginManager\App\Services\PluginOperationAbstract;
 
@@ -9,6 +9,6 @@ class Plugin extends PluginOperationAbstract
     public static function remove()
     {
         \Schema::disableForeignKeyConstraints();
-        \Schema::dropIfExists('chats');
+        \Schema::dropIfExists('handbooks');
     }
 }

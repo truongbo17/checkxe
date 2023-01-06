@@ -6,6 +6,7 @@ use Alert;
 use Bo\Base\Services\BaseService;
 use Composer\Autoload\ClassLoader;
 use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -188,10 +189,9 @@ class Plugin implements PluginInterface
                         call_user_func([$content['namespace'] . 'Plugin', 'activate']);
                     }
 
-                    // $this->publishAssets($plugin);
-                    if (File::isDirectory(get_path_database_plugin($content['primary_key']))) {
-                        app()->make('migrator')->run(get_path_database_plugin($content['primary_key']));
-                    }
+                    $this->publishAssets($content['primary_key'], $plugin_path);
+                    $this->migrate($content['primary_key']);
+
                     app()->register($content['provider']);
 
                     $this->activated_plugins[] = $content['primary_key'];
@@ -209,8 +209,23 @@ class Plugin implements PluginInterface
             }
         } catch (Exception $e) {
             Log::error($e);
+            Alert::error($e->getMessage());
         }
         return false;
+    }
+
+    /**
+     * Run migrations
+     **/
+    private function migrate(string $plugin)
+    {
+        try {
+            if (File::isDirectory(get_path_database_plugin($plugin))) {
+                app()->make('migrator')->run(get_path_database_plugin($plugin));
+            }
+        } catch (Exception $exception) {
+            Alert::error($exception->getMessage());
+        }
     }
 
     /**
@@ -262,6 +277,7 @@ class Plugin implements PluginInterface
             }
         } catch (Exception $e) {
             Log::error($e);
+            Alert::error($e->getMessage());
         }
         return false;
     }
@@ -304,6 +320,7 @@ class Plugin implements PluginInterface
             }
         } catch (Exception $e) {
             Log::error($e);
+            Alert::error($e->getMessage());
         }
         return false;
     }
@@ -405,5 +422,23 @@ class Plugin implements PluginInterface
     public function is_activate(string $plugin_key): bool
     {
         return array_key_exists($plugin_key, $this->activated_plugins);
+    }
+
+    /**
+     * @param string $plugin
+     * @param string $plugin_path
+     * @return void
+     */
+    private function publishAssets(string $plugin, string $plugin_path): void
+    {
+        $public_path = public_path('resources/vendor/plugins');
+
+        if (!File::isDirectory($public_path)) {
+            File::makeDirectory($public_path, 0755, true);
+        }
+
+        if (File::isDirectory(plugin_path($plugin . '/public'))) {
+            File::copyDirectory(plugin_path($plugin . '/public'), $public_path . '/' . $plugin);
+        }
     }
 }

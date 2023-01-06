@@ -59,7 +59,7 @@ class MakePluginCommand extends Command
 
         $namespace = "Bo\\$plugin_name_title";
         $class_controller = $plugin_name_title . "Controller";
-        $namespace_controller = "$namespace\\Http\\Controllers\\Admin";
+        $namespace_controller = "$namespace\\Http\\Controllers";
         $namespace_model = "$namespace\\Models";
         $namespace_request = "$namespace\\Http\\Requests";
         $namespace_provider = "$namespace\\Providers";

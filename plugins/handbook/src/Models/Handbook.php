@@ -1,11 +1,11 @@
 <?php
 
-namespace Bo\Chat\Models;
+namespace Bo\Handbook\Models;
 
 use Bo\Base\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Chat extends Model
+class Handbook extends Model
 {
     use CrudTrait;
 
@@ -15,7 +15,7 @@ class Chat extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'chats';
+    protected $table = 'handbooks';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];

@@ -1,0 +1,10 @@
+{
+    "primary_key": "handbook",
+    "name": "Handbook",
+    "namespace": "Bo\\Handbook\\",
+    "provider": "Bo\\Handbook\\Providers\\HandbookServiceProvider",
+    "author": "Nguyen Quang Truong",
+    "url": "https://github.com/truongbo17",
+    "version": "1.0",
+    "description": "The description for module handbook"
+}

@@ -1,10 +1,10 @@
 <?php
 
-namespace Bo\Chat\Http\Requests;
+namespace Bo\Handbook\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ChatRequest extends FormRequest
+class HandbookRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

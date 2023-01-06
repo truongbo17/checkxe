@@ -1,6 +1,6 @@
 <?php
 
-namespace Bo\Chat\Http\Controllers\Admin;
+namespace Bo\Handbook\Http\Controllers;
 
 use Bo\Base\Http\Controllers\CrudController;
 use Bo\Base\Http\Controllers\Operations\CreateOperation;
@@ -10,7 +10,7 @@ use Bo\Base\Http\Controllers\Operations\ShowOperation;
 use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\Base\Library\CrudPanel\CrudPanelFacade as CRUD;
 
-class ChatController extends CrudController
+class HandbookController extends CrudController
 {
     use ListOperation;
     use CreateOperation;
@@ -25,9 +25,9 @@ class ChatController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\Bo\Chat\Models\Chat::class);
-        CRUD::setRoute(config('bo.base.route_prefix') . '/chat');
-        CRUD::setEntityNameStrings('chat', 'chats');
+        CRUD::setModel(\Bo\Handbook\Models\Handbook::class);
+        CRUD::setRoute(config('bo.base.route_prefix') . '/handbook');
+        CRUD::setEntityNameStrings('handbook', 'handbooks');
     }
 
     /**
@@ -53,7 +53,7 @@ class ChatController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(\Bo\Chat\Http\Requests\ChatRequest::class);
+        CRUD::setValidation(\Bo\Handbook\Http\Requests\HandbookRequest::class);
 
         CRUD::field('name');
 
