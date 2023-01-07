@@ -1,0 +1,19 @@
+{
+    "name": "bo/shortcode",
+    "description": "Shortcode Package",
+    "type": "package",
+    "autoload": {
+        "psr-4": {
+            "Bo\\Shortcode\\": "src"
+        }
+    },
+    "require": {
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bo\\Shortcode\\ShortcodeServiceProvider"
+            ]
+        }
+    }
+}
