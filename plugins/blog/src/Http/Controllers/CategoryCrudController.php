@@ -34,7 +34,7 @@ class CategoryCrudController extends CrudController
             'name'      => 'articles', // the method that defines the relationship in your Model
             'wrapper'   => [
                 'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url('article?category_id='.$entry->getKey());
+                    return bo_url('article?category_id='.$entry->getKey());
                 },
             ],
         ]);

@@ -44,7 +44,7 @@ class TestCommand extends Command
             $type = 'info', // info / success / warning / error
             $message = 'Test Notification',
             $messageLong = 'This is a longer message for the test notification '.rand(1, 99999), // optional
-            $href = '/some-custom-url', // optional, e.g. backpack_url('/example')
+            $href = '/some-custom-url', // optional, e.g. bo_url('/example')
             $hrefText = 'Go to custom URL' // optional
         ));
     }

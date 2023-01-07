@@ -194,7 +194,7 @@ if (!function_exists('mb_ucfirst')) {
 
 if (!function_exists('bo_view')) {
     /**
-     * Returns a new displayable view based on the configured backpack view namespace.
+     * Returns a new displayable view based on the configured Bo view namespace.
      * If that view doesn't exist, it will load the one from the original theme.
      *
      * @param string (see config/bo/base.php)

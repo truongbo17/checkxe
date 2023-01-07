@@ -245,7 +245,6 @@ trait Read
      *
      * @param  array|int  $menu
      *
-     * https://backpackforlaravel.com/docs/4.1/crud-cheat-sheet#page-length
      */
     public function setPageLengthMenu($menu)
     {

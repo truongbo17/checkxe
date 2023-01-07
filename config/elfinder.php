@@ -39,7 +39,7 @@ return [
     */
 
     'route' => [
-        'prefix' => config('backpack.base.route_prefix', 'admin') . '/elfinder',
+        'prefix' => config('bo.base.route_prefix', 'admin') . '/elfinder',
         'middleware' => ['web', config('bo.base.middleware_key', 'admin')], //Set to null to disable middleware filter
     ],
 

@@ -18,7 +18,7 @@ class CheckIfAdmin
      *
      * Additionally, in Laravel 7+, you should change app/Providers/RouteServiceProvider::HOME
      * which defines the route where a logged in user (but not admin) gets redirected
-     * when trying to access an admin route. By default it's '/home' but Backpack
+     * when trying to access an admin route. By default it's '/home' but BoCMS
      * does not have a '/home' route, use something you've built for your users
      * (again - users, not admins).
      *

@@ -19,7 +19,7 @@ class Fix extends Command
      *
      * @var string
      */
-    protected $description = 'Fix known Backpack issues.';
+    protected $description = 'Fix known BoCMS issues.';
 
     /**
      * Execute the console command.

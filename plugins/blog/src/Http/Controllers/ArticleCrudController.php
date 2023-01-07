@@ -54,7 +54,7 @@ class ArticleCrudController extends CrudController
                 'attribute' => 'name',
                 'wrapper'   => [
                     'href' => function ($crud, $column, $entry, $related_key) {
-                        return backpack_url('category/'.$related_key.'/show');
+                        return bo_url('category/'.$related_key.'/show');
                     },
                 ],
             ]);

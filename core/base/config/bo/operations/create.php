@@ -32,5 +32,5 @@ return [
     // Before saving the entry, how would you like the request to be stripped?
     //  - false - use Bo's default (ONLY save inputs that have fields)
     //  - invokable class - custom stripping (the return should be an array with input names)
-    // 'strippedRequest' => App\Http\Requests\StripBackpackRequest::class,
+    // 'strippedRequest' => App\Http\Requests\StripBoRequest::class,
 ];
