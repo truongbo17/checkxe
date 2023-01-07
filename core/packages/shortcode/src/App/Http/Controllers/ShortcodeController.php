@@ -48,7 +48,35 @@ class ShortcodeController extends CrudController
     public function setupCreateOperation()
     {
         $this->crud->setValidation(ShortcodeRequest::class);
-        $this->crud->setFromDb();
+
+        $this->crud->addField([
+            'name'  => 'name',
+            'label' => trans('bo::shortcodes.name'),
+            'type'  => 'text',
+        ]);
+
+        $this->crud->addField([
+            'name'  => 'key',
+            'label' => trans('bo::shortcodes.key'),
+            'type'  => 'text',
+        ]);
+
+        $this->crud->addField([
+            'name'  => 'type',
+            'label' => trans('bo::shortcodes.type'),
+            'type'  => 'select2_from_array',
+            'options' => [
+                'source' => 'Source',
+                'view'   => 'View',
+            ],
+        ]);
+
+        $this->crud->addField([
+            'name'   => 'value',
+            'label'  => trans('bo::shortcodes.value'),
+            'type'   => 'custom_shortcode',
+            'options_view' => get_all_short_code_in_view()
+        ]);
     }
 
     public function setupUpdateOperation()

@@ -2,6 +2,8 @@
 
 namespace Bo\Shortcode;
 
+use File;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -32,6 +34,8 @@ class ShortcodeServiceProvider extends ServiceProvider
 
         $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'bo');
 
+        $this->loadViewsFrom(realpath(__DIR__ . '/resources/views/crud'), 'crud');
+
         \SideBarDashBoard::registerItem('shortcode')
             ->setLabel('Shortcode')
             ->setPosition(4)
@@ -44,9 +48,13 @@ class ShortcodeServiceProvider extends ServiceProvider
      * Register any package services.
      *
      * @return void
+     * @throws FileNotFoundException
      */
     public function register()
     {
+        if(File::exists(realpath(__DIR__ . '/helper/helpers.php'))){
+            File::requireOnce(realpath(__DIR__ . '/helper/helpers.php'));
+        }
         $this->setupRoutes($this->app->router);
     }
 

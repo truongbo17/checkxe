@@ -29,17 +29,6 @@ class RoleCrudController extends CrudController
         $this->crud->setModel($role_model);
         $this->crud->setEntityNameStrings(trans('permissionmanager::permissionmanager.role'), trans('permissionmanager::permissionmanager.roles'));
         $this->crud->setRoute(bo_url('role'));
-
-        // deny access according to configuration file
-        if (config('bo.permissionmanager.allow_role_create') == false) {
-            $this->crud->denyAccess('create');
-        }
-        if (config('bo.permissionmanager.allow_role_update') == false) {
-            $this->crud->denyAccess('update');
-        }
-        if (config('bo.permissionmanager.allow_role_delete') == false) {
-            $this->crud->denyAccess('delete');
-        }
     }
 
     public function setupListOperation()
