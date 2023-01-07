@@ -1,0 +1,10 @@
+{
+    "primary_key": "blog",
+    "name": "Blog",
+    "namespace": "Bo\\Blog\\",
+    "provider": "Bo\\Blog\\Providers\\BlogServiceProvider",
+    "author": "Nguyen Quang Truong",
+    "url": "https://github.com/truongbo17",
+    "version": "1.0",
+    "description": "The description for module blog"
+}

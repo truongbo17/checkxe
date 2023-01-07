@@ -6,7 +6,6 @@ use Alert;
 use Bo\Base\Services\BaseService;
 use Composer\Autoload\ClassLoader;
 use Exception;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
