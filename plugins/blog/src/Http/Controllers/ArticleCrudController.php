@@ -119,7 +119,7 @@ class ArticleCrudController extends CrudController
             $this->crud->addField([
                 'name' => 'content',
                 'label' => 'Content',
-                'type' => 'ckeditor',
+                'type' => 'ckeditor-shortcode',
                 'placeholder' => 'Your textarea text here',
             ]);
             $this->crud->addField([

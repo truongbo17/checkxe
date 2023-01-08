@@ -41,7 +41,7 @@ class SettingsServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__ . $this->migrationFilePath);
 
-        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'bo');
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/resources/lang'), 'setting');
 
         // only use the Settings package if the Settings table is present in the database
         if (!\App::runningInConsole() && Schema::hasTable(config('bo.setting.table_name'))) {

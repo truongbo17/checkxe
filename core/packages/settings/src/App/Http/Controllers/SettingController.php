@@ -21,7 +21,7 @@ class SettingController extends CrudController
     public function setup()
     {
         CRUD::setModel(Setting::class);
-        CRUD::setEntityNameStrings(trans('bo::settings.setting_singular'), trans('bo::settings.setting_plural'));
+        CRUD::setEntityNameStrings(trans('setting::settings.setting_singular'), trans('setting::settings.setting_plural'));
         CRUD::setRoute(bo_url(config('bo.setting.route')));
     }
 
@@ -35,15 +35,15 @@ class SettingController extends CrudController
         CRUD::setColumns([
             [
                 'name'  => 'name',
-                'label' => trans('bo::settings.name'),
+                'label' => trans('setting::settings.name'),
             ],
             [
                 'name'  => 'description',
-                'label' => trans('bo::settings.description'),
+                'label' => trans('setting::settings.description'),
             ],
             [
                 'name'  => 'type',
-                'label' => trans('bo::settings.type'),
+                'label' => trans('setting::settings.type'),
             ],
         ]);
     }
