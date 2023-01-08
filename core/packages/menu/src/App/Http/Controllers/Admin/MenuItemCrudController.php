@@ -9,7 +9,7 @@ use Bo\Base\Http\Controllers\Operations\ListOperation;
 use Bo\Base\Http\Controllers\Operations\ReorderOperation;
 use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\MenuCRUD\App\Http\Requests\MenuRequests;
-use Bo\Notifications\Notifications\DatabaseNotification;
+use Bo\MenuCRUD\App\Models\Menu;
 
 class MenuItemCrudController extends CrudController
 {
@@ -27,22 +27,7 @@ class MenuItemCrudController extends CrudController
         $this->crud->setRoute(config('bo.base.route_prefix') . '/menu-item');
         $this->crud->setEntityNameStrings('menu item', 'menu items');
 
-        $this->crud->enableReorder('name', 3);
-
-        $this->crud->operation('list', function () {
-            $this->crud->addColumn([
-                'name' => 'name',
-                'label' => 'Label',
-            ]);
-            $this->crud->addColumn([
-                'label'     => 'Parent',
-                'type'      => 'select',
-                'name'      => 'parent_id',
-                'entity'    => 'parent',
-                'attribute' => 'name',
-                'model'     => "\Bo\MenuCRUD\App\Models\MenuItem",
-            ]);
-        });
+        $this->crud->enableReorder('name', 10);
 
         $this->crud->operation(['create', 'update'], function () {
             $this->crud->addField([
@@ -63,6 +48,30 @@ class MenuItemCrudController extends CrudController
                 'type'           => 'page_or_link',
                 'page_model'     => '\Bo\PageManager\App\Models\Page',
                 'view_namespace' => file_exists(resource_path('views/vendor/bo/crud/fields/page_or_link.blade.php')) ? null : 'menucrud::fields',
+            ]);
+        });
+    }
+
+    public function setupListOperation()
+    {
+        $menu = Menu::findOrFail(request()->input('menu-id'));
+
+        $menu_item_id = $menu->menuItems()->get()->pluck('id')->toArray();
+
+        $this->crud->addClause('whereIn', 'id', $menu_item_id);
+
+        $this->crud->operation('list', function () {
+            $this->crud->addColumn([
+                'name'  => 'name',
+                'label' => 'Label',
+            ]);
+            $this->crud->addColumn([
+                'label'     => 'Parent',
+                'type'      => 'select',
+                'name'      => 'parent_id',
+                'entity'    => 'parent',
+                'attribute' => 'name',
+                'model'     => "\Bo\MenuCRUD\App\Models\MenuItem",
             ]);
         });
     }
