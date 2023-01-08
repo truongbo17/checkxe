@@ -81,7 +81,6 @@ class ShortcodeController extends CrudController
 
     public function setupUpdateOperation()
     {
-        $this->crud->setValidation(ShortcodeRequest::class);
-        $this->crud->setFromDb();
+        $this->setupCreateOperation();
     }
 }

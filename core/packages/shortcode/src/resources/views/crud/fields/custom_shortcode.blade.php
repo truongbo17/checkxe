@@ -17,20 +17,51 @@
 <label>{!! $field['label'] !!}</label>
 @include('crud::fields.inc.translatable_icon')
 <textarea
-    name="{{ $field['name'] }}"
+    id="{{ $field['name'] }}"
     data-init-function="bpFieldInitCKEditorElement"
     data-options="{{ trim(json_encode($field['options'])) }}"
         @include('crud::fields.inc.attributes', ['default_class' => 'form-control'])
     	>{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
 
+{{-- HINT --}}
+@if (isset($field['hint']))
+    <p class="help-block">{!! $field['hint'] !!}</p>
+@endif
+@include('crud::fields.inc.wrapper_end')
+
+@include('crud::fields.inc.wrapper_start')
+<label>{!! $field['label'] !!}</label>
+@include('crud::fields.inc.translatable_icon')
+
 <select
-    class="select2"
-    name="{{ $field['name'] }}
-    @include('crud::fields.inc.attributes')
+    id="{{ $field['name'] }}"
+    style="width: 100%"
+    data-init-function="bpFieldInitSelect2FromArrayElement"
+    data-field-is-inline="{{var_export($inlineCreate ?? false)}}"
+    data-language="{{ str_replace('_', '-', app()->getLocale()) }}"
+    @include('crud::fields.inc.attributes', ['default_class' =>  'form-control select2_from_array'])
 >
     @if (count($field['options_view']))
         @foreach ($field['options_view'] as $key => $value)
-            @if($key == $field['value'] || (is_array($field['value']) && in_array($key, $field['value'])))
+            @if((old(square_brackets_to_dots($field['name'])) !== null && (
+                    $key == old(square_brackets_to_dots($field['name'])) ||
+                    (is_array(old(square_brackets_to_dots($field['name']))) &&
+                    in_array($key, old(square_brackets_to_dots($field['name'])))))) ||
+                    (null === old(square_brackets_to_dots($field['name'])) &&
+                        ((isset($field['value']) && (
+                                    $key == $field['value'] || (
+                                            is_array($field['value']) &&
+                                            in_array($key, $field['value'])
+                                            )
+                                    )) ||
+                            (!isset($field['value']) && isset($field['default']) &&
+                            ($key == $field['default'] || (
+                                            is_array($field['default']) &&
+                                            in_array($key, $field['default'])
+                                        )
+                                    )
+                            ))
+                    ))
                 <option value="{{ $key }}" selected>{{ $value }}</option>
             @else
                 <option value="{{ $key }}">{{ $value }}</option>
@@ -38,12 +69,39 @@
         @endforeach
     @endif
 </select>
+
 {{-- HINT --}}
 @if (isset($field['hint']))
     <p class="help-block">{!! $field['hint'] !!}</p>
 @endif
 @include('crud::fields.inc.wrapper_end')
 
+@push('crud_fields_scripts')
+    <script>
+        $('textarea#{{ $field['name'] }}').parent().hide();
+        $('select#{{ $field['name'] }}').parent().hide();
+
+        selectType($("select[name=type]").val());
+
+        $("select[name=type]").on('change', function (e) {
+            selectType(e.target.value);
+        });
+
+        function selectType(type) {
+            if (type.toLowerCase() === 'source') {
+                $('textarea#{{ $field['name'] }}').parent().show();
+                $('textarea#{{ $field['name'] }}').attr('name', '{{ $field['name'] }}');
+                $('select#{{ $field['name'] }}').parent().hide();
+                $('select#{{ $field['name'] }}').removeAttr('name');
+            } else {
+                $('select#{{ $field['name'] }}').parent().show();
+                $('select#{{ $field['name'] }}').attr('name', '{{ $field['name'] }}');
+                $('textarea#{{ $field['name'] }}').parent().hide();
+                $('textarea#{{ $field['name'] }}').removeAttr('name');
+            }
+        }
+    </script>
+@endpush
 
 {{-- ########################################## --}}
 {{-- Extra CSS and JS for this particular field --}}
@@ -52,6 +110,40 @@
     @php
         $crud->markFieldTypeAsLoaded($field);
     @endphp
+
+    {{-- FIELD CSS - will be loaded in the after_styles section --}}
+    @push('crud_fields_styles')
+        <!-- include select2 css-->
+        <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet"
+              type="text/css"/>
+    @endpush
+
+    {{-- FIELD JS - will be loaded in the after_scripts section --}}
+    @push('crud_fields_scripts')
+        <!-- include select2 js-->
+        <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
+        @if (app()->getLocale() !== 'en')
+            <script
+                src="{{ asset('packages/select2/dist/js/i18n/' . str_replace('_', '-', app()->getLocale()) . '.js') }}"></script>
+        @endif
+        <script>
+            function bpFieldInitSelect2FromArrayElement(element) {
+                if (!element.hasClass("select2-hidden-accessible")) {
+                    let $isFieldInline = element.data('field-is-inline');
+
+                    element.select2({
+                        theme: "bootstrap",
+                        dropdownParent: $isFieldInline ? $('#inline-create-dialog .modal-content') : document.body
+                    }).on('select2:unselect', function (e) {
+                        if ($(this).attr('multiple') && $(this).val().length == 0) {
+                            $(this).val(null).trigger('change');
+                        }
+                    });
+                }
+            }
+        </script>
+    @endpush
 
     {{-- FIELD JS - will be loaded in the after_scripts section --}}
     @push('crud_fields_scripts')
