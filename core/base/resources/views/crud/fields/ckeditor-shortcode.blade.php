@@ -65,9 +65,18 @@
                 });
                 // trigger a new CKEditor
                 element.ckeditor(element.data('options'));
-                $('#edit').click(function(){
 
+                $("#add_shortcode").click(function () {
+                    console.log(123)
+                    insertContent("a")
                 });
+
+                function insertContent(html) {
+                    for (var i in CKEDITOR.instances) {
+                        CKEDITOR.instances[i].insertHtml(html);
+                    }
+                    return true;
+                }
             }
         </script>
     @endpush
