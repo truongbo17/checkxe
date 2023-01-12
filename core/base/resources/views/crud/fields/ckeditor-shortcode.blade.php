@@ -68,7 +68,7 @@
 
                 $("#add_shortcode").click(function () {
                     console.log(123)
-                    insertContent("a")
+                    insertContent("[shortcode]test1[/shortcode]")
                 });
 
                 function insertContent(html) {
