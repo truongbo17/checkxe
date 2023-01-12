@@ -16,3 +16,10 @@ if (!function_exists('get_all_short_code_in_view')) {
         return $result;
     }
 }
+
+if (!function_exists('get_all_short_codes')){
+    function get_all_short_codes()
+    {
+        return \Bo\Shortcode\App\Models\Shortcode::where('deleted_at', null)->get();
+    }
+}

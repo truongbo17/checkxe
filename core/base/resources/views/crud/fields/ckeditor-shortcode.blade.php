@@ -14,7 +14,9 @@
 @include('crud::fields.inc.wrapper_start')
 <div class="mb-2 d-flex">
     <label>{!! $field['label'] !!}</label>
-    <button type="button" class="btn btn-sm btn-outline-primary ml-auto" id="add_shortcode" ><i class="las la-plus-circle"></i> Shortcode</button>
+    <button type="button" class="btn btn-sm btn-outline-primary ml-auto" id="add_shortcode" data-toggle="modal"
+            data-target="#modal-add-shortcode"><i class="las la-plus-circle"></i> Shortcode
+    </button>
 </div>
 
 @include('crud::fields.inc.translatable_icon')
@@ -31,6 +33,54 @@
 @endif
 @include('crud::fields.inc.wrapper_end')
 
+<div class="modal fade fade" id="modal-add-shortcode" tabindex="0" role="dialog" aria-labelledby="modal-add-shortcode"
+     aria-modal="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="category-inline-create-dialog-label">
+                    {{trans('bo::crud.add')}} Shortcode
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body bg-light">
+                <form method="post" id="category-inline-create-form" action="#" onsubmit="return false">
+                    <div class="card">
+                        <div class="card-body row">
+                            <div class="form-group col-sm-12">
+                                <label>Shortcode</label>
+                                <select id="shortcode_choose"
+                                        style="width: 100%"
+                                        data-init-function="bpFieldInitSelect2FromArrayElement"
+                                        data-field-is-inline="{{var_export($inlineCreate ?? false)}}"
+                                        data-language="{{ str_replace('_', '-', app()->getLocale()) }}"
+                                    @include('crud::fields.inc.attributes', ['default_class' =>  'form-control select2_from_array'])>
+                                    @foreach(get_all_short_codes() as $shortcode)
+                                        <option value="{{$shortcode->key}}">{{$shortcode->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-add-shortcode">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- FIELD CSS - will be loaded in the after_styles section --}}
+@push('crud_fields_styles')
+    <!-- include select2 css-->
+    <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet"
+          type="text/css"/>
+@endpush
 
 {{-- ########################################## --}}
 {{-- Extra CSS and JS for this particular field --}}
@@ -42,22 +92,46 @@
 
     {{-- FIELD JS - will be loaded in the after_scripts section --}}
     @push('crud_fields_scripts')
+        <!-- include select2 js-->
+        <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
+        @if (app()->getLocale() !== 'en')
+            <script
+                src="{{ asset('packages/select2/dist/js/i18n/' . str_replace('_', '-', app()->getLocale()) . '.js') }}"></script>
+        @endif
+        <script>
+            function bpFieldInitSelect2FromArrayElement(element) {
+                if (!element.hasClass("select2-hidden-accessible")) {
+                    let $isFieldInline = element.data('field-is-inline');
+
+                    element.select2({
+                        theme: "bootstrap",
+                        dropdownParent: $isFieldInline ? $('#inline-create-dialog .modal-content') : document.body
+                    }).on('select2:unselect', function (e) {
+                        if ($(this).attr('multiple') && $(this).val().length == 0) {
+                            $(this).val(null).trigger('change');
+                        }
+                    });
+                }
+            }
+        </script>
+
         <script src="{{ asset('packages/ckeditor/ckeditor.js') }}"></script>
         <script src="{{ asset('packages/ckeditor/adapters/jquery.js') }}"></script>
         <script>
+
             function bpFieldInitCKEditorElement(element) {
 
 
                 //when removing ckeditor field from page html the instance is not properly deleted.
                 //this event is triggered in repeatable on deletion so this field can intercept it
                 //and properly delete the instances so it don't throw errors of unexistent elements in page that has initialized ck instances.
-                element.on('bo_field.deleted', function(e) {
+                element.on('bo_field.deleted', function (e) {
                     $ck_instance_name = element.siblings("[id^='cke_editor']").attr('id');
 
                     //if the instance name starts with cke_ it was an auto-generated name from ckeditor
                     //that happens because in repeatable we stripe the field names used by ckeditor, so it renders a random name
                     //that starts with cke_
-                    if($ck_instance_name.startsWith('cke_')) {
+                    if ($ck_instance_name.startsWith('cke_')) {
                         $ck_instance_name = $ck_instance_name.substr(4);
                     }
                     //we fully destroy the instance when element is deleted from the page.
@@ -66,9 +140,8 @@
                 // trigger a new CKEditor
                 element.ckeditor(element.data('options'));
 
-                $("#add_shortcode").click(function () {
-                    console.log(123)
-                    insertContent("[shortcode]test1[/shortcode]")
+                $("#save-add-shortcode").click(function () {
+                    insertContent(`[short-code]${$('#shortcode_choose').val()}[/short-code]`);
                 });
 
                 function insertContent(html) {
