@@ -14,6 +14,7 @@ class Shortcode extends Model
         'name',
         'value',
         'type',
+        'option'
     ];
 
     /**

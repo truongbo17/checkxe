@@ -18,6 +18,7 @@ return new class() extends Migration
             $table->string('key')->unique()->index();
             $table->string('type')->index();
             $table->text('value')->nullable();
+            $table->text('option')->nullable()->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

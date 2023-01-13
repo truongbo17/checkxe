@@ -5,11 +5,11 @@ namespace Bo\Shortcode\App\Http\Controllers;
 use Bo\Base\Http\Controllers\CrudController;
 use Bo\Base\Http\Controllers\Operations\CreateOperation;
 use Bo\Base\Http\Controllers\Operations\ListOperation;
-use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\Base\Http\Controllers\Operations\ShowOperation;
+use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\Base\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Bo\Shortcode\App\Models\Shortcode;
 use Bo\Shortcode\App\Http\Requests\ShortcodeRequest;
+use Bo\Shortcode\App\Models\Shortcode;
 
 class ShortcodeController extends CrudController
 {
@@ -72,10 +72,36 @@ class ShortcodeController extends CrudController
         ]);
 
         $this->crud->addField([
-            'name'   => 'value',
-            'label'  => trans('bo::shortcodes.value'),
-            'type'   => 'custom_shortcode',
+            'name'         => 'value',
+            'label'        => trans('bo::shortcodes.value'),
+            'type'         => 'custom_shortcode',
             'options_view' => get_all_short_code_in_view()
+        ]);
+
+        $this->crud->addField([
+            'name'           => 'option',
+            'label'          => 'Option pass variable to view',
+            'type'           => 'custom_list_route',
+            'new_item_label' => 'Add Line',
+            'init_rows'      => 1,
+            'fields'         => [
+                [
+                    'name'       => 'key_variable',
+                    'label'      => 'Name Variable',
+                    'attributes' => [
+                        'placeholder' => 'Please enter your name variable',
+                    ],
+                    'wrapper'    => ['class' => 'form-group col-md-5'],
+                ],
+                [
+                    'name'       => 'value_variable',
+                    'label'      => 'Value Variable',
+                    'attributes' => [
+                        'placeholder' => 'Please enter your value variable',
+                    ],
+                    'wrapper'    => ['class' => 'form-group col-md-7'],
+                ],
+            ],
         ]);
     }
 

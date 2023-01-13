@@ -3,6 +3,7 @@
 namespace Bo\Blog\Models;
 
 use Bo\Base\Models\Traits\CrudTrait;
+use Bo\Shortcode\App\Traits\ShortCodeTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ class Article extends Model
 {
     use CrudTrait;
     use Sluggable, SluggableScopeHelpers;
+    use ShortCodeTrait;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,13 +24,27 @@ class Article extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     // protected $guarded = ['id'];
-    protected $fillable = ['slug', 'title', 'content', 'image', 'status', 'category_id', 'featured', 'date'];
+    protected $fillable = [
+        'slug',
+        'title',
+        'content',
+        'image',
+        'status',
+        'category_id',
+        'featured',
+        'date'
+    ];
     // protected $hidden = [];
     // protected $dates = [];
     protected $casts = [
-        'featured'  => 'boolean',
-        'date'      => 'date',
+        'featured' => 'boolean',
+        'date'     => 'date',
     ];
+
+    public function getContentShortcodeAttribute(): ?string
+    {
+        return $this->getShortcode('content');
+    }
 
     /**
      * Return the sluggable configuration array for this model.

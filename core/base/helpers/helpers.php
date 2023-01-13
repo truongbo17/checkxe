@@ -283,3 +283,25 @@ if (!function_exists('is_multidimensional_array')) {
         return false;
     }
 }
+
+if (!function_exists('get_repeater_data_key_value')) {
+    function get_repeater_data_key_value($data, $key_name, $value_name): array
+    {
+        $result = [];
+        try {
+            if ($data) {
+                $data = json_decode($data, true);
+                foreach ($data as $value) {
+                    if (isset($value[$key_name]) && isset($value[$value_name])) {
+                        $result[$value[$key_name]] = $value[$value_name];
+                    }
+                }
+
+                return $result;
+            }
+        } catch (\Exception $exception) {
+        }
+
+        return $result;
+    }
+}
