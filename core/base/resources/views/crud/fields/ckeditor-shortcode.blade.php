@@ -33,55 +33,6 @@
 @endif
 @include('crud::fields.inc.wrapper_end')
 
-<div class="modal fade fade" id="modal-add-shortcode" tabindex="0" role="dialog" aria-labelledby="modal-add-shortcode"
-     aria-modal="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="category-inline-create-dialog-label">
-                    {{trans('bo::crud.add')}} Shortcode
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body bg-light">
-                <form method="post" id="category-inline-create-form" action="#" onsubmit="return false">
-                    <div class="card">
-                        <div class="card-body row">
-                            <div class="form-group col-sm-12">
-                                <label>Shortcode</label>
-                                <select id="shortcode_choose"
-                                        style="width: 100%"
-                                        data-init-function="bpFieldInitSelect2FromArrayElement"
-                                        data-field-is-inline="{{var_export($inlineCreate ?? false)}}"
-                                        data-language="{{ str_replace('_', '-', app()->getLocale()) }}"
-                                    @include('crud::fields.inc.attributes', ['default_class' =>  'form-control select2_from_array'])>
-                                    @foreach(get_all_short_codes() as $shortcode)
-                                        <option value="{{$shortcode->key}}">{{$shortcode->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="save-add-shortcode">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{{-- FIELD CSS - will be loaded in the after_styles section --}}
-@push('crud_fields_styles')
-    <!-- include select2 css-->
-    <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet"
-          type="text/css"/>
-@endpush
-
 {{-- ########################################## --}}
 {{-- Extra CSS and JS for this particular field --}}
 {{-- If a field type is shown multiple times on a form, the CSS and JS will only be loaded once --}}
@@ -92,27 +43,48 @@
 
     {{-- FIELD JS - will be loaded in the after_scripts section --}}
     @push('crud_fields_scripts')
-        <!-- include select2 js-->
-        <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
-        @if (app()->getLocale() !== 'en')
-            <script
-                src="{{ asset('packages/select2/dist/js/i18n/' . str_replace('_', '-', app()->getLocale()) . '.js') }}"></script>
-        @endif
         <script>
-            function bpFieldInitSelect2FromArrayElement(element) {
-                if (!element.hasClass("select2-hidden-accessible")) {
-                    let $isFieldInline = element.data('field-is-inline');
-
-                    element.select2({
-                        theme: "bootstrap",
-                        dropdownParent: $isFieldInline ? $('#inline-create-dialog .modal-content') : document.body
-                    }).on('select2:unselect', function (e) {
-                        if ($(this).attr('multiple') && $(this).val().length == 0) {
-                            $(this).val(null).trigger('change');
-                        }
-                    });
-                }
-            }
+            $( document ).ready(function() {
+                $(document.body).append(`<div class="modal fade fade" id="modal-add-shortcode" tabindex="0" role="dialog" aria-labelledby="modal-add-shortcode"
+                                    aria-modal="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="category-inline-create-dialog-label">
+                                                    {{trans('bo::crud.add')}} Shortcode
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body bg-light">
+                                                <div class="card">
+                                                    <div class="card-body row">
+                                                        <div class="form-group col-sm-12">
+                                                            <label>Shortcode</label>
+                                                            <select id="shortcode_choose"
+                                                                    style="width: 100%"
+                                                                    data-init-function="bpFieldInitSelect2FromArrayElement"
+                                                                    data-field-is-inline="{{var_export($inlineCreate ?? false)}}"
+                                                                    data-language="{{ str_replace('_', '-', app()->getLocale()) }}"
+                                                                @include('crud::fields.inc.attributes', ['default_class' =>  'form-control select2_from_array'])>
+                                                                @foreach(get_all_short_codes() as $shortcode)
+                                            <option value="{{$shortcode->key}}">{{$shortcode->name}}</option>
+                                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" id="save-add-shortcode">Save</button>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
+                                `);
+            });
         </script>
 
         <script src="{{ asset('packages/ckeditor/ckeditor.js') }}"></script>
