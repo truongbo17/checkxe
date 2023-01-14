@@ -91,15 +91,28 @@
             if (type.toLowerCase() === 'source') {
                 $('textarea#{{ $field['name'] }}').parent().show();
                 $('textarea#{{ $field['name'] }}').attr('name', '{{ $field['name'] }}');
+                $('textarea#{{ $field['name'] }}').val('');
+
                 $('select#{{ $field['name'] }}').parent().hide();
                 $('select#{{ $field['name'] }}').removeAttr('name');
+
+                $("div[bp-field-type=repeatable]").hide();
             } else {
                 $('select#{{ $field['name'] }}').parent().show();
                 $('select#{{ $field['name'] }}').attr('name', '{{ $field['name'] }}');
+
                 $('textarea#{{ $field['name'] }}').parent().hide();
                 $('textarea#{{ $field['name'] }}').removeAttr('name');
+
+                $("div[bp-field-type=repeatable]").show();
             }
         }
+
+        $('form').submit(function () {
+            if ($("select[name=type]").val().toLowerCase() === 'source') {
+                $("div[bp-field-type=repeatable] input").val("");
+            }
+        });
     </script>
 @endpush
 

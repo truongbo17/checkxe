@@ -78,12 +78,10 @@ class ShortcodeController extends CrudController
             'options_view' => get_all_short_code_in_view()
         ]);
 
-        $this->crud->addField([
+        $this->crud->addField([   // repeatable
             'name'           => 'option',
             'label'          => 'Option pass variable to view',
-            'type'           => 'custom_list_route',
-            'new_item_label' => 'Add Line',
-            'init_rows'      => 1,
+            'type'           => 'repeatable',
             'fields'         => [
                 [
                     'name'       => 'key_variable',
@@ -102,6 +100,7 @@ class ShortcodeController extends CrudController
                     'wrapper'    => ['class' => 'form-group col-md-7'],
                 ],
             ],
+            'new_item_label' => 'Add Line', // customize the text of the button
         ]);
     }
 
