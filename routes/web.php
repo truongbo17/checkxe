@@ -14,9 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return true;
 });
-
 
 //always put at the last line of the file
 Route::get('{page}/{subs?}', ['uses' => 'Bo\PageManager\App\Http\Controllers\PageController@index'])

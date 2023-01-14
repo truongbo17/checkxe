@@ -27,11 +27,19 @@ class MenuItemCrudController extends CrudController
         $this->crud->setRoute(config('bo.base.route_prefix') . '/menu-item');
         $this->crud->setEntityNameStrings('menu item', 'menu items');
 
-        $this->crud->enableReorder('name', 10);
+        if (request()->has('menu-id')) {
+            $menu = Menu::findOrFail(request()->input('menu-id'));
+
+            $menu_item_id = $menu->menuItems()->get()->pluck('id')->toArray();
+
+            $this->crud->addClause('whereIn', 'id', $menu_item_id);
+
+            $this->crud->setHeading("Menu Items : <a href='" . bo_url('menu') . "/" . $menu->id . "/show'>{$menu->name}</a>");
+        }
 
         $this->crud->operation(['create', 'update'], function () {
             $this->crud->addField([
-                'name' => 'name',
+                'name'  => 'name',
                 'label' => 'Label',
             ]);
             $this->crud->addField([
@@ -54,26 +62,21 @@ class MenuItemCrudController extends CrudController
 
     public function setupListOperation()
     {
-        $menu = Menu::findOrFail(request()->input('menu-id'));
-
-        $menu_item_id = $menu->menuItems()->get()->pluck('id')->toArray();
-
-        $this->crud->addClause('whereIn', 'id', $menu_item_id);
-
-        $this->crud->operation('list', function () {
-            $this->crud->addColumn([
-                'name'  => 'name',
-                'label' => 'Label',
-            ]);
-            $this->crud->addColumn([
-                'label'     => 'Parent',
-                'type'      => 'select',
-                'name'      => 'parent_id',
-                'entity'    => 'parent',
-                'attribute' => 'name',
-                'model'     => "\Bo\MenuCRUD\App\Models\MenuItem",
-            ]);
-        });
+        $this->crud->addColumn([
+            'name'  => 'name',
+            'label' => 'Label',
+        ]);
+        $this->crud->addColumn([
+            'label'     => 'Parent',
+            'type'      => 'select',
+            'name'      => 'parent_id',
+            'entity'    => 'parent',
+            'attribute' => 'name',
+            'model'     => "\Bo\MenuCRUD\App\Models\MenuItem",
+        ]);
+        if (!request()->has('menu-id')) {
+            $this->crud->removeButton('reorder', 'top');
+        }
     }
 
     public function setupCreateOperation()

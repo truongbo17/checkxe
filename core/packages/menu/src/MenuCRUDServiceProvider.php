@@ -41,7 +41,7 @@ class MenuCRUDServiceProvider extends ServiceProvider
         \SideBarDashBoard::registerItem('menu')
             ->setLabel('Menu')
             ->setPosition(2)
-            ->setRoute(bo_url('menu-item'))
+            ->setRoute(bo_url('menu'))
             ->setIcon('nav-icon la la-list')
             ->render();
     }

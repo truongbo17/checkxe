@@ -19,4 +19,9 @@ class Menu extends Model
     {
         return $this->belongsToMany(MenuItem::class, 'menu_items_pivot');
     }
+
+    public function gotoMenuItem()
+    {
+        return '<a class="btn btn-sm btn-link" target="_blank" href="' . bo_url('menu-item') . '?menu-id=' . $this->id . ' " data-toggle="tooltip" title="Just a demo custom button."><i class="las la-sitemap"></i> Menu Item</a>';
+    }
 }

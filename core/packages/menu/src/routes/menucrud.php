@@ -15,5 +15,6 @@ Route::group([
     'middleware' => ['web', config('bo.base.middleware_key', 'admin')],
     'namespace' => 'Bo\MenuCRUD\App\Http\Controllers\Admin',
 ], function () {
+    Route::crud('menu', 'MenuCrudController');
     Route::crud('menu-item', 'MenuItemCrudController');
 });
