@@ -27,7 +27,7 @@ class ArticleCrudController extends CrudController
         $this->crud->setModel(\Bo\Blog\Models\Article::class);
         $this->crud->setRoute(config('bo.base.route_prefix', 'admin').'/article');
         $this->crud->setEntityNameStrings('article', 'articles');
-dd($this->crud->getModel()->first()->content_shortcode);
+
         /*
         |--------------------------------------------------------------------------
         | LIST OPERATION
