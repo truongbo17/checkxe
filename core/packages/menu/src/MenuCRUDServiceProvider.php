@@ -36,13 +36,28 @@ class MenuCRUDServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . $this->migrationFilePath);
 
-        $this->loadViewsFrom(realpath(__DIR__.'/resources/views'), 'menucrud');
+        $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'menucrud');
+
+        \SideBarDashBoard::registerGroup('menu')
+            ->setLabel('Menu')
+            ->setPosition(2)
+            ->setIcon('nav-icon las la-list-ul')
+            ->render();
 
         \SideBarDashBoard::registerItem('menu')
             ->setLabel('Menu')
-            ->setPosition(2)
+            ->setPosition(1)
             ->setRoute(bo_url('menu'))
-            ->setIcon('nav-icon la la-list')
+            ->setIcon('nav-icon las la-bars')
+            ->setGroup('menu')
+            ->render();
+
+        \SideBarDashBoard::registerItem('menu-item')
+            ->setLabel('Menu Item')
+            ->setPosition(2)
+            ->setRoute(bo_url('menu-item'))
+            ->setIcon('nav-icon las la-stream')
+            ->setGroup('menu')
             ->render();
     }
 

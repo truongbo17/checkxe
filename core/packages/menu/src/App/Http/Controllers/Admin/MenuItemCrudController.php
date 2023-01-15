@@ -6,10 +6,8 @@ use Bo\Base\Http\Controllers\CrudController;
 use Bo\Base\Http\Controllers\Operations\CreateOperation;
 use Bo\Base\Http\Controllers\Operations\DeleteOperation;
 use Bo\Base\Http\Controllers\Operations\ListOperation;
-use Bo\Base\Http\Controllers\Operations\ReorderOperation;
 use Bo\Base\Http\Controllers\Operations\UpdateOperation;
-use Bo\MenuCRUD\App\Http\Requests\MenuRequests;
-use Bo\MenuCRUD\App\Models\Menu;
+use Bo\MenuCRUD\App\Http\Requests\MenuItemRequests;
 
 class MenuItemCrudController extends CrudController
 {
@@ -19,7 +17,6 @@ class MenuItemCrudController extends CrudController
     }
     use UpdateOperation;
     use DeleteOperation;
-    use ReorderOperation;
 
     public function setup()
     {
@@ -27,28 +24,10 @@ class MenuItemCrudController extends CrudController
         $this->crud->setRoute(config('bo.base.route_prefix') . '/menu-item');
         $this->crud->setEntityNameStrings('menu item', 'menu items');
 
-        if (request()->has('menu-id')) {
-            $menu = Menu::findOrFail(request()->input('menu-id'));
-
-            $menu_item_id = $menu->menuItems()->get()->pluck('id')->toArray();
-
-            $this->crud->addClause('whereIn', 'id', $menu_item_id);
-
-            $this->crud->setHeading("Menu Items : <a href='" . bo_url('menu') . "/" . $menu->id . "/show'>{$menu->name}</a>");
-        }
-
         $this->crud->operation(['create', 'update'], function () {
             $this->crud->addField([
                 'name'  => 'name',
                 'label' => 'Label',
-            ]);
-            $this->crud->addField([
-                'label'     => 'Parent',
-                'type'      => 'select',
-                'name'      => 'parent_id',
-                'entity'    => 'parent',
-                'attribute' => 'name',
-                'model'     => "\Bo\MenuCRUD\App\Models\MenuItem",
             ]);
             $this->crud->addField([
                 'name'           => ['type', 'link', 'page_id', 'router_name'],
@@ -67,20 +46,20 @@ class MenuItemCrudController extends CrudController
             'label' => 'Label',
         ]);
         $this->crud->addColumn([
-            'label'     => 'Parent',
-            'type'      => 'select',
-            'name'      => 'parent_id',
-            'entity'    => 'parent',
-            'attribute' => 'name',
-            'model'     => "\Bo\MenuCRUD\App\Models\MenuItem",
+            'name'    => 'type',
+            'label'   => 'Type',
+            'type'    => 'select_from_array',
+            'options' => [
+                'page_link'     => 'Page link',
+                'internal_link' => 'Internal link',
+                'external_link' => 'External link',
+                'router_name'   => 'Router name'
+            ],
         ]);
-        if (!request()->has('menu-id')) {
-            $this->crud->removeButton('reorder', 'top');
-        }
     }
 
     public function setupCreateOperation()
     {
-        $this->crud->setValidation(MenuRequests::class);
+        $this->crud->setValidation(MenuItemRequests::class);
     }
 }

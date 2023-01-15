@@ -23,7 +23,11 @@ return new class() extends Migration
         Schema::create('menu_item_pivot', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedBigInteger('menu_id')->nullable();
-            $table->unsignedBigInteger('menu_items_id')->nullable();
+            $table->unsignedBigInteger('menu_item_id')->nullable();
+            $table->integer('parent_id')->unsigned()->nullable();
+            $table->integer('lft')->unsigned()->nullable();
+            $table->integer('rgt')->unsigned()->nullable();
+            $table->integer('depth')->unsigned()->nullable();
             $table->timestamps();
         });
     }

@@ -9,6 +9,7 @@ use Bo\Base\Http\Controllers\Operations\ListOperation;
 use Bo\Base\Http\Controllers\Operations\ShowOperation;
 use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\MenuCRUD\App\Http\Requests\MenuRequests;
+use Bo\MenuCRUD\App\Models\MenuItem;
 
 class MenuCrudController extends CrudController
 {
@@ -35,6 +36,28 @@ class MenuCrudController extends CrudController
                 'name'  => 'description',
                 'label' => 'Description',
             ]);
+            if($this->crud->getOperation() == 'update'){
+                dd($this->crud->getModel()->menuItems()->get());
+                $this->crud->addField([
+                    'name'           => 'menu-item',
+                    'type'           => 'select-menu-item',
+                    'label'          => 'Menu Item',
+                    'view_namespace' => 'menucrud::fields',
+                    'fields'         => [
+                        [
+                            'name'    => 'menu-item-id',
+                            'type'    => 'select_and_order',
+                            'label'   => 'Name',
+                            'options' => [
+                                'test'  => 'a',
+                                'wtest' => 'wa',
+                                'twest' => 'wwa',
+                            ],
+                        ],
+                    ],
+                    'entries'        => MenuItem::all()
+                ]);
+            }
         });
     }
 
@@ -48,8 +71,6 @@ class MenuCrudController extends CrudController
             'name'  => 'description',
             'label' => 'Description',
         ]);
-
-        $this->crud->addButtonFromModelFunction('line', 'menu-item', 'gotoMenuItem', 'beginning');
     }
 
     public function setupCreateOperation()

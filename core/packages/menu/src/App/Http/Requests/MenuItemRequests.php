@@ -4,7 +4,7 @@ namespace Bo\MenuCRUD\App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MenuRequests extends FormRequest
+class MenuItemRequests extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,6 +26,7 @@ class MenuRequests extends FormRequest
     {
         return [
             'name' => 'required|min:2|max:255',
+            'type' => 'required',
         ];
     }
 
