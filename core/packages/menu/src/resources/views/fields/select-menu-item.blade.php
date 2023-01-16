@@ -12,7 +12,7 @@ function tree_element($entry, $key, $all_entries, $crud)
 
         // show the tree element
         echo '<li id="list_'.$entry->getKey().'">';
-        echo '<div><span class="disclose"><span></span></span>'.object_get($entry, $crud->get('reorder.label')).'</div>';
+        echo '<div><span class="disclose"><span></span></span>'.object_get($entry, "name").'</div>';
 
         // see if this element has any children
         $children = [];
@@ -41,7 +41,7 @@ function tree_element($entry, $key, $all_entries, $crud)
 ?>
 
 <div class="row mt-4">
-    <div class="{{ $crud->getReorderContentClass() }}">
+    <div class="col-md-8 col-md-offset-2">
         <div class="card p-4">
             <p>{{ trans('bo::crud.reorder_text') }}</p>
 

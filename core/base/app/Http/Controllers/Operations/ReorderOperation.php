@@ -79,7 +79,6 @@ trait ReorderOperation
     public function saveReorder()
     {
         $this->crud->hasAccessOrFail('reorder');
-
         $all_entries = json_decode(\Request::input('tree'), true);
 
         if (count($all_entries)) {

@@ -30,8 +30,6 @@ class LangFileManagerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // - first the published/overwritten views (in case they have any changes)
-        $this->loadViewsFrom(resource_path('views/vendor/bo/langfilemanager'), 'langfilemanager');
         // - then the stock views that come with the package, in case a published view might be missing
         $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'langfilemanager');
 

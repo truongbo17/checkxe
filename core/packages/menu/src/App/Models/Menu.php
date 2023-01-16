@@ -13,6 +13,11 @@ class Menu extends Model
     protected $fillable = [
         'name',
         'description',
+        'menu_item'
+    ];
+
+    protected $casts = [
+        'menu_item' => 'array'
     ];
 
     public function menuItems()
