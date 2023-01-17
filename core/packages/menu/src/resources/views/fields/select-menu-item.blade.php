@@ -2,6 +2,7 @@
 <label>{!! $field['label'] !!}</label>
 @include('crud::fields.inc.translatable_icon')
 
+
 <?php
 function tree_element($entry, $key, $all_entries, $crud)
 {
@@ -41,13 +42,14 @@ function tree_element($entry, $key, $all_entries, $crud)
 ?>
 
 <div class="row mt-4">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-12 col-md-offset-2">
         <div class="card p-4">
             <p>{{ trans('bo::crud.reorder_text') }}</p>
 
             <ol class="sortable mt-0">
                 <?php
-                $all_entries = collect($entries->all())->sortBy('lft')->keyBy($crud->getModel()->getKeyName());
+                $items = json_decode($field['value'] ?? "", true) ?? [];
+                $all_entries = collect($items)->sortBy('lft')->keyBy($crud->getModel()->getKeyName());
                 $root_entries = $all_entries->filter(function ($item) {
                     return $item->parent_id == 0;
                 });
@@ -59,7 +61,8 @@ function tree_element($entry, $key, $all_entries, $crud)
 
         </div><!-- /.card -->
 
-        <button id="toArray" class="btn btn-success" data-style="zoom-in"><i class="la la-save"></i> {{ trans('bo::crud.save') }}</button>
+        <button id="toArray" type="button" class="btn btn-success" data-style="zoom-in"><i
+                class="la la-save"></i> {{ trans('bo::crud.save') }}</button>
     </div>
 </div>
 
@@ -238,49 +241,26 @@ function tree_element($entry, $key, $all_entries, $crud)
                     startCollapsed: false
                 });
 
-                $('.disclose').on('click', function() {
+                $('.disclose').on('click', function () {
                     $(this).closest('li').toggleClass('mjs-nestedSortable-collapsed').toggleClass('mjs-nestedSortable-expanded');
                 });
 
-                $('#toArray').click(function(e){
+                $('#toArray').click(function (e) {
+                    $('.sortable').append(`<li id="list_3" class="mjs-nestedSortable-leaf"><div class="ui-sortable-handle"><span class="disclose"><span></span></span>test123</div></li>`);
+                    $('.sortable').sortable('refresh');
+
                     // get the current tree order
                     arraied = $('ol.sortable').nestedSortable('toArray', {startDepthCount: 0});
 
                     // log it
-                    //console.log(arraied);
-
-                    // send it with POST
-                    $.ajax({
-                        url: '{{ url(Request::path()) }}',
-                        type: 'POST',
-                        data: { tree: JSON.stringify(arraied) },
-                    })
-                        .done(function() {
-                            new Noty({
-                                type: "success",
-                                text: "<strong>{{ trans('bo::crud.reorder_success_title') }}</strong><br>{{ trans('bo::crud.reorder_success_message') }}"
-                            }).show();
-                        })
-                        .fail(function() {
-                            new Noty({
-                                type: "error",
-                                text: "<strong>{{ trans('bo::crud.reorder_error_title') }}</strong><br>{{ trans('bo::crud.reorder_error_message') }}"
-                            }).show();
-                        })
-                        .always(function() {
-                            console.log("complete");
-                        });
-
+                    console.log(arraied);
                 });
 
-                $.ajaxPrefilter(function(options, originalOptions, xhr) {
-                    var token = $('meta[name="csrf_token"]').attr('content');
+                const input = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "item").val("bla");
 
-                    if (token) {
-                        return xhr.setRequestHeader('X-XSRF-TOKEN', token);
-                    }
-                });
-
+                $('form').append(input);
             });
         </script>
     @endpush

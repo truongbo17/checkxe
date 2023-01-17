@@ -16,5 +16,4 @@ Route::group([
     'namespace' => 'Bo\MenuCRUD\App\Http\Controllers\Admin',
 ], function () {
     Route::crud('menu', 'MenuCrudController');
-    Route::crud('menu-item', 'MenuItemCrudController');
 });

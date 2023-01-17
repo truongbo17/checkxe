@@ -14,21 +14,12 @@ return new class() extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('key', 100)->unique();
             $table->string('name', 100);
             $table->string('description', 255)->nullable();
+            $table->text('item')->nullable();
             $table->timestamps();
             $table->softDeletes();
-        });
-
-        Schema::create('menu_item_pivot', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedBigInteger('menu_id')->nullable();
-            $table->unsignedBigInteger('menu_item_id')->nullable();
-            $table->integer('parent_id')->unsigned()->nullable();
-            $table->integer('lft')->unsigned()->nullable();
-            $table->integer('rgt')->unsigned()->nullable();
-            $table->integer('depth')->unsigned()->nullable();
-            $table->timestamps();
         });
     }
 
@@ -40,6 +31,5 @@ return new class() extends Migration
     public function down()
     {
         Schema::drop('menus');
-        Schema::drop('menu_items_pivot');
     }
 };

@@ -11,17 +11,13 @@ class Menu extends Model
 
     protected $table = 'menus';
     protected $fillable = [
+        'key',
         'name',
         'description',
-        'menu_item'
+        'item'
     ];
 
     protected $casts = [
-        'menu_item' => 'array'
+        'item' => 'array'
     ];
-
-    public function menuItems()
-    {
-        return $this->belongsToMany(MenuItem::class, 'menu_item_pivot');
-    }
 }

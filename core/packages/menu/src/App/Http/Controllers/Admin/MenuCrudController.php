@@ -9,7 +9,6 @@ use Bo\Base\Http\Controllers\Operations\ListOperation;
 use Bo\Base\Http\Controllers\Operations\ShowOperation;
 use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\MenuCRUD\App\Http\Requests\MenuRequests;
-use Bo\MenuCRUD\App\Models\MenuItem;
 
 class MenuCrudController extends CrudController
 {
@@ -33,35 +32,40 @@ class MenuCrudController extends CrudController
                 'label' => 'Name',
             ]);
             $this->crud->addField([
+                'name'  => 'key',
+                'label' => 'Key',
+            ]);
+            $this->crud->addField([
                 'name'  => 'description',
                 'label' => 'Description',
             ]);
-            if($this->crud->getOperation() == 'update'){
-                $this->crud->addField([
-                    'name'           => 'menu-item',
-                    'type'           => 'select-menu-item',
-                    'label'          => 'Menu Item',
-                    'view_namespace' => 'menucrud::fields',
-                    'fields'         => [
-                        [
-                            'name'    => 'menu-item-id',
-                            'type'    => 'select_and_order',
-                            'label'   => 'Name',
-                            'options' => [
-                                'test'  => 'a',
+            $this->crud->addField([
+                'name'           => 'item',
+                'type'           => 'select-menu-item',
+                'label'          => 'Menu Item',
+                'view_namespace' => 'menucrud::fields',
+                'fields'         => [
+                    [
+                        'name'    => 'menu-item-id',
+                        'type'    => 'select_and_order',
+                        'label'   => 'Name',
+                        'options' => [
+                            'test'      => 'a',
                                 'wtest' => 'wa',
                                 'twest' => 'wwa',
                             ],
                         ],
                     ],
-                    'entries'        => MenuItem::all()
                 ]);
-            }
         });
     }
 
     public function setupListOperation()
     {
+        $this->crud->addColumn([
+            'name'  => 'key',
+            'label' => 'Key',
+        ]);
         $this->crud->addColumn([
             'name'  => 'name',
             'label' => 'Label',
@@ -77,6 +81,11 @@ class MenuCrudController extends CrudController
         $this->crud->setValidation(MenuRequests::class);
     }
 
+    public function setupUpdateOperation()
+    {
+        $this->crud->setValidation(MenuRequests::class);
+    }
+
     /**
      * Update the specified resource in the database.
      *
@@ -86,7 +95,6 @@ class MenuCrudController extends CrudController
     {
         $this->crud->hasAccessOrFail('update');
 
-        dd(request()->all());
         // execute the FormRequest authorization and validation, if one is required
         $request = $this->crud->validateRequest();
 

@@ -3,6 +3,7 @@
 namespace Bo\MenuCRUD\App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MenuRequests extends FormRequest
 {
@@ -24,8 +25,12 @@ class MenuRequests extends FormRequest
      */
     public function rules()
     {
+        $id = $this->get('id') ?? request()->route('id');
+
         return [
-            'name' => 'required|min:2|max:255',
+            'key'         => ['required', 'min:2', 'max:100', Rule::unique('menus', 'key')->ignore($id)],
+            'name'        => 'required|min:2|max:100',
+            'description' => 'nullable|min:2|max:255',
         ];
     }
 
