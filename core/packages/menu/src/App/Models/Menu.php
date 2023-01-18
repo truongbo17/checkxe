@@ -16,8 +16,4 @@ class Menu extends Model
         'description',
         'item'
     ];
-
-    protected $casts = [
-        'item' => 'array'
-    ];
 }

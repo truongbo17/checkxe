@@ -31,6 +31,7 @@ class MenuRequests extends FormRequest
             'key'         => ['required', 'min:2', 'max:100', Rule::unique('menus', 'key')->ignore($id)],
             'name'        => 'required|min:2|max:100',
             'description' => 'nullable|min:2|max:255',
+            'item'        => 'required'
         ];
     }
 

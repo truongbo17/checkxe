@@ -3,6 +3,7 @@
 namespace Bo\MenuCRUD;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
 class MenuCRUDServiceProvider extends ServiceProvider
@@ -88,5 +89,15 @@ class MenuCRUDServiceProvider extends ServiceProvider
     public function register()
     {
         $this->setupRoutes($this->app->router);
+
+        Collection::macro('recursive', function () {
+            return $this->map(function ($value) {
+                if (is_array($value) || is_object($value)) {
+                    return collect($value)->recursive();
+                }
+
+                return $value;
+            });
+        });
     }
 }

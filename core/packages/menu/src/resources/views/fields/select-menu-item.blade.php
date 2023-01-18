@@ -12,13 +12,13 @@ function tree_element($entry, $key, $all_entries, $crud)
         $entry->tree_element_shown = true;
 
         // show the tree element
-        echo '<li id="list_'.$entry->getKey().'">';
-        echo '<div><span class="disclose"><span></span></span>'.object_get($entry, "name").'</div>';
+        echo '<li id="list_'.$entry->item_id.'">';
+        echo '<div><span class="disclose"><span></span></span>'.$entry->item_id.'</div>';
 
         // see if this element has any children
         $children = [];
         foreach ($all_entries as $key => $subentry) {
-            if ($subentry->parent_id == $entry->getKey()) {
+            if ($subentry->parent_id == $entry->item_id) {
                 $children[] = $subentry;
             }
         }
@@ -48,8 +48,18 @@ function tree_element($entry, $key, $all_entries, $crud)
 
             <ol class="sortable mt-0">
                 <?php
+                \Illuminate\Support\Collection::macro('recursive', function () {
+                    return $this->map(function ($value) {
+                        if (is_array($value) || is_object($value)) {
+                            return collect($value)->recursive();
+                        }
+
+                        return $value;
+                    });
+                });
+
                 $items = json_decode($field['value'] ?? "", true) ?? [];
-                $all_entries = collect($items)->sortBy('lft')->keyBy($crud->getModel()->getKeyName());
+                $all_entries = collect(json_decode(json_encode($items)));
                 $root_entries = $all_entries->filter(function ($item) {
                     return $item->parent_id == 0;
                 });
@@ -58,7 +68,6 @@ function tree_element($entry, $key, $all_entries, $crud)
                 }
                 ?>
             </ol>
-
         </div><!-- /.card -->
 
         <button id="toArray" type="button" class="btn btn-success" data-style="zoom-in"><i
@@ -235,7 +244,6 @@ function tree_element($entry, $key, $all_entries, $crud)
                     tolerance: 'pointer',
                     toleranceElement: '> div',
                     maxLevels: {{ $crud->get('reorder.max_level') ?? 3 }},
-
                     isTree: true,
                     expandOnHover: 700,
                     startCollapsed: false
@@ -250,16 +258,16 @@ function tree_element($entry, $key, $all_entries, $crud)
                     $('.sortable').sortable('refresh');
 
                     // get the current tree order
-                    arraied = $('ol.sortable').nestedSortable('toArray', {startDepthCount: 0});
+                    arraed = $('ol.sortable').nestedSortable('toArray', {startDepthCount: 0});
 
                     // log it
-                    console.log(arraied);
+                    console.log(arraed);
                 });
 
+                const arrayed = $('ol.sortable').nestedSortable('toArray', {startDepthCount: 0});
                 const input = $("<input>")
                     .attr("type", "hidden")
-                    .attr("name", "item").val("bla");
-
+                    .attr("name", "item").val(JSON.stringify(arrayed));
                 $('form').append(input);
             });
         </script>
