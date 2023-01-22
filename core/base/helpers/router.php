@@ -23,6 +23,28 @@ if (!function_exists('getRouteListAdmin')) {
     }
 }
 
+if (!function_exists('getRouteList')) {
+    /**
+     * Return array list route name alias admin
+     *
+     * @return array
+     * */
+    function getRouteList(): array
+    {
+        $list_route = Route::getRoutes()->getRoutesByName();
+        $array_route = [];
+        $array_ignore_route_permission = config('bo.permissionmanager.ignore_route_permission', []);
+
+        foreach ($list_route as $route) {
+            if (!in_array($route->getName(), $array_ignore_route_permission) && checkEndsWith($route->getName())) {
+                $array_route[$route->getName()] = request()->getSchemeAndHttpHost() . '/' . $route->uri();
+            }
+        }
+
+        return $array_route;
+    }
+}
+
 if (!function_exists('checkEndsWith')) {
     /**
      * Check end with string route

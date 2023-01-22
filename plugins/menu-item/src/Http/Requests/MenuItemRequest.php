@@ -1,11 +1,11 @@
 <?php
 
-namespace Bo\MenuCRUD\App\Http\Requests;
+namespace Bo\MenuItem\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class MenuRequests extends FormRequest
+class MenuItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +31,7 @@ class MenuRequests extends FormRequest
             'key'         => ['required', 'min:2', 'max:100', Rule::unique('menus', 'key')->ignore($id)],
             'name'        => 'required|min:2|max:100',
             'description' => 'nullable|min:2|max:255',
-//            'item'        => 'required'
+            'item'        => 'required'
         ];
     }
 

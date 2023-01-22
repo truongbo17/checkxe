@@ -1,0 +1,10 @@
+{
+    "primary_key": "menu-item",
+    "name": "MenuItem",
+    "namespace": "Bo\\MenuItem\\",
+    "provider": "Bo\\MenuItem\\Providers\\MenuItemServiceProvider",
+    "author": "Nguyen Quang Truong",
+    "url": "https://github.com/truongbo17",
+    "version": "1.0",
+    "description": "The description for module menu-item"
+}

@@ -25,39 +25,6 @@ class MenuCrudController extends CrudController
         $this->crud->setModel("Bo\MenuCRUD\App\Models\Menu");
         $this->crud->setRoute(config('bo.base.route_prefix') . '/menu');
         $this->crud->setEntityNameStrings('menu', 'menus');
-
-        $this->crud->operation(['create', 'update'], function () {
-            $this->crud->addField([
-                'name'  => 'name',
-                'label' => 'Name',
-            ]);
-            $this->crud->addField([
-                'name'  => 'key',
-                'label' => 'Key',
-            ]);
-            $this->crud->addField([
-                'name'  => 'description',
-                'label' => 'Description',
-            ]);
-            $this->crud->addField([
-                'name'           => 'item',
-                'type'           => 'select-menu-item',
-                'label'          => 'Menu Item',
-                'view_namespace' => 'menucrud::fields',
-                'fields'         => [
-                    [
-                        'name'    => 'menu-item-id',
-                        'type'    => 'select_and_order',
-                        'label'   => 'Name',
-                        'options' => [
-                            'test'      => 'a',
-                                'wtest' => 'wa',
-                                'twest' => 'wwa',
-                            ],
-                        ],
-                    ],
-                ]);
-        });
     }
 
     public function setupListOperation()
@@ -79,15 +46,75 @@ class MenuCrudController extends CrudController
     public function setupCreateOperation()
     {
         $this->crud->setValidation(MenuRequests::class);
+        $this->crud->addField([
+            'name'  => 'name',
+            'label' => 'Name',
+        ]);
+        $this->crud->addField([
+            'name'  => 'key',
+            'label' => 'Key',
+        ]);
+        $this->crud->addField([
+            'name'  => 'description',
+            'label' => 'Description',
+        ]);
+        $this->crud->addField([
+            'name'           => 'item',
+            'type'           => 'select-menu-item',
+            'label'          => 'Menu Item',
+            'view_namespace' => 'menucrud::fields',
+            'fields'         => [
+                [
+                    'name'    => 'menu-item-id',
+                    'type'    => 'select_and_order',
+                    'label'   => 'Name',
+                    'options' => [
+                        'test'      => 'a',
+                        'wtest' => 'wa',
+                        'twest' => 'wwa',
+                    ],
+                ],
+            ],
+        ]);
     }
 
     public function setupUpdateOperation()
     {
         $this->crud->setValidation(MenuRequests::class);
+        $this->crud->addField([
+            'name'  => 'name',
+            'label' => 'Name',
+        ]);
+        $this->crud->addField([
+            'name'  => 'key',
+            'label' => 'Key',
+        ]);
+        $this->crud->addField([
+            'name'  => 'description',
+            'label' => 'Description',
+        ]);
+//        $this->crud->addField([
+//            'name'           => 'item',
+//            'type'           => 'select-menu-item',
+//            'label'          => 'Menu Item',
+//            'view_namespace' => 'menucrud::fields',
+//            'fields'         => [
+//                [
+//                    'name'    => 'menu-item-id',
+//                    'type'    => 'select_and_order',
+//                    'label'   => 'Name',
+//                    'options' => [
+//                        'test'      => 'a',
+//                        'wtest' => 'wa',
+//                        'twest' => 'wwa',
+//                    ],
+//                ],
+//            ],
+//        ]);
     }
 
-//    public function update()
-//    {
+    public function update()
+    {
 //        dd(request()->all());
-//    }
+    }
 }

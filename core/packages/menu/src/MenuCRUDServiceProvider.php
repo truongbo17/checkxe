@@ -39,26 +39,11 @@ class MenuCRUDServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(realpath(__DIR__ . '/resources/views'), 'menucrud');
 
-        \SideBarDashBoard::registerGroup('menu')
-            ->setLabel('Menu')
-            ->setPosition(2)
-            ->setIcon('nav-icon las la-list-ul')
-            ->render();
-
         \SideBarDashBoard::registerItem('menu')
             ->setLabel('Menu')
-            ->setPosition(1)
+            ->setPosition(2)
             ->setRoute(bo_url('menu'))
             ->setIcon('nav-icon las la-bars')
-            ->setGroup('menu')
-            ->render();
-
-        \SideBarDashBoard::registerItem('menu-item')
-            ->setLabel('Menu Item')
-            ->setPosition(2)
-            ->setRoute(bo_url('menu-item'))
-            ->setIcon('nav-icon las la-stream')
-            ->setGroup('menu')
             ->render();
     }
 
@@ -89,15 +74,5 @@ class MenuCRUDServiceProvider extends ServiceProvider
     public function register()
     {
         $this->setupRoutes($this->app->router);
-
-        Collection::macro('recursive', function () {
-            return $this->map(function ($value) {
-                if (is_array($value) || is_object($value)) {
-                    return collect($value)->recursive();
-                }
-
-                return $value;
-            });
-        });
     }
 }
