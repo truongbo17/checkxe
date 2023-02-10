@@ -28,7 +28,7 @@ class MenuItemRequest extends FormRequest
         $id = $this->get('id') ?? request()->route('id');
 
         return [
-            'key'         => ['required', 'min:2', 'max:100', Rule::unique('menus', 'key')->ignore($id)],
+            'key'         => ['required', 'min:2', 'max:100', Rule::unique('menu-items', 'key')->ignore($id)],
             'name'        => 'required|min:2|max:100',
             'description' => 'nullable|min:2|max:255',
             'item'        => 'required'
