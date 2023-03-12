@@ -119,8 +119,9 @@ class UserCrudController extends CrudController
             ],
             [
                 'name'       => 'is_admin',
-                'type'       => 'number',
+                'type'       => 'radio',
                 'tab'        => 'Base info',
+                'options'    => array_flip(IsAdminEnum::asArray()),
                 'attributes' => [
                     'placeholder' => 'Auto',
                     'readonly'    => 'readonly',
