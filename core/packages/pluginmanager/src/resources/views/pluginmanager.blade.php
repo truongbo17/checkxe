@@ -78,13 +78,15 @@
         }
 
         function removePlugin(pluginPath) {
-            $.post("{{route("plugin.remove")}}",
-                {
-                    pluginPath: pluginPath,
-                },
-                function () {
-                    location.reload();
-                });
+            if (confirm('Are you sure you want to delete this plugin?')) {
+                $.post("{{route("plugin.remove")}}",
+                    {
+                        pluginPath: pluginPath,
+                    },
+                    function () {
+                        location.reload();
+                    });
+            }
         }
     </script>
 @endpush

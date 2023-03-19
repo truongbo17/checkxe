@@ -5,7 +5,6 @@ namespace Bo\Shortcode\App\Http\Controllers;
 use Bo\Base\Http\Controllers\CrudController;
 use Bo\Base\Http\Controllers\Operations\CreateOperation;
 use Bo\Base\Http\Controllers\Operations\ListOperation;
-use Bo\Base\Http\Controllers\Operations\ShowOperation;
 use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\Base\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Bo\Shortcode\App\Http\Requests\ShortcodeRequest;
@@ -16,7 +15,6 @@ class ShortcodeController extends CrudController
     use ListOperation;
     use UpdateOperation;
     use CreateOperation;
-    use ShowOperation;
 
     public function setup()
     {
