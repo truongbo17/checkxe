@@ -26,8 +26,6 @@
       <p class="help-block text-muted text-sm">{!! $field['hint'] !!}</p>
   @endif
 
-
-
 <div class="container-repeatable-elements">
     <div
         data-repeatable-holder="{{ $field['name'] }}"
