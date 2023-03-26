@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  laravel-app-cms:
+    container_name: laravel-app-cms
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    working_dir: /var/www/app
+    restart: unless-stopped
+    depends_on:
+      - mysql-cms
+    ports:
+      - "${PORT_APP}:80"
+    volumes:
+      - ./app/storage/logs/nginx:/var/log/nginx
+      - ./.docker/.composer:/root/.composer
+    networks:
+      - laravel
+  mysql-cms:
+    image: mysql
+    container_name: mysql-cms
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: laravel_docker
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+      MYSQL_ROOT_PASSWORD: laravel
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - laravel
+
+networks:
+  laravel:
+    driver: bridge
