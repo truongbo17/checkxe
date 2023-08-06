@@ -1,0 +1,10 @@
+{
+    "primary_key": "contact",
+    "name": "Contact",
+    "namespace": "Bo\\Contact\\",
+    "provider": "Bo\\Contact\\Providers\\ContactServiceProvider",
+    "author": "Nguyen Quang Truong",
+    "url": "https://github.com/truongbo17",
+    "version": "1.0",
+    "description": "The description for module contact"
+}

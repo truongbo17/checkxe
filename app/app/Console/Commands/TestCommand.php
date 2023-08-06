@@ -39,13 +39,37 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $user = User::find(1);
-        $user->notify(new DatabaseNotification(
-            $type = 'info', // info / success / warning / error
-            $message = 'Test Notification',
-            $messageLong = 'This is a longer message for the test notification '.rand(1, 99999), // optional
-            $href = '/some-custom-url', // optional, e.g. bo_url('/example')
-            $hrefText = 'Go to custom URL' // optional
-        ));
+        $data = "Ford
+Honda
+Hyundai
+Toyota
+Isuzu
+KIA
+Mercedes Benz
+BMW
+Mini Cooper
+Audi
+Lamborghini
+Volvo
+Jaguar
+Maserati
+Aston Martin
+Bentley
+Vinfast
+Mitsubishi
+Chevrolet
+Lexus
+Mazda
+Nissan
+Subaru
+Ssangyong
+Land Rover
+Peugeot
+Volkswagen
+Porsche
+Ferrari";
+
+        $data = explode("\n", $data);
+        dd($data);
     }
 }

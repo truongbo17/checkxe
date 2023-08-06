@@ -3,9 +3,10 @@
 <head>
     <title>{{ $title_page ?? config('layouts.title_page_default') }}</title>
     @include('partials.meta')
-    <link rel="icon" type="image/png" href="https://checkoto.vn/assets/storage/images/favicon_WC8.png" />
+    <link rel="icon" type="image/png" href="" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     @stack('css')
+    @livewireStyles
 </head>
 <body>
 <div class="relative bg-gray-50 overflow-hidden">
@@ -24,5 +25,6 @@
 </div>
 <script src="{{ asset('js/app.js') }}"></script>
 @stack('js')
+@livewireScripts
 </body>
 </html>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7979dc5e3432d00292659460278560f0",
+    "content-hash": "184516c3423caefddafbe2baf9df7a56",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -377,32 +377,6 @@
             }
         },
         {
-            "name": "bo/langfilemanager",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "./core/packages/langfilemanager",
-                "reference": "7ecb3f94937600aed1bd5eda41cea06ee1857b0f"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Bo\\LangFileManager\\LangFileManagerServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Bo\\LangFileManager\\": "src"
-                }
-            },
-            "description": "An interface to edit language files, for Laravel.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "bo/logmanager",
             "version": "dev-main",
             "dist": {
@@ -424,32 +398,6 @@
                 }
             },
             "description": "An interface to preview, download and delete Laravel log files.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "bo/pagemanager",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "./core/packages/pagemanager",
-                "reference": "66a211853d37b91c8e9720ace81564bf02101cd4"
-            },
-            "type": "package",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Bo\\PageManager\\PageManagerServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Bo\\PageManager\\": "src"
-                }
-            },
-            "description": "Create admin panels for presentation websites on Laravel",
             "transport-options": {
                 "relative": true
             }
@@ -557,32 +505,6 @@
                 }
             },
             "description": "Setting Package",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "bo/shortcode",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "./core/packages/shortcode",
-                "reference": "b5993fb827bba90a6c663d3a8e98c9c84cb29252"
-            },
-            "type": "package",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Bo\\Shortcode\\ShortcodeServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Bo\\Shortcode\\": "src"
-                }
-            },
-            "description": "Shortcode Package",
             "transport-options": {
                 "relative": true
             }
@@ -11558,14 +11480,11 @@
         "bo/base": 20,
         "bo/filemanager": 20,
         "bo/generators": 20,
-        "bo/langfilemanager": 20,
         "bo/logmanager": 20,
-        "bo/pagemanager": 20,
         "bo/permissionmanager": 20,
         "bo/pluginmanager": 20,
         "bo/revise-operation": 20,
         "bo/settings": 20,
-        "bo/shortcode": 20,
         "bo/sidebar": 20
     },
     "prefer-stable": true,
