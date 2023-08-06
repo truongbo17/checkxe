@@ -16,7 +16,6 @@
         "bo/generators": "*@dev",
         "bo/langfilemanager": "*@dev",
         "bo/logmanager": "*@dev",
-        "bo/notifications": "*@dev",
         "bo/pagemanager": "*@dev",
         "bo/permissionmanager": "*@dev",
         "bo/pluginmanager": "*@dev",
@@ -34,6 +33,7 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "livewire/livewire": "^2.12",
         "prologue/alerts": "^1.0|^0.4"
     },
     "require-dev": {
