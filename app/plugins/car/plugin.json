@@ -1,0 +1,10 @@
+{
+    "primary_key": "car",
+    "name": "Car",
+    "namespace": "Bo\\Car\\",
+    "provider": "Bo\\Car\\Providers\\CarServiceProvider",
+    "author": "Nguyen Quang Truong",
+    "url": "https://github.com/truongbo17",
+    "version": "1.0",
+    "description": "The description for module car"
+}

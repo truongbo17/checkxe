@@ -1,0 +1,10 @@
+{
+    "primary_key": "medias",
+    "name": "Medias",
+    "namespace": "Bo\\Medias\\",
+    "provider": "Bo\\Medias\\Providers\\MediasServiceProvider",
+    "author": "Nguyen Quang Truong",
+    "url": "https://github.com/truongbo17",
+    "version": "1.0",
+    "description": "The description for module medias"
+}

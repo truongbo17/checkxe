@@ -232,4 +232,6 @@ return [
 
     ],
 
+    'secret_key_for_api' => env("SECRET_KEY_FOR_API", env("APP_KEY"))
+
 ];

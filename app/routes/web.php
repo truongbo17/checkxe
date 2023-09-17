@@ -1,6 +1,7 @@
  <?php
 
-use Illuminate\Support\Facades\Route;
+ use App\Http\Controllers\HomeController;
+ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home.index');
-});
+Route::get('/', [HomeController::class, 'index']);
 
-//always put at the last line of the file
-Route::get('{page}/{subs?}', ['uses' => 'Bo\PageManager\App\Http\Controllers\PageController@index'])
-    ->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$', 'subs' => '.*']);
