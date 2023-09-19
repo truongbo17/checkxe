@@ -25,6 +25,7 @@ class UploadController extends Controller
             'license_plates' => 'required|string|min:5',
             'description'    => 'required|string|min:5',
             'source'         => 'nullable|string|min:5',
+            'upload_from'    => 'nullable|string',
             'medias'         => 'required|array',
             'medias.*'       => 'required|string',
         ]);
@@ -48,6 +49,7 @@ class UploadController extends Controller
                 'license_plates' => $request->input('license_plates'),
                 'description'    => $request->input('description'),
                 'source'         => $request->input('source'),
+                'upload_from'    => $request->input('upload_from', 'scrape'),
             ]);
 
             $medias_upload = [];

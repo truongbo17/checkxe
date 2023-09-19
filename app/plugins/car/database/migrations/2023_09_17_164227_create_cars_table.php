@@ -19,6 +19,7 @@ return new class () extends Migration
             $table->string("description", 500)->nullable();
             $table->string("source")->nullable();
             $table->tinyInteger("status")->default(0);
+            $table->string("upload_from", 20)->nullable();
             $table->timestamps();
         });
     }
