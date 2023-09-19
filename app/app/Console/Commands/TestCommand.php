@@ -39,37 +39,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $data = "Ford
-Honda
-Hyundai
-Toyota
-Isuzu
-KIA
-Mercedes Benz
-BMW
-Mini Cooper
-Audi
-Lamborghini
-Volvo
-Jaguar
-Maserati
-Aston Martin
-Bentley
-Vinfast
-Mitsubishi
-Chevrolet
-Lexus
-Mazda
-Nissan
-Subaru
-Ssangyong
-Land Rover
-Peugeot
-Volkswagen
-Porsche
-Ferrari";
 
-        $data = explode("\n", $data);
-        dd($data);
     }
 }
