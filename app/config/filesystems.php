@@ -53,13 +53,15 @@ return [
 //            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
 //        ],
         's3' => [
-            'bucket1' => [
+            'migration-for-facebook-urls' => [
                 'driver' => 's3',
                 'key' => env('AWS_BUCKET1_ACCESS_KEY_ID'),
                 'secret' => env('AWS_BUCKET1_SECRET_ACCESS_KEY'),
                 'region' => env('AWS_BUCKET1_DEFAULT_REGION'),
                 'bucket' => env('AWS_BUCKET1_BUCKET'),
                 'url' => env('AWS_BUCKET1_URL'),
+                'endpoint' => env('AWS_BUCKET1_ENDPOINT'),
+                'use_path_style_endpoint' => env('AWS_BUCKET1_USE_PATH_STYLE_ENDPOINT', false),
             ],
             'bucket2' => [
                 'driver' => 's3',

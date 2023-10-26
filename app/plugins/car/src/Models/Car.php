@@ -4,10 +4,11 @@ namespace Bo\Car\Models;
 
 use Bo\Base\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\MediaModel;
 
 class Car extends Model
 {
-    use CrudTrait;
+    use CrudTrait, MediaModel;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,4 +23,11 @@ class Car extends Model
     // protected $hidden = [];
     // protected $dates = [];
 
+    public const PENDING_STATUS = 0;
+    public const PUBLISH_STATUS = 1;
+
+    public function getPublicUrlAttribute()
+    {
+        return $this->getPublicUrl();
+    }
 }

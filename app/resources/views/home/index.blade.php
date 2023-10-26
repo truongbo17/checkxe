@@ -2,6 +2,6 @@
 
 @section('content')
     @include('home.search')
-    @include('home.list')
+    @include('home.list', ['car_news' => $car_news])
     @livewire('contact-form')
 @endsection
