@@ -42,8 +42,25 @@ class CarController extends CrudController
         CRUD::column('id');
         CRUD::column('license_plates');
         CRUD::column('description');
-        CRUD::column('source');
-        CRUD::column('status');
+        CRUD::addColumn([
+            'name'     => 'source',
+            'type'     => 'closure',
+            'function' => function ($entry) {
+                return "<a target='_blank' href='" . $entry->source . "'> $entry->source <i class='las la-external-link-alt'></i></a>";
+            },
+            'escaped'  => false
+        ]);
+
+        $this->crud->addColumns([
+            [
+                'name' => 'status',
+                'type' => 'select_from_array',
+                'options' => [
+                    Car::PENDING_STATUS => 'pending',
+                    Car::PUBLISH_STATUS => 'publish',
+                ],
+            ],
+        ]);
     }
 
     /**

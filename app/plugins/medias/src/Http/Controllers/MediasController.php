@@ -2,6 +2,7 @@
 
 namespace Bo\Medias\Http\Controllers;
 
+use App\Libs\DiskPathTools\DiskPathInfo;
 use Bo\Base\Http\Controllers\CrudController;
 use Bo\Base\Http\Controllers\Operations\CreateOperation;
 use Bo\Base\Http\Controllers\Operations\DeleteOperation;
@@ -9,6 +10,7 @@ use Bo\Base\Http\Controllers\Operations\ListOperation;
 use Bo\Base\Http\Controllers\Operations\ShowOperation;
 use Bo\Base\Http\Controllers\Operations\UpdateOperation;
 use Bo\Base\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Bo\Car\Models\Car;
 use Bo\Medias\Http\Requests\MediasRequest;
 use Bo\Medias\Models\Medias;
 
@@ -40,11 +42,18 @@ class MediasController extends CrudController
     protected function setupListOperation()
     {
         CRUD::column('id');
-        CRUD::column('source_id');
+        CRUD::addColumn([
+            'name'     => 'source_id',
+            'type'     => 'closure',
+            'function' => function ($entry) {
+                return "<a target='_blank' href='" . bo_url('car/' . $entry->source_id . '/show') . "'>" . Car::find($entry->source_id)->license_plates . "<i class='las la-external-link-alt'></i></a>";
+            },
+            'escaped'  => false
+        ]);
         CRUD::column('type');
         CRUD::column('target');
         CRUD::column('target_data');
-        CRUD::column('status');
+        CRUD::column('status')->type('number');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -83,5 +92,18 @@ class MediasController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->autoSetupShowOperation();
+
+        CRUD::addColumn([
+            'name'  => 'medias',
+            'type'  => 'custom_html',
+            'value' => function ($entry) {
+                return '<img src="' . $entry->getMedia() . '" class="w-50"/>';
+            }
+        ]);
     }
 }

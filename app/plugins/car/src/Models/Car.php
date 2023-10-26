@@ -3,8 +3,11 @@
 namespace Bo\Car\Models;
 
 use Bo\Base\Models\Traits\CrudTrait;
+use Bo\Medias\Models\Medias;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\MediaModel;
+use Illuminate\Support\Facades\Cache;
 
 class Car extends Model
 {
@@ -28,6 +31,14 @@ class Car extends Model
 
     public function getPublicUrlAttribute()
     {
-        return $this->getPublicUrl();
+        // File có hạn là 13h, cache là 12h => đảm bảo cache phải hết trước khi sinh file
+        return Cache::remember('cache_for_source_id_' . $this->id, Carbon::now()->addHours(12), function () {
+            $result = [];
+            Medias::where('source_id', $this->id)->each(function ($item) use (&$result) {
+                $result[] = $this->getPublicUrl($item->target_data);
+            });
+
+            return $result;
+        });
     }
 }
